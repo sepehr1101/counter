@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">نرم افزار قرائت کنتور</string>
+
+    <string name="navigation_drawer_open">باز کردن منو</string>
+    <string name="navigation_drawer_close">بستن منو</string>
+
+    <string name="action_settings">تنظیمات</string>
+    <string name="title_activity_flash_light">نور فلاش</string>
+    <string name="title_activity_display_view_pager">قرائت</string>
+    <string name="menu_item_report">گزارش فرعی</string>
+    <string name="menu_item_more_info">اطلاعات بیشتر</string>
+    <string name="menu_item_location">آدرس روی نقشه</string>
+    <string name="menu_item_camera">ثبت تصاویر</string>
+    <string name="menu_item_search">جستجو</string>
+    <string name="menu_item_viewpager_filter">فیلتر</string>
+    <string name="menu_item_lock_input">نمایش/عدم نمایش صفحه کلید</string>
+    <string name="menu_item_qeire_mojaz">غیر مجاز</string>
+    <string name="menue_item_contact_us">ارتباط با ما</string>
+    <string name="menue_item_display_last_unread">نمایش آخرین قرائت</string>
+    <string name="title_activity_startup">فرم ورودی</string>
+    <string name="title_activity_login">صفحه ورود</string>
+    <string name="title_activity_my_works_report">گزارش قرائت من</string>
+    <string name="title_activity_load">فرم بارگیری اطلاعات</string>
+    <string name="spinner_prompt">انتخاب کنید</string>
+    <string name="title_activity_off_load">تخلیه</string>
+    <string name="title_activity_gps">GpsActivity</string>
+    <string name="title_activity_setting">تنظیمات شخصی</string>
+    <string name="title_activity_urgent">بارگیری/تخلیه اضطراری</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

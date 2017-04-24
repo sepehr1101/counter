@@ -1,0 +1,4 @@
+ALTER TABLE COUNTER_STATE_VALUE_KEY_MODEL
+ ADD COLUMN CAN_ENTER_NUMBER BIT NOT NULL default 0;ALTER TABLE COUNTER_STATE_VALUE_KEY_MODEL
+                                                     ADD COLUMN IS_MANE BIT NOT NULL default 0;ALTER TABLE COUNTER_STATE_VALUE_KEY_MODEL
+                                                                                                                                                    ADD COLUMN CAN_NUMBER_BE_LESS_THAN_PRE BIT NOT NULL default 0;

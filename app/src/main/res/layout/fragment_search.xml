@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/border_dialog">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:padding="5dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:padding="5dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="right"
+            android:gravity="right"
+            android:textSize="30sp"
+            android:textColor="@color/colorPrimary"
+            android:text="جستجو بر اساس:"/>
+        <com.rey.material.widget.Spinner
+            style="@style/Material.Widget.Spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:background="@drawable/border_text_view"
+            android:gravity="center_horizontal|center_vertical"
+            android:textSize="30sp"
+            app:rd_style="@style/MySpinnerStyle"
+            android:id="@+id/spinnerSearch"
+            android:spinnerMode="dropdown"
+            android:textColor="#EEE"
+            android:popupBackground="@color/colorPrimary" />
+            <EditText
+                android:id="@+id/searchText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="ورود اطلاعات..."
+                android:textColorHint="#EEE"
+                android:background="@color/colorPrimary"
+                android:layout_marginTop="10dp"
+                android:textColor="#EEE"
+                android:textDirection="rtl"
+                android:textSize="30sp"
+                android:gravity="center"
+                android:focusable="true"
+                android:inputType="number"
+                android:visibility="visible"/>
+            <AutoCompleteTextView
+                android:id="@+id/searchAutoComplete"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="نام و نام خانوادگی"
+                android:textColorHint="#EEE"
+                android:background="@color/colorPrimary"
+                android:layout_marginTop="10dp"
+                android:textColor="#EEE"
+                android:textDirection="rtl"
+                android:textSize="30sp"
+                android:gravity="center"
+                android:focusable="true"
+                android:inputType="textAutoComplete"
+                android:visibility="gone"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp">
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@color/colorAccent"
+                android:text="انصراف"
+                android:textColor="#EEE"
+                android:layout_marginRight="5dp"
+                android:textSize="30sp"
+                android:id="@+id/dismissSearch"
+                android:layout_gravity="left" />
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@color/colorPrimaryDark"
+                android:text="جستجو"
+                android:textColor="#EEE"
+                android:textSize="30sp"
+                android:layout_marginLeft="5dp"
+                android:id="@+id/buttonSearch"
+                android:layout_gravity="right"/>
+        </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/progressBar5"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:indeterminate="true"
+                android:max="100"
+                android:progress="40"
+                android:foregroundGravity="center_horizontal"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:visibility="gone"/>
+
+    </LinearLayout>
+</LinearLayout>

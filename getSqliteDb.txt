@@ -1,0 +1,1 @@
+adb -d shell "run-as com.sepehr.sa_sh.abfacounter01 ls /data/data/com.sepehr.sa_sh.abfacounter01/databases/"

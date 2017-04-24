@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/border_dialog">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="16dp"
+        android:padding="5dp"
+        android:layout_weight="1">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageHolder"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:contentDescription="desc"
+            android:layout_alignParentStart="true"
+            android:visibility="gone"/>
+        <VideoView
+            android:id="@+id/videoHolder"
+            android:layout_width="wrap_content"
+            android:layout_height="400dp"
+            android:visibility="gone" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="در حال ارسال..."
+            android:visibility="gone"
+            android:id="@+id/textViewImageUpload"
+            android:layout_marginTop="16dp" />
+        <ProgressBar
+            android:id="@+id/progressBarImageUpload"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:indeterminate="false"
+            android:max="100"
+            android:progress="0"
+            android:foregroundGravity="center_horizontal"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:layout_marginTop="16dp" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_gravity="center"
+            android:foregroundGravity="center_horizontal"
+            android:text="آپلود"
+            android:id="@+id/buttonUploadImage"
+            android:visibility="gone"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="16dp"
+        android:padding="5dp">
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="#D6D7D7"
+            android:text="بستن فرم"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_marginRight="5dp"
+            android:textSize="20sp"
+            android:id="@+id/dismissCameraCapture"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@color/colorPrimaryDark"
+            android:text="عکس"
+            android:textColor="#D6D7D7"
+            android:textSize="20sp"
+            android:layout_marginLeft="5dp"
+            android:id="@+id/captureImageButton" />
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@color/colorPrimaryDark"
+            android:text="فیلم"
+            android:textColor="#D6D7D7"
+            android:textSize="20sp"
+            android:layout_marginLeft="5dp"
+            android:id="@+id/recordVideoButton" />
+    </LinearLayout>
+
+</LinearLayout>

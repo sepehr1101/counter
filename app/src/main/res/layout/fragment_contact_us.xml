@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/border_dialog">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/colorAccent"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:textDirection="rtl"
+            android:layout_margin="@dimen/activity_horizontal_margin">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="آقای شمسایی"
+                android:textSize="20dp"
+                android:textColor="#000000"
+                android:layout_margin="4dp"
+                android:layout_gravity="right"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="09357366741"
+                android:textSize="20dp"
+                android:textColor="#000000"
+                android:layout_margin="4dp"
+                android:layout_gravity="left"/>
+        </LinearLayout>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="right"
+            android:textDirection="rtl"
+            android:layout_margin="@dimen/activity_horizontal_margin">
+            <Button
+                android:id="@+id/exit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorPrimaryDark"
+                android:text="بستن فرم"
+                android:textColor="#D6D7D7"
+                android:textSize="20sp"
+                android:layout_margin="4dp"/>
+            <Button
+                android:id="@+id/call"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:background="@color/colorAccent"
+                android:text="تماس"
+                android:textColor="#D6D7D7"
+                android:textSize="20sp"
+                android:layout_margin="4dp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
