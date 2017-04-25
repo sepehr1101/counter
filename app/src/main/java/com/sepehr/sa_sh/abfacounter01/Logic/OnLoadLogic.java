@@ -22,6 +22,7 @@ import com.sepehr.sa_sh.abfacounter01.models.InterConnection.KarbariViewModel;
 import com.sepehr.sa_sh.abfacounter01.models.InterConnection.MobileInputModel;
 import com.sepehr.sa_sh.abfacounter01.models.InterConnection.OnOffLoadViewModel;
 import com.sepehr.sa_sh.abfacounter01.models.InterConnection.ReadingConfigViewModel;
+import com.sepehr.sa_sh.abfacounter01.models.OffloadState;
 import com.sepehr.sa_sh.abfacounter01.models.sqlLiteTables.CounterReportValueKeyModel;
 import com.sepehr.sa_sh.abfacounter01.models.sqlLiteTables.CounterStateValueKeyModel;
 import com.sepehr.sa_sh.abfacounter01.models.sqlLiteTables.HighLowModel;
@@ -174,6 +175,9 @@ public class OnLoadLogic implements IOnLoadLogic{
                 int i=0;
                 for (OnOffLoadViewModel onOffLoadViewModel : mobileInputModel.myWorks) {
                     OnOffLoadModel dbModel=new OnOffLoadModel(onOffLoadViewModel,i);
+                    if(onOffLoadViewModel.OffLoad.CounterStateCode!=null){
+                        dbModel.offLoadState= OffloadState.SENT_SUCCESSFULLY;
+                    }
                     dbModel._index=i;
                     publishProgress(i);
                     onOffLoads.add(dbModel);
