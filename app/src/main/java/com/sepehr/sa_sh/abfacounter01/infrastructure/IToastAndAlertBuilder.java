@@ -5,5 +5,7 @@ package com.sepehr.sa_sh.abfacounter01.infrastructure;
  */
 public interface IToastAndAlertBuilder {
     void makeSimpleAlert(String message);
+    void makeSimpleAlert(String message,String title);
+
     void  makeSimpleToast(String message);
 }

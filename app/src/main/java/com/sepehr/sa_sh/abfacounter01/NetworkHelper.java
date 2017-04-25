@@ -2,6 +2,8 @@ package com.sepehr.sa_sh.abfacounter01;
 import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by sa-sh on 8/18/2016.
@@ -29,4 +31,19 @@ public final class NetworkHelper {
         return  client;
     }
 
+    public static Retrofit getInstance(boolean isLocal){
+        String baseUrl;
+        if(isLocal){
+            baseUrl=DifferentCompanyManager.getLocalBaseUrl(DifferentCompanyManager.getActiveCompanyName());
+        }
+        else {
+            baseUrl=DifferentCompanyManager.getBaseUrl(DifferentCompanyManager.getActiveCompanyName());
+        }
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .client(NetworkHelper.getHttpClient())//added recently
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        return retrofit;
+    }
 }

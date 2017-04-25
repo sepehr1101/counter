@@ -100,6 +100,35 @@ public class DifferentCompanyManager {
         }
     }
     //
+    public static String getLocalBaseUrl(CompanyNames companyNames){
+        switch (companyNames){
+            case ZONE1:
+                return "http://172.21.0.16/";
+            case ZONE2:
+                return "http://172.22.4.71/";
+            case ZONE3:
+                return "http://172.23.0.113/";
+            case ZONE4:
+                return "http://172.24.13.23/";
+            case ZONE5:
+                return  "http://172.25.0.72/";
+            case ZONE6:
+                return "http://172.26.0.32/";
+            case TSW:
+                return "http://81.90.148.25/";
+            case TE:
+                return "http://172.31.0.25/";
+            case TSE:
+                return "http://172.28.5.40/";
+            case TOWNS_WEST:
+                return "http://172.28.5.40/";
+            case ESF:
+                return "http://172.18.12.122/";
+            default:
+                throw new UnsupportedOperationException();
+        }
+    }
+    //
     public static String getEmailTail(CompanyNames companyNames){
         switch (companyNames){
             case ZONE1:
@@ -177,6 +206,6 @@ public class DifferentCompanyManager {
     }
     //
     public static CompanyNames getActiveCompanyName(){
-        return CompanyNames.ESF;
+        return CompanyNames.TSW;
     }
 }

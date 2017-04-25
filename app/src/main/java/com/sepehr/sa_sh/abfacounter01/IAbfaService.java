@@ -24,8 +24,6 @@ import retrofit2.Call;
  * Created by sa-sh on 7/23/2016.
  */
 public interface IAbfaService {
-    @GET("Api/api/CRMobileLoad")
-    Call<List<CounterReadingEntity>> repoCounterReadingList(@Query("userCode") int userCode);
 
     @GET("Api/api/CRMobileLoad")
     Call<MobileInputModel> loadData(

@@ -22,6 +22,15 @@ public class ToastAndAlertBuilder implements IToastAndAlertBuilder{
         alert.show();
     }
     //
+
+    public void makeSimpleAlert(String message,String title){
+        AlertDialog alert = new AlertDialog.Builder(appContext)
+                .create();
+        alert.setTitle(title);
+        alert.setMessage(message);
+        alert.show();
+    }
+
     public void makeSimpleToast(String message){
         Toast.makeText(appContext,message,Toast.LENGTH_LONG).show();
     }

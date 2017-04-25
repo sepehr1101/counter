@@ -1,6 +1,7 @@
 package com.sepehr.sa_sh.abfacounter01;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,6 +18,8 @@ import android.widget.Toast;
 
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
+import com.sepehr.sa_sh.abfacounter01.infrastructure.IToastAndAlertBuilder;
+import com.sepehr.sa_sh.abfacounter01.infrastructure.ToastAndAlertBuilder;
 import com.sepehr.sa_sh.abfacounter01.models.UiElementInActivity;
 import com.sepehr.sa_sh.abfacounter01.models.sqlLiteTables.KarbariGroup;
 import com.sepehr.sa_sh.abfacounter01.models.sqlLiteTables.OnOffLoadModel;
@@ -46,14 +49,10 @@ public class StartupActivity extends BaseActivity{
 
     @Override
     protected void initialize() {
+        Context appContext=getApplicationContext();
         addKarbariesIfNotExists();
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);//right to left
-
-        String deviceId=Build.FINGERPRINT;
-        Log.e("device id:", deviceId);
-
         Log.e("serial", Build.SERIAL);
-        Log.e("id", Build.ID);
 
         LinearLayout loadLinearLayout=(LinearLayout)findViewById(R.id.load);
         loadLinearLayout.setOnClickListener(new View.OnClickListener() {
@@ -75,11 +74,6 @@ public class StartupActivity extends BaseActivity{
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
         manage_M_permissions();
-        //
-        //GpsEnabled();
-        //gpsGranted();
-        ////////////////////
-
     }
     //
     private void manage_M_permissions(){
@@ -247,16 +241,9 @@ public class StartupActivity extends BaseActivity{
         if (!enabled) {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
             alertDialog.setCancelable(false);
-            // Setting Dialog Title
             alertDialog.setTitle("تنظیمات جی پی اس");
-
             // Setting Dialog Message
             alertDialog.setMessage("مکان یابی شما غیر فعال است ،آیا مایلید به قسمت تنظیمات مکان یابی منتقل شوید");
-
-            // Setting Icon to Dialog
-            //alertDialog.setIcon(R.drawable.delete);
-
-            // On pressing Settings button
             alertDialog.setPositiveButton("تنظیمات", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -272,31 +259,6 @@ public class StartupActivity extends BaseActivity{
             });
             // Showing Alert Message
             alertDialog.show();
-        }
-    }
-    //
-    private void gpsGranted() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            Log.i("marshmallow", "!");
-            boolean hasLocationAccess,hasCameraAccess,hasSDAccess;
-            hasLocationAccess=checkLocationPermission();
-            if(!hasLocationAccess){
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-                alertDialog.setCancelable(false);
-                // Setting Dialog Title
-                alertDialog.setTitle("تنظیمات جی پی اس");
-
-                // Setting Dialog Message
-                alertDialog.setMessage("لطفا با راهبر سیستم تماس حاصل فرمایید");
-                alertDialog.setNegativeButton("بستن برنامه", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        finishAffinity();
-                    }
-                });
-                // Showing Alert Message
-                alertDialog.show();
-            }
-
         }
     }
     //
@@ -316,18 +278,4 @@ public class StartupActivity extends BaseActivity{
         // Showing Alert Message
         alertDialog.show();
     }
-    //
-    private boolean checkLocationPermission()
-    {
-        String permission = "android.permission.ACCESS_FINE_LOCATION";
-        int res = this.checkCallingOrSelfPermission(permission);
-        return (res == PackageManager.PERMISSION_GRANTED);
-    }
-    //
-    private  boolean checkCameraPermission(){
-        String permission = "android.permission.ACCESS_FINE_LOCATION";
-        int res = this.checkCallingOrSelfPermission(permission);
-        return (res == PackageManager.PERMISSION_GRANTED);
-    }
-    //
 }

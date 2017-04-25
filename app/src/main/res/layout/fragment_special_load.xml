@@ -36,7 +36,14 @@
                 android:layout_gravity="center"
                 android:visibility="gone"
                 android:layout_marginTop="16dp"/>
-
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="در حال بارگیری اطلاعات"
+                android:visibility="gone"
+                android:id="@+id/loadStateTextView"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/colorPrimaryDark"/>
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -47,4 +47,7 @@ dependencies {
     //compile 'pub.devrel:easypermissions:0.3.0' //permission
     //compile 'com.anthonycr.grant:permissions:1.0' //permission
     compile 'gun0912.ted:tedpermission:1.0.3'
+    //compile 'com.google.dagger:dagger-android:2.10'
+    //compile 'com.google.dagger:dagger-android-support:2.10'
+    //annotationProcessor 'com.google.dagger:dagger-android-processor:2.10'
 }
