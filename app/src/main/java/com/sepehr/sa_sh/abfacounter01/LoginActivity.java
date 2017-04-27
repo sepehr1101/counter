@@ -32,9 +32,10 @@ public class LoginActivity extends AppCompatActivity {
     String userCode,password,appVersion;
     Typeface face;
     int failureCount=0;
-    final int ALLOWED_FAILURE_COUNT=2;
+    final int ALLOWED_FAILURE_COUNT=3;
     ProgressBar loginProgressBar;
     TextView companyNameTextView;
+    boolean isLocal=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +82,6 @@ public class LoginActivity extends AppCompatActivity {
     }
     //
     private void loginClickListener(){
-        //doLogin();//temp
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,7 +94,12 @@ public class LoginActivity extends AppCompatActivity {
     }
     //
     private void getToken(final String username, final String password){
-        IAbfaService abfaService = IAbfaService.retrofit.create(IAbfaService.class);
+        boolean canILoginLocally=canILoginLocally();
+        if(canILoginLocally){
+            sharedPreferenceManager.put("isLocal",true);
+            sharedPreferenceManager.apply();
+        }
+        IAbfaService abfaService = NetworkHelper.getInstance(canILoginLocally).create(IAbfaService.class);
         final TokenRequestModel tokenRequestModel=new TokenRequestModel(username,password);
         Call<TokenResponseModel> call=abfaService.getToken(tokenRequestModel.username
                 ,tokenRequestModel.password,
@@ -116,16 +121,16 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 //endregion
 
-                sharedPreferenceManager.putString("token", "Bearer " + tokenResponseModel.access_token);
-                sharedPreferenceManager.putInt("userCode", Integer.parseInt((username)));
-                sharedPreferenceManager.putString("password", Crypto.encrypt(password));
+                sharedPreferenceManager.put("token", "Bearer " + tokenResponseModel.access_token);
+                sharedPreferenceManager.put("userCode", Integer.parseInt((username)));
+                sharedPreferenceManager.put("password", Crypto.encrypt(password));
                 sharedPreferenceManager.apply();
                 doLogin();
             }
 
             @Override
             public void onFailure(Call<TokenResponseModel> call, Throwable t) {
-                String errorMessage = "";
+                String errorMessage ;
                 toastAndAlertBuilder.makeSimpleAlert(SimpleErrorHandler.getErrorMessage(t));
                 Log.e("retrofit token error", t.toString());
                 ++failureCount;
@@ -156,6 +161,16 @@ public class LoginActivity extends AppCompatActivity {
             return false;
         }
         if(sharedPreferenceManager.getInt("userCode")==0){
+            return false;
+        }
+        return true;
+    }
+    //
+    private boolean canILoginLocally(){
+        if(!checkMobileDataIsOn()){
+            return false;
+        }
+        if(failureCount<ALLOWED_FAILURE_COUNT){
             return false;
         }
         return true;

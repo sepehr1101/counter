@@ -232,12 +232,18 @@ public class StartupActivity extends BaseActivity{
     }
 
     //
+
+    /**
+     * <h1>check if GPS is enabled</h1>
+     *<p>check whether GPS is Enabled or not , if is disabled , enable it or exit</p>
+     *@since 2016/08/26
+     * @author _1101
+     */
     private void GpsEnabled(){
         LocationManager service = (LocationManager) getSystemService(LOCATION_SERVICE);
         boolean enabled = service
                 .isProviderEnabled(LocationManager.GPS_PROVIDER);
         Log.e("GPS IS:", enabled + "");
-        //check inke gps roshan bashe , age nist az user bexaim roshan kone ya az barname kharej she! :(
         if (!enabled) {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
             alertDialog.setCancelable(false);

@@ -16,19 +16,27 @@ public class SharedPreferenceManager implements ISharedPreferenceManager{
         this.editor = this.prefs.edit();
     }
     //
-    public void putString(String key,String value){
+    public void put(String key,String value){
         editor.putString(key,value);
     }
-    public void putInt(String key,int value){
+    public void put(String key,int value){
         editor.putInt(key, value);
     }
-    public void apply(){
-        editor.apply();
+    public void put(String key,boolean value){
+        editor.putBoolean(key,value);
     }
+
     public String getString(String key){
         return prefs.getString(key,"");
     }
     public int getInt(String key){
         return  prefs.getInt(key,0);
+    }
+    public boolean getBool(String key){
+        return prefs.getBoolean(key,false);
+    }
+
+    public void apply(){
+        editor.apply();
     }
 }

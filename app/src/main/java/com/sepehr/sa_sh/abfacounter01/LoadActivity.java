@@ -1,38 +1,21 @@
 package com.sepehr.sa_sh.abfacounter01;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import com.orm.SugarRecord;
-import com.orm.SugarTransactionHelper;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.ReadingConfigService;
 import com.sepehr.sa_sh.abfacounter01.Logic.IOnLoadLogic;
 import com.sepehr.sa_sh.abfacounter01.Logic.OnLoadLogic;
 import com.sepehr.sa_sh.abfacounter01.infrastructure.IToastAndAlertBuilder;
-import com.sepehr.sa_sh.abfacounter01.infrastructure.SimpleErrorHandler;
 import com.sepehr.sa_sh.abfacounter01.infrastructure.ToastAndAlertBuilder;
-import com.sepehr.sa_sh.abfacounter01.models.InterConnection.CounterReportValueKeyViewModel;
-import com.sepehr.sa_sh.abfacounter01.models.InterConnection.CounterStateValueKeyViewModel;
-import com.sepehr.sa_sh.abfacounter01.models.InterConnection.KarbariViewModel;
-import com.sepehr.sa_sh.abfacounter01.models.InterConnection.MobileInputModel;
-import com.sepehr.sa_sh.abfacounter01.models.InterConnection.OnOffLoadViewModel;
-import com.sepehr.sa_sh.abfacounter01.models.InterConnection.ReadingConfigViewModel;
 import com.sepehr.sa_sh.abfacounter01.models.UiElementInActivity;
-import com.sepehr.sa_sh.abfacounter01.models.sqlLiteTables.CounterReportValueKeyModel;
-import com.sepehr.sa_sh.abfacounter01.models.sqlLiteTables.CounterStateValueKeyModel;
-import com.sepehr.sa_sh.abfacounter01.models.sqlLiteTables.HighLowModel;
-import com.sepehr.sa_sh.abfacounter01.models.sqlLiteTables.KarbariModel;
-import com.sepehr.sa_sh.abfacounter01.models.sqlLiteTables.OnOffLoadModel;
-import com.sepehr.sa_sh.abfacounter01.models.sqlLiteTables.ReadingConfigModel;
-import java.util.ArrayList;
-import java.util.List;
-import retrofit2.Callback;
-import retrofit2.Call;
 
 public class LoadActivity extends BaseActivity{
     Button startLoadButton2;
@@ -44,6 +27,7 @@ public class LoadActivity extends BaseActivity{
     ReadingConfigService readingConfig;
     IToastAndAlertBuilder toastAndAlertBuilder;
     IOnLoadLogic onLoadLogic;
+    boolean isLocal;
 
     @Override
     protected UiElementInActivity getUiElementsInActivity() {
@@ -57,6 +41,10 @@ public class LoadActivity extends BaseActivity{
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);//right to left
         deviceId=Build.SERIAL;
         Context appContext=this;
+        SharedPreferences prefs = PreferenceManager
+                .getDefaultSharedPreferences(appContext);
+        userCode=prefs.getInt("userCode",0);
+        isLocal=prefs.getBoolean("isLocal",false);
         startLoadButton2=(Button)findViewById(R.id.startLoadButton2);
         progressBar2 = (ProgressBar) findViewById(R.id.progressBar2);
         loadStateTextView2=(TextView)findViewById(R.id.loadStateTextView2);

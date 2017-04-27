@@ -42,6 +42,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -55,6 +56,9 @@ public class DisplayViewPager extends BaseActivity {
     IToastAndAlertBuilder toastAndAlertBuilder;
     IKarbariRepo karbariManager;
     String[] items;
+    private int offlineAttempts=0;
+    private final int MAX_OFFLINE_ATTEMPTS=3;
+
     public static  String bill_id;
     public static BigDecimal currentTrackNumber;
     public static int currentPosition=0;
@@ -577,13 +581,22 @@ public class DisplayViewPager extends BaseActivity {
                     unSenderReport.offLoadState = 2;
                     unSenderReport.save();
                 }
+                offlineAttempts=0;
             }
 
             @Override
             public void onFailure(Call<Integer> call, Throwable t) {
-                String errorMessage = SimpleErrorHandler.getErrorMessage(t);
-                toastAndAlertBuilder.makeSimpleAlert(errorMessage);
                 Log.e("retrofit error", t.toString());
+                if(t instanceof IOException){
+                    offlineAttempts++;
+                }
+                if(offlineAttempts==MAX_OFFLINE_ATTEMPTS){
+                    toastAndAlertBuilder.makeSimpleAlert("حالت آفلاین","حالت آفلاین قرائت بطور خودکار فعال شد");
+                }
+                if(offlineAttempts<MAX_OFFLINE_ATTEMPTS || !(t instanceof IOException)){
+                    String errorMessage = SimpleErrorHandler.getErrorMessage(t);
+                    toastAndAlertBuilder.makeSimpleAlert(errorMessage);
+                }
             }
         });
     }
