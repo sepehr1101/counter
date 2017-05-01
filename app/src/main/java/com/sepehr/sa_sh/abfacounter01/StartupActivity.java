@@ -227,7 +227,7 @@ public class StartupActivity extends BaseActivity{
     //
     @Override
     protected void onResume() {
-        GpsEnabled();
+        turnOnGpsOrCloseApp();
         super.onResume();
     }
 

@@ -3,7 +3,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -17,13 +16,16 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.orm.SugarTransactionHelper;
 import com.rey.material.widget.Spinner;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.CounterReportService;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.CounterStateService;
-import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.IKarbariRepo;
+import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.IKarbariService;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.IOnOffloadService;
-import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.KarbariRepo;
+import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.KarbariService;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.OnOffloadService;
+import com.sepehr.sa_sh.abfacounter01.Logic.CounterNumberHelper;
+import com.sepehr.sa_sh.abfacounter01.Logic.ICounterNumberHelper;
 import com.sepehr.sa_sh.abfacounter01.infrastructure.GeoTracker;
 import com.sepehr.sa_sh.abfacounter01.infrastructure.IGeoTracker;
 import com.sepehr.sa_sh.abfacounter01.infrastructure.IMediaPlayerManager;
@@ -31,9 +33,11 @@ import com.sepehr.sa_sh.abfacounter01.infrastructure.IToastAndAlertBuilder;
 import com.sepehr.sa_sh.abfacounter01.infrastructure.MediaPlayerManager;
 import com.sepehr.sa_sh.abfacounter01.infrastructure.SimpleErrorHandler;
 import com.sepehr.sa_sh.abfacounter01.infrastructure.ToastAndAlertBuilder;
+import com.sepehr.sa_sh.abfacounter01.models.OffloadState;
 import com.sepehr.sa_sh.abfacounter01.models.UiElementInActivity;
 import com.sepehr.sa_sh.abfacounter01.models.sqlLiteTables.CounterReportValueKeyModel;
-import com.sepehr.sa_sh.abfacounter01.models.sqlLiteTables.CounterStateValueKeyModel;
+import com.sepehr.sa_sh.abfacounter01.models.sqlLiteTables.HighLowModel;
+import com.sepehr.sa_sh.abfacounter01.models.sqlLiteTables.KarbariModel;
 import com.sepehr.sa_sh.abfacounter01.models.sqlLiteTables.OnOffLoadModel;
 
 import android.view.View;
@@ -54,7 +58,8 @@ import retrofit2.Callback;
 public class DisplayViewPager extends BaseActivity {
     Context appContext;
     IToastAndAlertBuilder toastAndAlertBuilder;
-    IKarbariRepo karbariManager;
+    IKarbariService karbariService;
+    ICounterNumberHelper counterNumberHelper;
     String[] items;
     private int offlineAttempts=0;
     private final int MAX_OFFLINE_ATTEMPTS=3;
@@ -73,6 +78,7 @@ public class DisplayViewPager extends BaseActivity {
     boolean isAppbarLocked=false;
     public List<OnOffLoadModel> _list =new ArrayList<>();
     OnOffLoadModel onOffLoadModel;
+    HighLowModel highLowModel;
     int viewPagerSize;
     String token;
     String persianDate;
@@ -82,7 +88,7 @@ public class DisplayViewPager extends BaseActivity {
     //
     IMediaPlayerManager mediaPlayerManager;
     //
-    CounterReportService reportManager;
+    CounterReportService reportService;
     List<CounterReportValueKeyModel> selectedReports;
     //////
     IGeoTracker geoTracker;
@@ -100,11 +106,13 @@ public class DisplayViewPager extends BaseActivity {
     protected void initialize() {
         try {
             appContext = this;
-            initilizeSomeUiElements();
+            initializeSomeUiElements();
+            highLowModel=HighLowModel.first(HighLowModel.class);
+            counterNumberHelper=new CounterNumberHelper();
             items = CounterStateService.getCounterStateTitles();
             isAppbarLocked= initializeViewpager();
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-            karbariManager=new KarbariRepo();
+            karbariService =new KarbariService();
             mediaPlayerManager = new MediaPlayerManager(appContext);
             toastAndAlertBuilder = new ToastAndAlertBuilder(appContext);
             geoTracker = new GeoTracker("viewPager", appContext);
@@ -140,8 +148,8 @@ public class DisplayViewPager extends BaseActivity {
         //initialize before page scroll
         bill_id = _list.get(0).billId;
         currentTrackNumber=_list.get(0).trackNumber;
-        reportManager=new CounterReportService(bill_id);
-        selectedReports=reportManager.getCounterReadingSelectedReports(bill_id);
+        reportService =new CounterReportService(bill_id);
+        selectedReports= reportService.getCounterReadingSelectedReports(bill_id);
         //
         // Pass results to ViewPagerAdapter Class
         //List<OnOffLoadModel> _viewPagerList=OnOffLoadModel.listAll(OnOffLoadModel.class);
@@ -155,7 +163,7 @@ public class DisplayViewPager extends BaseActivity {
         return false;
     }
 
-    private void initilizeSomeUiElements(){
+    private void initializeSomeUiElements(){
         systemDate = (TextView) findViewById(R.id.systemDate);
         persianDate = DateAndTime.getPersianTodayDate();
         persianDate_db_format = DateAndTime.getPersianDbFormattedDate();
@@ -204,7 +212,7 @@ public class DisplayViewPager extends BaseActivity {
                     }
                     try{
                     Integer karbariCode = _list.get(currentPosition).karbariCod;
-                    boolean hasKarbariVibration = karbariManager.HasVibrate(karbariCode);
+                    boolean hasKarbariVibration = karbariService.HasVibrate(karbariCode);
                     if (hasKarbariVibration) {
                         vibratePlease();
                     }
@@ -258,13 +266,13 @@ public class DisplayViewPager extends BaseActivity {
                 .setIcon(R.drawable.ic_search_white_36dp);
 
         menu.add(Menu.NONE, MenuItemId.MENUE_ITEM_DISPLAY_LAST_UNREAD.getValue(), Menu.NONE, R.string.menue_item_display_last_unread)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 
         menu.add(Menu.NONE, MenuItemId.MENU_ITEM_LOCK_INPUT.getValue(), Menu.NONE, R.string.menu_item_lock_input)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 
         menu.add(Menu.NONE,MenuItemId.MENUE_ITEM_CONTACT_US.getValue(),Menu.NONE,R.string.menue_item_contact_us)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
         return true;
     }
 
@@ -320,7 +328,7 @@ public class DisplayViewPager extends BaseActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-    //
+
     public void setViewPagerCurrentItem(int position){
         viewPager=(ViewPager) findViewById(R.id.pager);
         viewPager.setCurrentItem(position, true);
@@ -368,15 +376,8 @@ public class DisplayViewPager extends BaseActivity {
 
         //check if gps is enabled
         try {
-            final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            boolean isGpsEnabled = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-            Log.e("gps is:", isGpsEnabled + "");
-            if (!isGpsEnabled) {
-                Snackbar.make(viewPager, "لطفا از روشن بودن gps اطمینان حاصل فرمایید", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                return;
-            }
-            //
+            turnOnGpsOrCloseApp();
+            turnOnDataOrCloseApp();
             Integer counterNumber;
             EditText counterNumberEditText = (EditText) viewPager.findViewWithTag("counterNumber" + currentPosition);
             Spinner counterStateSpinner = (Spinner) viewPager.findViewWithTag("counterState" + currentPosition);
@@ -418,17 +419,13 @@ public class DisplayViewPager extends BaseActivity {
                 return;
             }
 
-            //moshtarak bein e saie e halat ha
-            int preNumber = Integer.valueOf(onOffLoadModel.preNumber);
+            //moshtarak bein e saier e halat ha
+            //TODO CLEAN CODE IN CLASS
+            int preNumber = onOffLoadModel.preNumber;
             int todayNumber = Integer.valueOf(counterNumberString);
-            double todayAverage = CounterNumberHelper.CalculateAverage(preNumber, todayNumber, onOffLoadModel.preDate);
-            double monthAverage = todayAverage * 30;
-            AverageState averageState = CounterNumberHelper.DetermineAverageState(
-                    Double.valueOf(onOffLoadModel.preAverage.toString()), monthAverage, new HighLow(25, 25)
-                    , onOffLoadModel.tedadMaskooni.intValue());
+            KarbariModel karbari=karbariService.get(onOffLoadModel.getKarbariCod());
+            AverageState averageState = counterNumberHelper.getAverageState(onOffLoadModel,karbari,highLowModel,todayNumber);
             averageStateGlobal = averageState;
-            boolean isRestarted;
-            isRestarted = CounterNumberHelper.isRestarted(preNumber, todayNumber);
             //
             //region ______________________________ 2______________________________
          //2. shomare qabli kamtar az feli
@@ -551,11 +548,9 @@ public class DisplayViewPager extends BaseActivity {
     //
     private void sendTheUnsended(){
         String deviceId= Build.SERIAL;
-        final List<OnOffLoadModel> unSendeds=OnOffLoadModel
-                .find(OnOffLoadModel.class, "OFF_LOAD_STATE= ? ", "1");
-        final  List<CounterReadingReport> unSendedReports=CounterReadingReport
-                .find(CounterReadingReport.class,"OFF_LOAD_STATE= ? ","1");
-        Output output=new Output(unSendedReports,unSendeds);
+        final List<OnOffLoadModel> unSendeds=onOffloadService.get(OffloadState.ABOUT_TO_SEND);
+        final  List<CounterReadingReport> unsendedReports=reportService.get(OffloadState.ABOUT_TO_SEND);
+        Output output=new Output(unsendedReports,unSendeds);
         IAbfaService abfaService = IAbfaService.retrofit.create(IAbfaService.class);
         Call<Integer> call=abfaService.sendCounterReadingInfo(getToken(),output,deviceId,getUserCode(),false,new BigDecimal(-1));
         call.enqueue(new Callback<Integer>() {
@@ -571,16 +566,13 @@ public class DisplayViewPager extends BaseActivity {
                 }
                 Integer count = response.body();
                 Log.e("count :", count + "");
-                for (OnOffLoadModel unSended : unSendeds) {
-                    unSended.offLoadState = 2;
-                    unSended.save();
-                    Log.i("save done", " 2");
-                }
-                //
-                for (CounterReadingReport unSenderReport : unSendedReports) {
-                    unSenderReport.offLoadState = 2;
-                    unSenderReport.save();
-                }
+                SugarTransactionHelper.doInTransaction(new SugarTransactionHelper.Callback() {
+                    @Override
+                    public void manipulateInTransaction() {
+                        onOffloadService.changeOffloadState(unSendeds,OffloadState.SENT_SUCCESSFULLY);
+                        reportService.changeOffloadState(unsendedReports,OffloadState.SENT_SUCCESSFULLY);
+                    }
+                });
                 offlineAttempts=0;
             }
 

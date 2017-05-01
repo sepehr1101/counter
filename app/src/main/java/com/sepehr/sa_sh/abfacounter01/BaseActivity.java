@@ -3,8 +3,16 @@ package com.sepehr.sa_sh.abfacounter01;
 /**
  * Created by saeid on 3/10/2017.
  */
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.LocationManager;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,11 +22,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
 import com.sepehr.sa_sh.abfacounter01.infrastructure.ISharedPreferenceManager;
 import com.sepehr.sa_sh.abfacounter01.infrastructure.IToastAndAlertBuilder;
 import com.sepehr.sa_sh.abfacounter01.infrastructure.SharedPreferenceManager;
 import com.sepehr.sa_sh.abfacounter01.models.UiElementInActivity;
+
+import java.lang.reflect.Method;
 
 public abstract class BaseActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -26,6 +37,7 @@ public abstract class BaseActivity extends AppCompatActivity
     public DrawerLayout drawer;
     Toolbar toolbar;
     NavigationView navigationView;
+    boolean isNavigationOpen=false;
     //
     int userCode;
     String token,deviceId;
@@ -47,9 +59,16 @@ public abstract class BaseActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawer.openDrawer(Gravity.RIGHT);
+            }
+        });
         initialize();
     }
     //
@@ -88,7 +107,6 @@ public abstract class BaseActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
         if (id == R.id.nav_load) {
             Intent intentLoad=new Intent(this,LoadActivity.class);
             startActivity(intentLoad);
@@ -144,6 +162,80 @@ public abstract class BaseActivity extends AppCompatActivity
     public String getToken(){
         token = sharedPreferenceManager.getString("token");
         return token;
+    }
+    //
+    /**
+     * <h1>check if GPS is enabled</h1>
+     *<p>check whether GPS is Enabled or not , if is disabled , enable it or exit</p>
+     *@since 2016/08/26
+     * @author _1101
+     */
+    public void turnOnGpsOrCloseApp(){
+        LocationManager service = (LocationManager) getSystemService(LOCATION_SERVICE);
+        boolean enabled = service
+                .isProviderEnabled(LocationManager.GPS_PROVIDER);
+        Log.e("GPS IS:", enabled + "");
+        if (!enabled) {
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+            alertDialog.setCancelable(false);
+            alertDialog.setTitle("تنظیمات جی پی اس");
+            // Setting Dialog Message
+            alertDialog.setMessage("مکان یابی شما غیر فعال است ،آیا مایلید به قسمت تنظیمات مکان یابی منتقل شوید");
+            alertDialog.setPositiveButton("تنظیمات", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(intent);
+                }
+            });
+
+            // on pressing cancel button
+            alertDialog.setNegativeButton("بستن برنامه", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    finishAffinity();
+                }
+            });
+            // Showing Alert Message
+            alertDialog.show();
+        }
+    }
+
+    public void turnOnDataOrCloseApp(){
+        boolean mobileDataEnabled = false; // Assume disabled
+        ConnectivityManager cm = (ConnectivityManager) getApplicationContext()
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        try {
+            Class cmClass = Class.forName(cm.getClass().getName());
+            Method method = cmClass.getDeclaredMethod("getMobileDataEnabled");
+            method.setAccessible(true); // Make the method callable
+            // get the setting for "mobile data"
+            mobileDataEnabled = (Boolean)method.invoke(cm);
+            if (!mobileDataEnabled) {
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+                alertDialog.setCancelable(false);
+                alertDialog.setTitle("تنظیمات دیتا");
+                // Setting Dialog Message
+                alertDialog.setMessage("داده های دستگاه شما خاموش است ، لطفا نسبت به روشن کردن آن اقدام فرمایید");
+                alertDialog.setPositiveButton("تنظیمات", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(Settings.ACTION_SETTINGS);
+                        startActivity(intent);
+                    }
+                });
+
+                // on pressing cancel button
+                alertDialog.setNegativeButton("بستن برنامه", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        finishAffinity();
+                    }
+                });
+                // Showing Alert Message
+                alertDialog.show();
+            }
+        } catch (Exception e) {
+            // Some problem accessible private API
+            // TODO do whatever error handling you want here
+            Log.e("data is "," false catched error");
+        }
     }
 }
 

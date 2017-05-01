@@ -3,6 +3,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
+import android.net.wifi.WifiManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +20,14 @@ import com.sepehr.sa_sh.abfacounter01.infrastructure.IToastAndAlertBuilder;
 import com.sepehr.sa_sh.abfacounter01.infrastructure.SharedPreferenceManager;
 import com.sepehr.sa_sh.abfacounter01.infrastructure.SimpleErrorHandler;
 import com.sepehr.sa_sh.abfacounter01.infrastructure.ToastAndAlertBuilder;
+
+import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.concurrent.ExecutionException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 
@@ -35,7 +44,6 @@ public class LoginActivity extends AppCompatActivity {
     final int ALLOWED_FAILURE_COUNT=3;
     ProgressBar loginProgressBar;
     TextView companyNameTextView;
-    boolean isLocal=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,14 +174,33 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
     //
+    public boolean canIPingBaseUrl(){
+        try {
+          Boolean result=  new Ping().execute("").get();
+            return result;
+        }catch (InterruptedException e){
+            return false;
+        }catch (ExecutionException e){
+            return false;
+        }
+    }
+    //
     private boolean canILoginLocally(){
-        if(!checkMobileDataIsOn()){
+        if(/*!isWifiOn() || */ !canIPingBaseUrl()){
             return false;
         }
         if(failureCount<ALLOWED_FAILURE_COUNT){
             return false;
         }
         return true;
+    }
+    //
+    private boolean isWifiOn(){
+        WifiManager wifi = (WifiManager)getApplicationContext().getSystemService(WIFI_SERVICE);
+        if (wifi.isWifiEnabled()){
+            return true;
+        }
+        return false;
     }
     //
     private void doLogin(){
@@ -218,5 +245,42 @@ public class LoginActivity extends AppCompatActivity {
         String companyName=DifferentCompanyManager.getCompanyName
                 (DifferentCompanyManager.getActiveCompanyName());
         companyNameTextView.setText(companyName);
+    }
+    //
+    //
+    class Ping extends AsyncTask<String, Boolean, Boolean> {
+        private Exception exception;
+        protected Boolean doInBackground(String... urls) {
+            try {
+                try {
+                    URL url = new URL("http://192.168.1.1");
+
+                    HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
+                    urlc.setRequestProperty("User-Agent", "Android Application:");
+                    urlc.setRequestProperty("Connection", "close");
+                    urlc.setConnectTimeout(1000 * 3); // mTimeout is in seconds
+                    urlc.connect();
+
+                    if (urlc.getResponseCode() == 200) {
+                        return true;
+                    }
+                } catch (MalformedURLException e1) {
+                    e1.printStackTrace();
+                    return false;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+                return false;
+            } catch (Exception e) {
+                this.exception = e;
+                return false;
+            }
+        }
+
+        protected void onPostExecute(Boolean feed) {
+            // TODO: check this.exception
+            // TODO: do something with the feed
+        }
     }
 }

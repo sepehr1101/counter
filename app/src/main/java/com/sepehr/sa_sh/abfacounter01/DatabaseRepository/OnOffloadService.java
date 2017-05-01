@@ -1,11 +1,16 @@
 package com.sepehr.sa_sh.abfacounter01.DatabaseRepository;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+
 import com.orm.SugarDb;
+import com.orm.SugarRecord;
 import com.sepehr.sa_sh.abfacounter01.constants.ReadingListType;
+import com.sepehr.sa_sh.abfacounter01.models.OffloadState;
 import com.sepehr.sa_sh.abfacounter01.models.sqlLiteTables.OnOffLoadModel;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -46,7 +51,7 @@ public class OnOffloadService implements IOnOffloadService {
     private List<OnOffLoadModel> getReadingListNormal() {
         String query="SELECT C.* FROM ON_OFF_LOAD_MODEL C " +
                 "JOIN READING_CONFIG_MODEL R ON C.TRACK_NUMBER=R.TRACK_NUMBER " +
-                "  WHERE  R.IS_ACTIVE=1  ORDER BY C.ESHTERAK";
+                "  WHERE  R.IS_ACTIVE=1  ORDER BY C.QERAAT_CODE";
         _onOfLoadList =OnOffLoadModel.findWithQuery(OnOffLoadModel.class,
                 query);
         return _onOfLoadList;
@@ -65,7 +70,7 @@ public class OnOffloadService implements IOnOffloadService {
                 " JOIN COUNTER_STATE_VALUE_KEY_MODEL S ON C.COUNTER_STATE_CODE=S.MAINCODE  " +
                 "JOIN READING_CONFIG_MODEL R ON C.TRACK_NUMBER=R.TRACK_NUMBER " +
                 "                WHERE S.ISMANE=1 AND R.IS_ACTIVE=1" +
-                "  ORDER BY C.ESHTERAK";
+                "  ORDER BY C.QERAAT_CODE";
         _onOfLoadList =OnOffLoadModel.findWithQuery(OnOffLoadModel.class,
                 query);
         return _onOfLoadList;
@@ -74,7 +79,7 @@ public class OnOffloadService implements IOnOffloadService {
         String query="SELECT C.* FROM ON_OFF_LOAD_MODEL C " +
                 "JOIN READING_CONFIG_MODEL R ON C.TRACK_NUMBER=R.TRACK_NUMBER " +
                 "  WHERE C.COUNTER_STATE_CODE IS NULL AND R.IS_ACTIVE=1" +
-                "  ORDER BY C.ESHTERAK";
+                "  ORDER BY C.QERAAT_CODE";
         _onOfLoadList =OnOffLoadModel.findWithQuery(OnOffLoadModel.class,
                 query);
         return _onOfLoadList;
@@ -85,7 +90,7 @@ public class OnOffloadService implements IOnOffloadService {
         String query="SELECT C.* FROM ON_OFF_LOAD_MODEL C " +
                 "JOIN READING_CONFIG_MODEL R ON C.TRACK_NUMBER=R.TRACK_NUMBER " +
                 "  WHERE C.COUNTER_STATE_CODE ="+counterStateCode+" AND R.IS_ACTIVE=1 " +
-                "  ORDER BY C.ESHTERAK";
+                "  ORDER BY C.QERAAT_CODE";
         _onOfLoadList =OnOffLoadModel.findWithQuery(OnOffLoadModel.class,query);
         return _onOfLoadList;
     }
@@ -129,5 +134,27 @@ public class OnOffloadService implements IOnOffloadService {
         _onOfLoadList =OnOffLoadModel.findWithQuery(OnOffLoadModel.class,
                 query);
         return _onOfLoadList;
+    }
+
+    /**
+     * <h1>get list by 'offloadState'</h1>
+     * <p>int offloadState is of type 'OffloadState' constant only class
+     * in models package</p>
+     * @param offloadState
+     * @return List<OnOffLoadModel></>
+     */
+    public List<OnOffLoadModel> get(int offloadState){
+        final List<OnOffLoadModel> onOffLoadModelList=OnOffLoadModel
+                .find(OnOffLoadModel.class, "OFF_LOAD_STATE= ? ", offloadState+"");
+        return onOffLoadModelList;
+    }
+
+    public void changeOffloadState(Collection<OnOffLoadModel> onOffloadList, int offloadState){
+        for (OnOffLoadModel onOffLoad : onOffloadList) {
+            onOffLoad.offLoadState = offloadState;
+            //onOffLoad.save();
+            Log.i("save done ",offloadState+"");
+        }
+        SugarRecord.saveInTx(onOffloadList);
     }
 }

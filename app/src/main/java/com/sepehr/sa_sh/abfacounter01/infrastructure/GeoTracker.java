@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -41,8 +42,13 @@ public class GeoTracker implements
     //
     public LatLang getLatLang(){
         LatLang latLang;
-        mLastLocation = LocationServices.FusedLocationApi
-                .getLastLocation(mGoogleApiClient);
+        try {
+            mLastLocation = LocationServices.FusedLocationApi
+                    .getLastLocation(mGoogleApiClient);
+        }catch (SecurityException e){
+            e.printStackTrace();
+            throw e;
+        }
 
         if (mLastLocation != null) {
             double latitude = mLastLocation.getLatitude();
@@ -56,8 +62,12 @@ public class GeoTracker implements
     }
     //
     public void displayLocation() {
+        try {
         mLastLocation = LocationServices.FusedLocationApi
                 .getLastLocation(mGoogleApiClient);
+        }catch (SecurityException e){
+            e.printStackTrace();
+        }
 
         if (mLastLocation != null) {
             double latitude = mLastLocation.getLatitude();
@@ -80,8 +90,10 @@ public class GeoTracker implements
     //
     public boolean checkPlayServices() {
         boolean resultBoolean=true;
-        int resultCode = GooglePlayServicesUtil
-                .isGooglePlayServicesAvailable(appContext);
+        GoogleApiAvailability googleApiAvailability=GoogleApiAvailability.getInstance();
+        int resultCode=googleApiAvailability.isGooglePlayServicesAvailable(appContext);
+     /*   int resultCode = GooglePlayServicesUtil
+                .isGooglePlayServicesAvailable(appContext);*/
         if (resultCode != ConnectionResult.SUCCESS) {
             resultBoolean=false;
         }
@@ -180,8 +192,13 @@ public class GeoTracker implements
      * Starting the location updates
      * */
     public void startLocationUpdates() {
+        try {
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 mGoogleApiClient, mLocationRequest, this);
+        }catch (SecurityException e){
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     /**
@@ -193,7 +210,13 @@ public class GeoTracker implements
     }
     //
     public Location getLastLocation(){
-       return LocationServices.FusedLocationApi
-                .getLastLocation(mGoogleApiClient);
+        try {
+            return LocationServices.FusedLocationApi
+                    .getLastLocation(mGoogleApiClient);
+        }
+        catch (SecurityException e){
+            e.printStackTrace();
+            throw e;
+        }
     }
 }

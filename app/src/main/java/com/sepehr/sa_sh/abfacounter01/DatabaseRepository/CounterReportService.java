@@ -7,11 +7,14 @@ import com.orm.util.SugarConfig;
 import com.orm.util.SugarCursor;
 import com.sepehr.sa_sh.abfacounter01.CounterReadingReport;
 import com.sepehr.sa_sh.abfacounter01.constants.CounterOrReportStatus;
+import com.sepehr.sa_sh.abfacounter01.models.OffloadState;
 import com.sepehr.sa_sh.abfacounter01.models.ReportCheckboxModel;
 import com.sepehr.sa_sh.abfacounter01.models.sqlLiteTables.CounterReportValueKeyModel;
+import com.sepehr.sa_sh.abfacounter01.models.sqlLiteTables.OnOffLoadModel;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -126,5 +129,19 @@ public class CounterReportService implements ICounterReportService{
         List<CounterReadingReport> readingReports=
                 CounterReadingReport.findWithQuery(CounterReadingReport.class, query);
         return readingReports;
+    }
+
+    public List<CounterReadingReport> get(int offloadState){
+        final  List<CounterReadingReport> reportList=CounterReadingReport
+                .find(CounterReadingReport.class,"OFF_LOAD_STATE= ? ",offloadState+"");
+        return reportList;
+    }
+
+    public void changeOffloadState(Collection<CounterReadingReport> reports, int offloadState){
+        for (CounterReadingReport report : reports) {
+            report.setOffLoadState(offloadState);
+            //report.save();
+        }
+        SugarRecord.saveInTx(reports);
     }
 }

@@ -14,9 +14,9 @@ import android.widget.RelativeLayout;
 import com.rey.material.widget.Spinner;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.CounterStateService;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.ICounterStateService;
-import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.IKarbariRepo;
+import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.IKarbariService;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.IReadingConfigService;
-import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.KarbariRepo;
+import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.KarbariService;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.ReadingConfigService;
 import com.sepehr.sa_sh.abfacounter01.models.sqlLiteTables.CounterReportValueKeyModel;
 import com.sepehr.sa_sh.abfacounter01.models.sqlLiteTables.OnOffLoadModel;
@@ -30,7 +30,7 @@ import java.util.List;
 public class ViewPagerAdaptor extends PagerAdapter {
 
     // Declare Variables
-    IKarbariRepo karbariManager;
+    IKarbariService karbariManager;
     IReadingConfigService readingConfigService;
     ICounterStateService counterStateManager;
     Typeface face;
@@ -53,7 +53,7 @@ public class ViewPagerAdaptor extends PagerAdapter {
         this.spinnerItems=spinnerItems;
         this.selectedReports=selectedReports;
         this.fragmentManager=fragmentManager;
-        this.karbariManager=new KarbariRepo();
+        this.karbariManager=new KarbariService();
     }
 
     @Override

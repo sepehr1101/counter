@@ -13,11 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rey.material.widget.Spinner;
-import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.IKarbariRepo;
-import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.KarbariRepo;
+import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.IKarbariService;
+import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.KarbariService;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.OnOffLoadStatic;
-import com.sepehr.sa_sh.abfacounter01.models.sqlLiteTables.KarbariGroup;
-import com.sepehr.sa_sh.abfacounter01.models.sqlLiteTables.KarbariModel;
 import com.sepehr.sa_sh.abfacounter01.models.sqlLiteTables.OnOffLoadModel;
 
 import java.util.ArrayList;
@@ -35,7 +33,7 @@ public class TaqirKarbariFragment extends DialogFragment {
     Spinner spinnerKarbariGroup,spinnerKarbari;
     int karbariGroupId,karbariId;
     String bill_id;
-    IKarbariRepo karbariRepo;
+    IKarbariService karbariRepo;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         getActivity().getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);//right to left
@@ -54,7 +52,7 @@ public class TaqirKarbariFragment extends DialogFragment {
         dismissDialog(rootView);
         confirmTaqirKarbari();
 
-        karbariRepo=new KarbariRepo();
+        karbariRepo=new KarbariService();
         karbariGroupTitles=karbariRepo.getKarbariGroupTitles();
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
                 R.layout.spinner_custom_item, karbariGroupTitles);

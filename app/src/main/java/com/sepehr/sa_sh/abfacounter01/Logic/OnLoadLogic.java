@@ -214,6 +214,8 @@ public class OnLoadLogic implements IOnLoadLogic{
                         CounterStateValueKeyModel.deleteAll(CounterStateValueKeyModel.class);
                         CounterReportValueKeyModel.deleteAll(CounterReportValueKeyModel.class);
                         KarbariModel.deleteAll(KarbariModel.class);
+                        HighLowModel.deleteAll(HighLowModel.class);
+
                         SugarRecord.saveInTx(onOffLoads);
                         SugarRecord.saveInTx(readingConfigs);
                         SugarRecord.saveInTx(counterStateValueKeys);

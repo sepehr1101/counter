@@ -15,7 +15,13 @@
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" >
+        <item name="android:actionOverflowButtonStyle">@style/OverFlowButton</item>
+        <item name="android:drawablePadding">2dp</item>
+    </style>
+    <style name="OverFlowButton">
+        <item name="android:layout_margin">3dp</item>
+    </style>
 
     <style name="MySpinnerStyle" parent="Material.Drawable.Ripple.Wave"></style>
 
@@ -24,4 +30,10 @@
         <item name="colorControlNormal">#FFF</item>
         <!-- colorControlActivated & colorControlHighlight use the colorAccent color by default -->
     </style>
+
+    <style name="OverflowMenuStyle" parent="AppTheme.PopupOverlay">
+        <item name="android:dropDownHorizontalOffset">-16dp</item>
+        <item name="android:dropDownVerticalOffset">16dp</item>
+    </style>
+
 </resources>

@@ -1,8 +1,4 @@
 package com.sepehr.sa_sh.abfacounter01;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.preference.PreferenceManager;
-
 import com.sepehr.sa_sh.abfacounter01.constants.CompanyNames;
 
 /**
