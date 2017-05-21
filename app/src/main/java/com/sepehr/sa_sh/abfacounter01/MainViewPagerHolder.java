@@ -20,6 +20,7 @@ public class MainViewPagerHolder {
     public TextView qotr;
     public TextView qotrSifoon;
     public TextView billId;
+    public TextView radif;
     public TextView firstLastName;
     public TextView eshterak;
     public ExpandableTextView address;
@@ -39,6 +40,7 @@ public class MainViewPagerHolder {
         qotr=(TextView)itemView.findViewById(R.id.qotr);
         qotrSifoon=(TextView) itemView.findViewById(R.id.qotrSifoon);
         billId = (TextView) itemView.findViewById(R.id.billId);
+        radif=(TextView)itemView.findViewById(R.id.radif);
         firstLastName = (TextView) itemView.findViewById(R.id.firstLastName);
         karbari=(TextView) itemView.findViewById(R.id.karbari);
         eshterak=(TextView) itemView.findViewById(R.id.eshterak);
@@ -65,6 +67,7 @@ public class MainViewPagerHolder {
         onOffLoad.sifoonQotr=onOffLoad.sifoonQotr==null?0 :onOffLoad.sifoonQotr;
         this.qotrSifoon.setText(qotrSifoonList[onOffLoad.getSifoonQotr()]);
         this.billId.setText(onOffLoad.billId);
+        this.radif.setText(onOffLoad.getRadif().setScale(0)+"");
         // firstLastName.setText(firstLastNames.get(position).trim());
 
         this.firstLastName.setText(onOffLoad.getName().trim() + " "

@@ -16,8 +16,8 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:background="@drawable/startup_items_shape"
-            android:layout_marginTop="80dp"
-            android:layout_marginBottom="140dp"
+            android:layout_marginTop="55dp"
+            android:layout_marginBottom="115dp"
             android:padding="16dp">
 
             <ImageView
@@ -27,7 +27,7 @@
                 android:layout_gravity="center"
                 android:textAlignment="center" />
             <ProgressBar
-                android:id="@+id/progressBarOffLoad"
+                android:id="@+id/progressBar"
                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
@@ -46,17 +46,41 @@
                 android:visibility="gone"
                 android:id="@+id/offLoadStateTextView"
                 android:layout_marginTop="16dp"/>
-
-            <Button
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_gravity="center"
-                android:foregroundGravity="center_horizontal"
-                android:text="تخلیه"
-                android:id="@+id/urgent_off_load_btn"
-                android:textSize="25sp"/>
+                android:orientation="vertical">
+
+                <com.rey.material.widget.Spinner
+                    style="@style/Material.Widget.Spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginTop="16dp"
+                    android:padding="2dp"
+                    android:background="@drawable/border_text_view"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:textSize="15sp"
+                    android:prompt="@string/spinner_prompt"
+                    android:id="@+id/listNumberSpinner"
+                    android:spinnerMode="dropdown"
+                    android:textColor="#EEE"
+                    android:popupBackground="@color/colorPrimary"
+                    android:visibility="visible"/>
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginTop="16dp"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_gravity="center"
+                    android:foregroundGravity="center_horizontal"
+                    android:text="تخلیه"
+                    android:id="@+id/offLoadButton"
+                    android:textSize="25sp"
+                    android:visibility="visible"/>
+            </LinearLayout>
+
         </LinearLayout>
     </LinearLayout>
     <View

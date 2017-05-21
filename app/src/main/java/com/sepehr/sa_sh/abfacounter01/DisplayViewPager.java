@@ -26,6 +26,7 @@ import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.KarbariService;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.OnOffloadService;
 import com.sepehr.sa_sh.abfacounter01.Logic.CounterNumberHelper;
 import com.sepehr.sa_sh.abfacounter01.Logic.ICounterNumberHelper;
+import com.sepehr.sa_sh.abfacounter01.constants.MenuItemId;
 import com.sepehr.sa_sh.abfacounter01.infrastructure.GeoTracker;
 import com.sepehr.sa_sh.abfacounter01.infrastructure.IGeoTracker;
 import com.sepehr.sa_sh.abfacounter01.infrastructure.IMediaPlayerManager;
@@ -241,8 +242,8 @@ public class DisplayViewPager extends BaseActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.display_view_pager, menu);
 
-        menu.add(Menu.NONE,MenuItemId.MENU_ITEM_QEIRE_MOJAZ.getValue(), Menu.NONE, R.string.menu_item_qeire_mojaz)
-                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
+        menu.add(Menu.NONE, MenuItemId.MENU_ITEM_QEIRE_MOJAZ.getValue(), Menu.NONE, R.string.menu_item_qeire_mojaz)
+                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM)
                 .setIcon(R.drawable.ic_block_white_48dp);
 
         menu.add(Menu.NONE,MenuItemId.MENU_ITEM_MORE_INFO.getValue(), Menu.NONE, R.string.menu_item_more_info)

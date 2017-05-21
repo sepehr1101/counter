@@ -131,6 +131,7 @@ public class ViewPagerAdaptor extends PagerAdapter {
         viewPagerHolder.shomareBadane.setTypeface(face);
         viewPagerHolder.preNumber.setTypeface(face);
         viewPagerHolder.billId.setTypeface(face);
+        viewPagerHolder.radif.setTypeface(face);
         viewPagerHolder.firstLastName.setTypeface(face);
         viewPagerHolder.eshterak.setTypeface(face);
         viewPagerHolder.addressExpandable.setTypeface(face);

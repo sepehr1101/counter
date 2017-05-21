@@ -27,7 +27,7 @@
                 android:layout_gravity="center"
                 android:textAlignment="center" />
             <ProgressBar
-                android:id="@+id/progressBarOffLoad"
+                android:id="@+id/progressBar"
                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:text="در حال تخلیه اطلاعات"
                 android:visibility="gone"
-                android:id="@+id/offLoadStateTextView"
+                android:id="@+id/loadStateTextView"
                 android:layout_marginTop="16dp"/>
 
             <Button
@@ -55,7 +55,7 @@
                 android:layout_gravity="center"
                 android:foregroundGravity="center_horizontal"
                 android:text="بارگیری"
-                android:id="@+id/offLoadButton"
+                android:id="@+id/startLoadButton"
                 android:textSize="25sp"/>
         </LinearLayout>
     </LinearLayout>

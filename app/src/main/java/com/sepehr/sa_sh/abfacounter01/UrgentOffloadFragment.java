@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -15,6 +16,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+
+import com.rey.material.widget.Spinner;
+import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.CounterReportService;
+import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.ICounterReportService;
+import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.IOnOffloadService;
+import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.IReadingConfigService;
+import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.IStatisticsRepo;
+import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.OnOffloadService;
+import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.ReadingConfigService;
+import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.StatisticsRepo;
+import com.sepehr.sa_sh.abfacounter01.Logic.IOffloadLogic;
+import com.sepehr.sa_sh.abfacounter01.Logic.OffloadLogic;
+import com.sepehr.sa_sh.abfacounter01.infrastructure.IToastAndAlertBuilder;
+import com.sepehr.sa_sh.abfacounter01.infrastructure.ToastAndAlertBuilder;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -28,19 +45,37 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Created by Sepehr on 10/20/2016.
+ * Created by _1101 on 10/20/2016.
  */
 public class UrgentOffloadFragment extends Fragment {
+
+    Context mContext;
+    Button mStartButton;
+    ProgressBar mProgressBar;
+    TextView mStateTextView;
+    Spinner mSpinner;
+
+    int userCode;
+    String token;
+    String deviceId;
+
+    IReadingConfigService readingConfigService;
+    IStatisticsRepo statisticsRepo;
+    IOnOffloadService onOffloadService;
+    ICounterReportService counterReportService;
+    IToastAndAlertBuilder toastAndAlertBuilder;
+
+    IOffloadLogic offloadLogic;
+
     public UrgentOffloadFragment() {
     }
-    Button urgentOffLoadBtn;
+    //Button urgentOffLoadBtn;
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_urgent_offload, container, false);
-        final Typeface face = Typeface.createFromAsset(getContext().getAssets(), "fonts/BZar.ttf");
-        List<CounterReadingModel01> counterReadingModel01List=
+        initialize(rootView);
+        //region bluetooth-old
+       /* List<CounterReadingModel01> counterReadingModel01List=
                 CounterReadingModel01.listAll(CounterReadingModel01.class);
         String fileString="";
         for (CounterReadingModel01 readingModel:counterReadingModel01List) {
@@ -63,13 +98,41 @@ public class UrgentOffloadFragment extends Fragment {
                     Log.e("send error :",e.getMessage());
                 }
             }
-        });
-
-
+        });*/
+        //endregion
         return rootView;
     }
-    //
-    private String generateOffloadRow(CounterReadingModel01 readingModel){
+
+    private void initialize(View rootView){
+        mContext=getContext();
+        mProgressBar=(ProgressBar) rootView.findViewById(R.id.progressBar);
+        mSpinner=(Spinner)rootView.findViewById(R.id.listNumberSpinner);
+        mStartButton=(Button)rootView.findViewById(R.id.offLoadButton);
+        mStateTextView=(TextView)rootView.findViewById(R.id.offLoadStateTextView);
+        userCode=((UrgentActivity)getContext()).getUserCode();
+        token=((UrgentActivity)getContext()).getToken();
+        deviceId= Build.SERIAL;
+        toastAndAlertBuilder=new ToastAndAlertBuilder(mContext);
+        readingConfigService=new ReadingConfigService();
+        statisticsRepo=new StatisticsRepo(mContext);
+        onOffloadService=new OnOffloadService(mContext);
+        counterReportService=new CounterReportService();
+        offloadLogic=new OffloadLogic(mContext,mStartButton,mProgressBar,mStateTextView,mSpinner,userCode,token,deviceId,
+                readingConfigService,toastAndAlertBuilder,statisticsRepo,onOffloadService,counterReportService);
+        startOffload();
+    }
+
+    private void startOffload(){
+        mStartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                offloadLogic.start(true);
+            }
+        });
+    }
+
+    //region old-bluetooth
+   /* private String generateOffloadRow(CounterReadingModel01 readingModel){
         String radif =readingModel.Radif==null?"0":readingModel.Radif.longValue()+"";
         String paddedRadif =  String.format("%9s", radif).replace(' ', '0');
 
@@ -150,5 +213,6 @@ public class UrgentOffloadFragment extends Fragment {
                 + "OUT_" + timeStamp + ".txt");
 
         return textFile;
-    }
+    }*/
+    //endregion
 }

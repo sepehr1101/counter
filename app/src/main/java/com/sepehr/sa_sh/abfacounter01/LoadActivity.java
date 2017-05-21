@@ -60,7 +60,8 @@ public class LoadActivity extends BaseActivity{
         startLoadButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onLoadLogic.start(false);
+                boolean isLocal=false;
+                onLoadLogic.start(isLocal);
             }
         });
     }

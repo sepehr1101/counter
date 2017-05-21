@@ -335,28 +335,41 @@
                 android:background="@android:color/transparent"/>
         </com.ms.square.android.expandabletextview.ExpandableTextView>
         <TextView
-        android:id="@+id/billId"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_margin="2dp"
-        android:layout_marginBottom="3dp"
-        android:padding="2dp"
-        android:text="شناسه"
-        android:background="@drawable/border_text_view"
-        android:gravity="center_horizontal|center_vertical"
-        android:textSize="35sp"
-        android:textColor="#EEE"/>
+            android:id="@+id/billId"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_margin="2dp"
+            android:layout_marginBottom="3dp"
+            android:padding="2dp"
+            android:text="شناسه"
+            android:background="@drawable/border_text_view"
+            android:gravity="center_horizontal|center_vertical"
+            android:textSize="35sp"
+            android:textColor="#EEE"
+            android:visibility="gone"/>
         <TextView
-        android:id="@+id/firstLastName"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_margin="2dp"
-        android:padding="2dp"
-        android:background="@drawable/border_text_view"
-        android:text=""
-        android:gravity="center"
-        android:textSize="35sp"
-        android:textColor="#EEE"/>
+            android:id="@+id/radif"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_margin="2dp"
+            android:layout_marginBottom="3dp"
+            android:padding="2dp"
+            android:text="شناسه"
+            android:background="@drawable/border_text_view"
+            android:gravity="center_horizontal|center_vertical"
+            android:textSize="35sp"
+            android:textColor="#EEE"/>
+        <TextView
+            android:id="@+id/firstLastName"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_margin="2dp"
+            android:padding="2dp"
+            android:background="@drawable/border_text_view"
+            android:text=""
+            android:gravity="center"
+            android:textSize="35sp"
+            android:textColor="#EEE"/>
         <com.rey.material.widget.Spinner
             style="@style/Material.Widget.Spinner"
             android:layout_width="wrap_content"

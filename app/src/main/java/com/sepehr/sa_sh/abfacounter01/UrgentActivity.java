@@ -25,10 +25,10 @@ public class UrgentActivity extends BaseActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapterTab adapter = new ViewPagerAdapterTab(getSupportFragmentManager());
-        adapter.addFragment(new BluetoothFragment(),"تنظیمات اتصال");
-        adapter.addFragment(new UrgentLoadFragment(), "بارگیری Bluetooth");
-        adapter.addFragment(new UrgentOffloadFragment(), "تخلیه Bluetooth");
+        adapter.addFragment(new UrgentLoadFragment(), "بارگیری offline");
+        adapter.addFragment(new UrgentOffloadFragment(), "تخلیه offline");
         adapter.addFragment(new SpecialLoadFragment(),"بارگیری ویژه");
+        adapter.addFragment(new BluetoothFragment(),"تنظیمات اتصال");
         viewPager.setAdapter(adapter);
     }
 }

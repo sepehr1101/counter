@@ -8,8 +8,8 @@ android {
         applicationId "com.sepehr.sa_sh.abfacounter01"
         minSdkVersion 21//17
         targetSdkVersion 25
-        versionCode 17
-        versionName "96.Q1.07"
+        versionCode 18
+        versionName "96.Q1.08"
     }
     buildTypes {
         release {

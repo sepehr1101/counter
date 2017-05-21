@@ -111,7 +111,9 @@ public class DifferentCompanyManager {
             case ZONE6:
                 return "http://172.26.0.32/";
             case TSW:
-                return "http://81.90.148.25/";
+                //return "http://81.90.148.25/";
+                //return "http://192.168.42.12:45455/";
+                return "http://172.30.1.22/";
             case TE:
                 return "http://172.31.0.25/";
             case TSE:
@@ -202,6 +204,6 @@ public class DifferentCompanyManager {
     }
     //
     public static CompanyNames getActiveCompanyName(){
-        return CompanyNames.TSW;
+        return CompanyNames.ZONE5;
     }
 }

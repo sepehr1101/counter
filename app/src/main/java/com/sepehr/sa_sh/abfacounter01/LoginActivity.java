@@ -93,21 +93,24 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                boolean isLocal=false;
                 switchVisibility();
                 userCode = usercodeEditCode.getText().toString();
                 password = passwordEditCode.getText().toString();
-                getToken(userCode, password);
+                if(userCode.length()>1){
+                    String userFirstChar= userCode.substring(0,1);
+                    if(userFirstChar.equals("0")){
+                        userCode=userCode.substring(1,userCode.length());
+                        isLocal=true;
+                    }
+                }
+                getToken(userCode, password,isLocal);
             }
         });
     }
     //
-    private void getToken(final String username, final String password){
-        boolean canILoginLocally=canILoginLocally();
-        if(canILoginLocally){
-            sharedPreferenceManager.put("isLocal",true);
-            sharedPreferenceManager.apply();
-        }
-        IAbfaService abfaService = NetworkHelper.getInstance(canILoginLocally).create(IAbfaService.class);
+    private void getToken(final String username, final String password,boolean islocal){
+        IAbfaService abfaService = NetworkHelper.getInstance(islocal).create(IAbfaService.class);
         final TokenRequestModel tokenRequestModel=new TokenRequestModel(username,password);
         Call<TokenResponseModel> call=abfaService.getToken(tokenRequestModel.username
                 ,tokenRequestModel.password,
@@ -253,7 +256,7 @@ public class LoginActivity extends AppCompatActivity {
         protected Boolean doInBackground(String... urls) {
             try {
                 try {
-                    URL url = new URL("http://192.168.1.1");
+                    URL url = new URL("http://192.168.42.12:45455");
 
                     HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
                     urlc.setRequestProperty("User-Agent", "Android Application:");

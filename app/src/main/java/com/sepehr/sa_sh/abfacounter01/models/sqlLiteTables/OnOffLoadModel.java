@@ -386,8 +386,8 @@ public class OnOffLoadModel extends SugarRecord{
         return this.possibleAddress==null?"":this.possibleAddress;
     }
 
-    public void setPossibleAddress(String possibleAddressl) {
-        this.possibleAddress = possibleAddressl;
+    public void setPossibleAddress(String possibleAddress) {
+        this.possibleAddress = possibleAddress;
     }
 
     public String getPossibleCounterSerial() {
