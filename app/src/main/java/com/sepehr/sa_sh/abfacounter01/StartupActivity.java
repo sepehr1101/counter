@@ -103,7 +103,9 @@ public class StartupActivity extends BaseActivity{
                         Manifest.permission.RECORD_AUDIO,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,
                         Manifest.permission.INTERNET,
-                        Manifest.permission.CALL_PHONE)
+                        Manifest.permission.CALL_PHONE
+                        //,Manifest.permission.READ_LOGS
+                        )
                 .check();
     }
     //

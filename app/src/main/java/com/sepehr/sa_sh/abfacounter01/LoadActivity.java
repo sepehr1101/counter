@@ -15,6 +15,8 @@ import com.sepehr.sa_sh.abfacounter01.infrastructure.IToastAndAlertBuilder;
 import com.sepehr.sa_sh.abfacounter01.infrastructure.ToastAndAlertBuilder;
 import com.sepehr.sa_sh.abfacounter01.models.UiElementInActivity;
 
+import java.util.concurrent.ExecutionException;
+
 public class LoadActivity extends BaseActivity{
     Button startLoadButton2;
     ProgressBar progressBar2;
@@ -55,11 +57,12 @@ public class LoadActivity extends BaseActivity{
                 deviceId,readingConfig,toastAndAlertBuilder);
         startLoadingButtonClickListener();
     }
-
+    TextView t;
     private void startLoadingButtonClickListener(){
         startLoadButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                t.setText("s");
                 boolean isLocal=false;
                 onLoadLogic.start(isLocal);
             }

@@ -36,7 +36,7 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/_load_activity"
                     android:layout_gravity="center"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"/>
                 <ProgressBar
                     android:id="@+id/progressBar2"
                     style="@style/Widget.AppCompat.ProgressBar.Horizontal"

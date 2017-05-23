@@ -98,8 +98,8 @@ public class LoginActivity extends AppCompatActivity {
                 userCode = usercodeEditCode.getText().toString();
                 password = passwordEditCode.getText().toString();
                 if(userCode.length()>1){
-                    String userFirstChar= userCode.substring(0,1);
-                    if(userFirstChar.equals("0")){
+                    String userFirstChar= userCode.substring(0,2);
+                    if(userFirstChar.equals("00")){
                         userCode=userCode.substring(1,userCode.length());
                         isLocal=true;
                     }

@@ -204,6 +204,6 @@ public class DifferentCompanyManager {
     }
     //
     public static CompanyNames getActiveCompanyName(){
-        return CompanyNames.ZONE5;
+        return CompanyNames.TSW;
     }
 }

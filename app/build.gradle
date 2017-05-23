@@ -54,6 +54,6 @@ dependencies {
     //splash shimmer
     compile 'com.koushikdutta.ion:ion:2.1.9'
     //web client
-    compile 'gun0912.ted:tedpermission:1.0.3'
-    //M permission
+    compile 'gun0912.ted:tedpermission:1.0.3'//M permission
+    compile 'ch.acra:acra:4.9.2'
 }

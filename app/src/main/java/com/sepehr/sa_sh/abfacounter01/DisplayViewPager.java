@@ -24,6 +24,7 @@ import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.IKarbariService;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.IOnOffloadService;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.KarbariService;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.OnOffloadService;
+import com.sepehr.sa_sh.abfacounter01.Fragments.FlashLightFragment;
 import com.sepehr.sa_sh.abfacounter01.Logic.CounterNumberHelper;
 import com.sepehr.sa_sh.abfacounter01.Logic.ICounterNumberHelper;
 import com.sepehr.sa_sh.abfacounter01.constants.MenuItemId;
@@ -246,13 +247,16 @@ public class DisplayViewPager extends BaseActivity {
                 .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM)
                 .setIcon(R.drawable.ic_block_white_48dp);
 
+        menu.add(Menu.NONE, MenuItemId.MENUE_ITEM_FLASH_LIGHT.getValue(), Menu.NONE, R.string.menu_item_flash_light)
+                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
         menu.add(Menu.NONE,MenuItemId.MENU_ITEM_MORE_INFO.getValue(), Menu.NONE, R.string.menu_item_more_info)
         .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
         .setIcon(R.drawable.ic_featured_play_list_white_36dp);
 
-        menu.add(Menu.NONE,MenuItemId.MENU_ITEM_LOCATION.getValue(), Menu.NONE, R.string.menu_item_location)
+       /* menu.add(Menu.NONE,MenuItemId.MENU_ITEM_LOCATION.getValue(), Menu.NONE, R.string.menu_item_location)
                 .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM)
-                .setIcon(R.drawable.ic_place_white_36dp);
+                .setIcon(R.drawable.ic_place_white_36dp);*/
 
         menu.add(Menu.NONE,MenuItemId.MENU_ITEM_REPORT.getValue(), Menu.NONE, R.string.menu_item_report)
                 .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
@@ -319,6 +323,10 @@ public class DisplayViewPager extends BaseActivity {
         if(id==MenuItemId.MENU_ITEM_QEIRE_MOJAZ.getValue()){
             QeireMojazFragment dialogFragment=new QeireMojazFragment();
             dialogFragment.show(fm, "غیر مجاز");
+        }
+        if(id==MenuItemId.MENUE_ITEM_FLASH_LIGHT.getValue()){
+            FlashLightFragment flashLightFragment=new FlashLightFragment();
+            flashLightFragment.show(fm,"نور فلاش");
         }
         if(id==MenuItemId.MENUE_ITEM_CONTACT_US.getValue()){
             ContactUsFragment dialogFragment=new ContactUsFragment();

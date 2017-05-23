@@ -15,6 +15,7 @@
     <string name="menu_item_viewpager_filter">فیلتر</string>
     <string name="menu_item_lock_input">نمایش/عدم نمایش صفحه کلید</string>
     <string name="menu_item_qeire_mojaz">غیر مجاز</string>
+    <string name="menu_item_flash_light">نور فلاش</string>
     <string name="menue_item_contact_us">ارتباط با ما</string>
     <string name="menue_item_display_last_unread">نمایش آخرین قرائت</string>
     <string name="title_activity_startup">فرم ورودی</string>
@@ -26,6 +27,12 @@
     <string name="title_activity_gps">GpsActivity</string>
     <string name="title_activity_setting">تنظیمات شخصی</string>
     <string name="title_activity_urgent">بارگیری/تخلیه اضطراری</string>
+
+    <string name="crash_toast_text">برنامه متوقف شد ، گزارش خطا به توسعه دهندگان این برنامه ارسال میشود تا هر چه سریعتر اشکال رفع شود</string>
+    <string name="crash_dialog_title">خطا در اجرای برنامه</string>
+    <string name="crash_dialog_text">همکار گرامی متاسفانه برنامه به دلیل اشکال متوقف شد. لطفا برای جلوگیری از تکرار این خطا در برنامه به ما کمک نمایید</string>
+    <string name="crash_dialog_comment_prompt">در صورتی که توضیحاتی در مورد اشکال اخیر میتوانید اضافه کنید:</string>
+    <string name="crash_dialog_ok_toast">با سپاس از شما</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
