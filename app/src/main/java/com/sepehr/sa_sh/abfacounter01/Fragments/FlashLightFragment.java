@@ -138,7 +138,7 @@ public class FlashLightFragment extends DialogFragment {
             // play sound
             playSound();
             camera.setParameters(params);
-            params.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+            params.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
             camera.stopPreview();
             isFlashOn = false;
 

@@ -6,6 +6,7 @@ import com.sepehr.sa_sh.abfacounter01.models.InterConnection.MobileInputModel;
 import com.sepehr.sa_sh.abfacounter01.models.SpecialLoadModel;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -31,6 +32,13 @@ public interface IAbfaService {
             @Query("userCode") int userCode,
             @Query("deviceId") String deviceId,
             @Query("currentVersion") int currentVersionCode);
+
+    @POST("Api/api/CRMobileLoad")
+    Call<MobileInputModel> reload(
+            @Header("Authorization") String token,
+            @Query("userCode") int userCode,
+            @Query("deviceId") String deviceId,
+            @Body Collection<BigDecimal> trackNumbers);
 
     @POST("Api/api/CRMobileOffLoad")
     Call<Integer> sendCounterReadingInfo(@Header("Authorization") String token,

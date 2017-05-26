@@ -20,6 +20,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageButton;
 
+import com.sepehr.sa_sh.abfacounter01.Activities.LoadActivity;
+import com.sepehr.sa_sh.abfacounter01.Activities.OffLoadActivity;
+
 public class FlashLight extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -170,7 +173,7 @@ public class FlashLight extends AppCompatActivity
 
         }
         else if (id == R.id.preferred_setting) {
-            Intent intentSetting=new Intent(this,SettingActivity.class);
+            Intent intentSetting=new Intent(this,AppSettingActivity.class);
             startActivity(intentSetting);
         }
         else if(id==R.id.close_app){

@@ -32,7 +32,9 @@ import com.sepehr.sa_sh.abfacounter01.models.sqlLiteTables.ReadingConfigModel;
 
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -53,7 +55,7 @@ import retrofit2.Retrofit;
  *@version 1.0.
  *@since 2017-04-24
  */
-public class OnLoadLogic implements IOnLoadLogic{
+public class ReloadLogic implements IOnLoadLogic{
     //declare variables
     Context mContext;
     Button mStartButton;
@@ -64,7 +66,7 @@ public class OnLoadLogic implements IOnLoadLogic{
     String token,deviceId;
     ReadingConfigService readingConfig;
     IToastAndAlertBuilder toastAndAlertBuilder;
-    public OnLoadLogic(Context mContext,
+    public ReloadLogic(Context mContext,
                        Button mStartButton,
                        ProgressBar mProgressBar,
                        TextView mStateTextView,
@@ -107,9 +109,10 @@ public class OnLoadLogic implements IOnLoadLogic{
     }
     //
     private void loadAndSaveData(boolean isLocal){
+        Collection<BigDecimal> trackNumbers=readingConfig.getReadTrackNumbers();
         IAbfaService abfaService = NetworkHelper.getInstance(isLocal).create(IAbfaService.class);
         Call<MobileInputModel> call=
-                abfaService.loadData(token, userCode, deviceId, BuildConfig.VERSION_CODE);
+                abfaService.reload(token, userCode, deviceId,trackNumbers);
         call.enqueue(new Callback<MobileInputModel>() {
             @Override
             public void onResponse(Call<MobileInputModel> call,
@@ -144,7 +147,7 @@ public class OnLoadLogic implements IOnLoadLogic{
     }
     //
     private void validateMyWorks(final MobileInputModel mobileInputModels){
-        OnLoadLogic.BackgroundSave task = new OnLoadLogic.BackgroundSave();
+        ReloadLogic.BackgroundSave task = new ReloadLogic.BackgroundSave();
         task.initialize(mProgressBar, mobileInputModels, mStateTextView,readingConfig.getMaxIndex());
         task.execute("start");
     }
@@ -265,5 +268,23 @@ public class OnLoadLogic implements IOnLoadLogic{
         protected void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
         }
+
+       /* private void deleteDuplicates(){
+            SugarTransactionHelper.doInTransaction(new SugarTransactionHelper.Callback() {
+                @Override
+                public void manipulateInTransaction() {
+                    CounterStateValueKeyModel.deleteAll(CounterStateValueKeyModel.class);
+                    CounterReportValueKeyModel.deleteAll(CounterReportValueKeyModel.class);
+                    KarbariModel.deleteAll(KarbariModel.class);
+                    HighLowModel.deleteAll(HighLowModel.class);
+                    SugarRecord.saveInTx(onOffLoads);
+                    SugarRecord.saveInTx(readingConfigs);
+                    SugarRecord.saveInTx(counterStateValueKeys);
+                    SugarRecord.saveInTx(counterReportValueKeys);
+                    SugarRecord.saveInTx(karbariInfos);
+                    highLowInfo.save();
+                }
+            });
+        }*/
     }
 }

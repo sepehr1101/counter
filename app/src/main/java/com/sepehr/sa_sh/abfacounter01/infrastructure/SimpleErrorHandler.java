@@ -1,8 +1,15 @@
 package com.sepehr.sa_sh.abfacounter01.infrastructure;
 
+import com.sepehr.sa_sh.abfacounter01.NetworkCommunication.ServiceGenerator;
+
 import java.io.IOException;
 import java.io.InterruptedIOException;
+import java.lang.annotation.Annotation;
 import java.net.SocketTimeoutException;
+
+import okhttp3.ResponseBody;
+import retrofit2.Converter;
+import retrofit2.Response;
 
 /**
  * Created by saeid on 3/12/2017.
@@ -50,5 +57,38 @@ public class SimpleErrorHandler {
             errorMessage="همکار گرامی لطفا چهت دریافت آخرین نسخه اپلیکیشن با راهبر تماس حاصل فرمایید";
         }
         return  errorMessage;
+    }
+
+    public static APIError parseError(Response<?> response) {
+        Converter<ResponseBody, APIError> converter =
+                ServiceGenerator.getInstance(false)
+                        .responseBodyConverter(APIError.class,new Annotation[0]);
+
+        APIError error;
+
+        try {
+            error = converter.convert(response.errorBody());
+        } catch (IOException e) {
+            return new APIError();
+        }
+
+        return error;
+    }
+
+    public static class APIError {
+
+        private int Status;
+        private String Message;
+
+        public APIError() {
+        }
+
+        public int status() {
+            return Status;
+        }
+
+        public String message() {
+            return Message;
+        }
     }
 }

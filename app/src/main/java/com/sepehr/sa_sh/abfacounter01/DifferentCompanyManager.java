@@ -112,7 +112,7 @@ public class DifferentCompanyManager {
                 return "http://172.26.0.32/";
             case TSW:
                 //return "http://81.90.148.25/";
-                //return "http://192.168.42.12:45455/";
+                //return "http://192.168.1.104:45455/";
                 return "http://172.30.1.22/";
             case TE:
                 return "http://172.31.0.25/";

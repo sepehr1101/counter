@@ -3,6 +3,7 @@ package com.sepehr.sa_sh.abfacounter01.DatabaseRepository;
 import com.sepehr.sa_sh.abfacounter01.models.sqlLiteTables.ReadingConfigModel;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -14,4 +15,6 @@ public interface IReadingConfigService {
     ReadingConfigModel get(BigDecimal trackNumber);
 
     List<String> getListNumbers();
+
+    Collection<BigDecimal> getReadTrackNumbers();
 }

@@ -3,6 +3,8 @@ package com.sepehr.sa_sh.abfacounter01;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 
+import com.sepehr.sa_sh.abfacounter01.Adopters.ViewPagerAdapterTab;
+import com.sepehr.sa_sh.abfacounter01.BaseClasses.BaseActivity;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.IStatisticsRepo;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.StatisticsRepo;
 import com.sepehr.sa_sh.abfacounter01.models.UiElementInActivity;

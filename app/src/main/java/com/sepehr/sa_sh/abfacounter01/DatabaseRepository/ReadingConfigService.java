@@ -7,6 +7,7 @@ import com.sepehr.sa_sh.abfacounter01.models.sqlLiteTables.ReadingConfigModel;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -72,5 +73,14 @@ public class ReadingConfigService implements IReadingConfigService{
             return readingConfigs.get(0).get_index()+1;
         }
         return 1;
+    }
+
+    public Collection<BigDecimal> getReadTrackNumbers(){
+        Collection<BigDecimal> trackNumbers=new ArrayList<>();
+        Collection<ReadingConfigModel> readingConfigs=ReadingConfigModel.listAll(ReadingConfigModel.class);
+        for (ReadingConfigModel readingConfig:readingConfigs) {
+            trackNumbers.add(readingConfig.getTrackNumber());
+        }
+        return trackNumbers;
     }
 }

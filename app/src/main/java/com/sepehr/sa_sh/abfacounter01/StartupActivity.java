@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Build;
 import android.provider.Settings;
@@ -18,16 +17,16 @@ import android.widget.Toast;
 
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
-import com.sepehr.sa_sh.abfacounter01.infrastructure.IToastAndAlertBuilder;
-import com.sepehr.sa_sh.abfacounter01.infrastructure.ToastAndAlertBuilder;
+import com.sepehr.sa_sh.abfacounter01.Activities.LoadActivity;
+import com.sepehr.sa_sh.abfacounter01.Adopters.ViewPagerAdapterTab;
+import com.sepehr.sa_sh.abfacounter01.BaseClasses.BaseActivity;
 import com.sepehr.sa_sh.abfacounter01.models.UiElementInActivity;
 import com.sepehr.sa_sh.abfacounter01.models.sqlLiteTables.KarbariGroup;
-import com.sepehr.sa_sh.abfacounter01.models.sqlLiteTables.OnOffLoadModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class StartupActivity extends BaseActivity{
+public class StartupActivity extends BaseActivity {
 
     private LinearLayout startupContentWrapper;
     private TabLayout tabLayout;

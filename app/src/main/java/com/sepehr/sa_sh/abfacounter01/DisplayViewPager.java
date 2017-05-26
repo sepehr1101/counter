@@ -18,6 +18,7 @@ import android.view.MenuItem;
 
 import com.orm.SugarTransactionHelper;
 import com.rey.material.widget.Spinner;
+import com.sepehr.sa_sh.abfacounter01.BaseClasses.BaseActivity;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.CounterReportService;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.CounterStateService;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.IKarbariService;

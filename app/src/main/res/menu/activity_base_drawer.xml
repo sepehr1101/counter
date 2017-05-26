@@ -5,31 +5,27 @@
         <item
             android:id="@+id/nav_load"
             android:icon="@drawable/ic_archive_black_36dp"
-            android:title="بارگیری" />
+            android:title="@string/title_activity_load" />
         <item
             android:id="@+id/nav_my_works"
             android:icon="@drawable/ic_assignment_black_36dp"
-            android:title="نمایش لیست" />
+            android:title="@string/title_activity_display_view_pager" />
         <item
             android:id="@+id/nav_off_load"
             android:icon="@drawable/ic_unarchive_black_36dp"
-            android:title="تخلیه" />
+            android:title="@string/title_activity_off_load" />
         <item
             android:id="@+id/nav_reports"
             android:icon="@drawable/ic_insert_chart_black_36dp"
-            android:title="گزارش" />
+            android:title="@string/title_activity_my_works_report" />
         <item
-            android:id="@+id/nav_urgent"
+            android:id="@+id/nav_reading_config"
             android:icon="@drawable/ic_portable_wifi_off_black_36dp"
-            android:title="بارگیری/تخلیه اضطراری" />
+            android:title="@string/title_activity_reading_config" />
     </group>
 
     <item android:title="امکانات">
         <menu>
-            <item
-                android:id="@+id/nav_flash_light"
-                android:icon="@drawable/ic_flash_on_black_36dp"
-                android:title="فلاش" />
             <item
                 android:id="@+id/nav_location"
                 android:icon="@drawable/ic_place_black_36dp"
@@ -37,7 +33,7 @@
             <item
                 android:id="@+id/preferred_setting"
                 android:icon="@drawable/ic_settings_black_36dp"
-                android:title="تنظیمات شخصی" />
+                android:title="@string/title_activity_setting" />
             <item
                 android:id="@+id/close_app"
                 android:icon="@drawable/ic_close_black_36dp"

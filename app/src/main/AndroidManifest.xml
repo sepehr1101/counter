@@ -63,7 +63,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoadActivity"
+            android:name=".Activities.LoadActivity"
             android:label="@string/title_activity_load"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
@@ -100,22 +100,21 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".OffLoadActivity"
+            android:name=".Activities.OffLoadActivity"
             android:label="@string/title_activity_off_load"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".SettingActivity"
+            android:name=".AppSettingActivity"
             android:label="@string/title_activity_setting"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".UrgentActivity"
-            android:label="@string/title_activity_urgent"
+            android:name=".ReadingConfigActivity"
+            android:label="@string/title_activity_reading_config"
             android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing" />
     </application>
 
 </manifest>

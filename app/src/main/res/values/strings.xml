@@ -21,12 +21,12 @@
     <string name="title_activity_startup">فرم ورودی</string>
     <string name="title_activity_login">صفحه ورود</string>
     <string name="title_activity_my_works_report">گزارش قرائت من</string>
-    <string name="title_activity_load">فرم بارگیری اطلاعات</string>
+    <string name="title_activity_load"> بارگیری اطلاعات</string>
     <string name="spinner_prompt">انتخاب کنید</string>
-    <string name="title_activity_off_load">تخلیه</string>
+    <string name="title_activity_off_load">تخلیه اطلاعات</string>
     <string name="title_activity_gps">GpsActivity</string>
-    <string name="title_activity_setting">تنظیمات شخصی</string>
-    <string name="title_activity_urgent">بارگیری/تخلیه اضطراری</string>
+    <string name="title_activity_setting">تنظیمات برنامه</string>
+    <string name="title_activity_reading_config">تنظیمات قرائت</string>
 
     <string name="crash_toast_text">برنامه متوقف شد ، گزارش خطا به توسعه دهندگان این برنامه ارسال میشود تا هر چه سریعتر اشکال رفع شود</string>
     <string name="crash_dialog_title">خطا در اجرای برنامه</string>
