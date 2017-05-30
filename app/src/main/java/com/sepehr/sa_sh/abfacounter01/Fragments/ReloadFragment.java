@@ -23,7 +23,7 @@ public class ReloadFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.base_load_fragment, container, false);
         int imageId=R.drawable._load_activity;
-        new LoadBase(getContext(),rootView,"بارگیری مجدد",imageId,true,true);
+        new LoadBase(getContext(),rootView,"بارگیری مجدد",imageId,false,true);
         return rootView;
     }
 }

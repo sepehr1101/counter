@@ -5,4 +5,16 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorAccentAlpha">#77FF4081</color>
     <color name="transparent">#00000000</color>
+
+    <color name="colorPrimaryRed">#FFCCBC</color>
+    <color name="colorPrimaryRedDark">#FF5722</color>
+    <color name="colorAccentRed">#263238</color>
+
+    <color name="white">#FFF</color>
+    <color name="milky">#EEE</color>
+    <color name="black">#000</color>
+
+    <color name="gradient_center">#08afaa</color>
+    <color name="gradient_end">#045464</color>
+    <color name="gradient_start">#10ae96</color>
 </resources>

@@ -26,6 +26,7 @@ import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.IOnOffloadService;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.KarbariService;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.OnOffloadService;
 import com.sepehr.sa_sh.abfacounter01.Fragments.FlashLightFragment;
+import com.sepehr.sa_sh.abfacounter01.Fragments.SearchFragment;
 import com.sepehr.sa_sh.abfacounter01.Logic.CounterNumberHelper;
 import com.sepehr.sa_sh.abfacounter01.Logic.ICounterNumberHelper;
 import com.sepehr.sa_sh.abfacounter01.constants.MenuItemId;

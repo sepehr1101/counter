@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="OverlayPrimaryColorRed">
+        <item name="colorPrimary">@color/colorPrimaryRed</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryRedDark</item>
+    </style>
+<!--
+    <style name="OverlayPrimaryColorGreen">
+        <item name="colorPrimary">@color/md_green_500</item>
+        <item name="colorPrimaryDark">@color/md_green_700</item>
+    </style>
+
+    <style name="OverlayPrimaryColorBlue">
+        <item name="colorPrimary">@color/md_blue_500</item>
+        <item name="colorPrimaryDark">@color/md_blue_700</item>
+    </style>-->
+</resources>

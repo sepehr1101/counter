@@ -153,7 +153,7 @@
                         android:layout_height="match_parent"
                         android:layout_toLeftOf="@+id/more2"
                         rv_centered="true"
-                        app:rv_color="#000">
+                        app:rv_color="@color/black">
                         <ImageView
                             android:clickable="false"
                             android:layout_width="match_parent"
@@ -213,7 +213,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#EEE" />
+                android:background="@color/milky" />
             <android.support.v4.view.ViewPager
                 android:id="@+id/startViewpager"
                 android:layout_width="match_parent"

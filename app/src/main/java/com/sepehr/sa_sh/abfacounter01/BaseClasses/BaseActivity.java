@@ -59,6 +59,7 @@ public abstract class BaseActivity extends AppCompatActivity
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);//right to left
         super.onCreate(savedInstanceState);
         uiElementInActivity=getUiElementsInActivity();
+        getTheme().applyStyle(R.style.OverlayPrimaryColorRed, true);
         setContentView(uiElementInActivity.getContentViewId());
         initializeBase();
         setSupportActionBar(toolbar);

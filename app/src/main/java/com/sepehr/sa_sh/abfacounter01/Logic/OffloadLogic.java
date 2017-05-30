@@ -235,6 +235,8 @@ public class OffloadLogic implements IOffloadLogic{
                 if(onOffloads!=null && onOffloads.size()>0){
                     OnOffLoadModel.deleteInTx(onOffloads);
                 }
+                OnOffLoadModel.deleteAll(OnOffLoadModel.class,"TRACK_NUMBER=?",readingConfig.getTrackNumber()+"");
+                CounterReadingReport.deleteAll(CounterReadingReport.class,"TRACK_NUMBER=?",readingConfig.getTrackNumber()+"");
                 if(reports!=null && reports.size()>0){
                     CounterReadingReport.deleteInTx(reports);
                 }

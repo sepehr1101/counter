@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import com.orm.SugarTransactionHelper;
+import com.sepehr.sa_sh.abfacounter01.CounterReadingReport;
 import com.sepehr.sa_sh.abfacounter01.Crypto;
 import com.sepehr.sa_sh.abfacounter01.R;
 import com.sepehr.sa_sh.abfacounter01.infrastructure.ISharedPreferenceManager;
@@ -94,6 +95,7 @@ public class DeleteDataFragment extends Fragment {
                 HighLowModel.deleteAll(HighLowModel.class);
                 OnOffLoadModel.deleteAll(OnOffLoadModel.class);
                 ReadingConfigModel.deleteAll(ReadingConfigModel.class);
+                CounterReadingReport.deleteAll(CounterReadingReport.class);
             }
         });
     }

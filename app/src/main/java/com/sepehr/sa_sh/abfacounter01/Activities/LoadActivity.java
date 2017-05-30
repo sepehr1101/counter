@@ -18,7 +18,7 @@ public class LoadActivity extends BaseActivity {
     @Override
     protected UiElementInActivity getUiElementsInActivity() {
         UiElementInActivity uiElementInActivity=new UiElementInActivity();
-        uiElementInActivity.setContentViewId(R.layout.activity_load);
+        uiElementInActivity.setContentViewId(R.layout.activity_base);
         return uiElementInActivity;
     }
 
