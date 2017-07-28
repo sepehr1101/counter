@@ -4,6 +4,7 @@ package com.sepehr.sa_sh.abfacounter01;
 import com.sepehr.sa_sh.abfacounter01.models.ChangePasswordModel;
 import com.sepehr.sa_sh.abfacounter01.models.InterConnection.MobileInputModel;
 import com.sepehr.sa_sh.abfacounter01.models.SpecialLoadModel;
+import com.sepehr.sa_sh.abfacounter01.models.sqlLiteTables.QeireMojazModel;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -26,21 +27,21 @@ import retrofit2.Call;
  */
 public interface IAbfaService {
 
-    @GET("Api/api/CRMobileLoad")
+    @GET("Api1/api/CRMobileLoad")
     Call<MobileInputModel> loadData(
             @Header("Authorization") String token,
             @Query("userCode") int userCode,
             @Query("deviceId") String deviceId,
             @Query("currentVersion") int currentVersionCode);
 
-    @POST("Api/api/CRMobileLoad")
+    @POST("Api1/api/CRMobileLoad")
     Call<MobileInputModel> reload(
             @Header("Authorization") String token,
             @Query("userCode") int userCode,
             @Query("deviceId") String deviceId,
             @Body Collection<BigDecimal> trackNumbers);
 
-    @POST("Api/api/CRMobileOffLoad")
+    @POST("Api1/api/CRMobileOffLoad")
     Call<Integer> sendCounterReadingInfo(@Header("Authorization") String token,
                                          @Body Output output,
                                          @Query("deviceId") String deviceId,
@@ -52,17 +53,17 @@ public interface IAbfaService {
     Call<String> changePassword(@Header("Authorization") String token,
                                  @Body ChangePasswordModel changePasswordModel);
 
-    @POST("Api/api/CRMobileLoad")
+    @POST("Api1/api/CRMobileLoad")
     Call<String> validateMyWorks(@Header("Authorization") String token,
             @Query("userCode") int userCode,
             @Query("deviceId") String deviceId,
             @Query("receivedRecordsCount") int myWorksCount);
 
-    @GET("Api/api/CRSpecialLoad")
+    @GET("Api1/api/CRSpecialLoad")
     Call<List<SpecialLoadModel>> getMySpecialWorks(@Header("Authorization") String token,
                                              @Query("dbf") String deviceId);
 
-    @POST("Api/api/QeireMojaz")
+    @POST("Api1/api/QeireMojaz")
     Call<String> sendQeireMojaz(@Header("Authorization") String token,
                                 @Body QeireMojazModel qeireMojazModel,
                                          @Query("deviceId") String deviceId,

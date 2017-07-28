@@ -73,10 +73,6 @@
 
     </LinearLayout>
     <View
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@color/colorPrimary"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="0dp">
+        style="@style/bottomView">
     </View>
 </RelativeLayout>

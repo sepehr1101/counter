@@ -58,8 +58,10 @@ public abstract class BaseActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);//right to left
         super.onCreate(savedInstanceState);
+        //setTheme(R.style.OverlayPrimaryColorRed);
+        sharedPreferenceManager=new SharedPreferenceManager(this);
         uiElementInActivity=getUiElementsInActivity();
-        getTheme().applyStyle(R.style.OverlayPrimaryColorRed, true);
+        setTheme();
         setContentView(uiElementInActivity.getContentViewId());
         initializeBase();
         setSupportActionBar(toolbar);
@@ -93,7 +95,7 @@ public abstract class BaseActivity extends AppCompatActivity
         return true;
     }
     //
-    @Override
+   /* @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -106,7 +108,7 @@ public abstract class BaseActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
     //
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -153,7 +155,27 @@ public abstract class BaseActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
-        sharedPreferenceManager=new SharedPreferenceManager(this);
+    }
+    //
+    private void setTheme(){
+        int themeIndex= sharedPreferenceManager.getInt("theme");
+        switch (themeIndex) {
+            case 0:
+                getTheme().applyStyle(R.style.AppTheme_GreenBlue_NoActionBar, true);
+                break;
+            case 1:
+                getTheme().applyStyle(R.style.AppTheme_DarkGrey_NoActionBar, true);
+                break;
+            case 2:
+                getTheme().applyStyle(R.style.AppTheme_Indigo_NoActionBar, true);
+                break;
+            case 3:
+                getTheme().applyStyle(R.style.AppTheme_Monochrome1_NoActionBar, true);
+                break;
+            default:
+                getTheme().applyStyle(R.style.AppTheme_GreenBlue_NoActionBar, true);
+                break;
+        }
     }
     //
     public int getUserCode(){

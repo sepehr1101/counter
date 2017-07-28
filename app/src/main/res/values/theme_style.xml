@@ -1,18 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="OverlayPrimaryColorRed">
-        <item name="colorPrimary">@color/colorPrimaryRed</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryRedDark</item>
-    </style>
-<!--
-    <style name="OverlayPrimaryColorGreen">
-        <item name="colorPrimary">@color/md_green_500</item>
-        <item name="colorPrimaryDark">@color/md_green_700</item>
+    <!-- Base application theme. -->
+    <style name="AppTheme.GreenBlue" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:colorBackground">@color/white</item>
+        <item name="actionBarStyle">@style/MyActionBar</item>
+        <item name="android:itemTextAppearance">@style/MyActionBar.MenuTextStyle</item>
+        <item name="android:itemBackground">?attr/colorPrimaryDark</item>
     </style>
 
-    <style name="OverlayPrimaryColorBlue">
-        <item name="colorPrimary">@color/md_blue_500</item>
-        <item name="colorPrimaryDark">@color/md_blue_700</item>
-    </style>-->
+    <style name="AppTheme.Red" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimaryRed</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryRedDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:colorBackground">@color/white</item>
+        <item name="actionBarStyle">@style/MyActionBar</item>
+        <item name="android:itemTextAppearance">@style/MyActionBar.MenuTextStyle</item>
+        <item name="android:itemBackground">?attr/colorPrimaryDark</item>
+    </style>
+
+    <style name="AppTheme.DarkGrey" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimaryDarkGrey</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkGreyDark</item>
+        <item name="colorAccent">@color/colorAccentDarkGrey</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:colorBackground">@color/white</item>
+        <item name="actionBarStyle">@style/MyActionBar</item>
+        <item name="android:itemTextAppearance">@style/MyActionBar.MenuTextStyle</item>
+        <item name="android:itemBackground">?attr/colorPrimaryDark</item>
+    </style>
+
+    <style name="AppTheme.Indigo" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimaryIndigo</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryIndigoDark</item>
+        <item name="colorAccent">@color/colorAccentIndigo</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:colorBackground">@color/white</item>
+        <item name="actionBarStyle">@style/MyActionBar</item>
+        <item name="android:itemTextAppearance">@style/MyActionBar.MenuTextStyle</item>
+        <item name="android:itemBackground">?attr/colorPrimaryDark</item>
+    </style>
+
+    <style name="AppTheme.Monochrome1" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimaryMonochrome1</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryMonochrome1Dark</item>
+        <item name="colorAccent">@color/colorAccentIndigo</item>
+        <item name="android:textColor">@color/colorAccentMonochrome1</item>
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:colorBackground">@color/white</item>
+        <item name="actionBarStyle">@style/MyActionBar</item>
+        <!--To change the text styling of options menu items</item>-->
+        <item name="android:itemTextAppearance">@style/MyActionBar.MenuTextStyle</item>
+        <!--To change the background of options menu-->
+        <item name="android:itemBackground">?attr/colorPrimaryDark</item>
+    </style>
+
+    <style name="MyActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="background">?attr/colorPrimaryDark</item>
+        <item name="titleTextStyle">@style/MyActionBarTitle</item>
+    </style>
+
+    <style name="MyActionBarTitle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="MyActionBar.MenuTextStyle"
+        parent="style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">?attr/colorAccent</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">25sp</item>
+    </style>
+
 </resources>

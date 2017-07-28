@@ -3,16 +3,28 @@
     <color name="colorPrimary">#08ADA8</color>
     <color name="colorPrimaryDark">#05727B</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="colorAccentAlpha">#77FF4081</color>
     <color name="transparent">#00000000</color>
 
     <color name="colorPrimaryRed">#FFCCBC</color>
     <color name="colorPrimaryRedDark">#FF5722</color>
-    <color name="colorAccentRed">#263238</color>
+
+    <color name="colorPrimaryDarkGrey">#263238</color>
+    <color name="colorPrimaryDarkGreyDark">#37474f </color>
+    <color name="colorAccentDarkGrey">#FF5722</color>
+
+    <color name="colorPrimaryIndigo">#0C374D</color>
+    <color name="colorPrimaryIndigoDark">#093145</color>
+    <color name="colorAccentIndigo">#EBC944</color>
+
+    <color name="colorPrimaryMonochrome1">#000000</color>
+    <color name="colorPrimaryMonochrome1Dark">#000000</color>
+    <color name="colorAccentMonochrome1">#FFFFFF</color>
 
     <color name="white">#FFF</color>
     <color name="milky">#EEE</color>
     <color name="black">#000</color>
+
+    <color name="textColor">#EEE</color>
 
     <color name="gradient_center">#08afaa</color>
     <color name="gradient_end">#045464</color>

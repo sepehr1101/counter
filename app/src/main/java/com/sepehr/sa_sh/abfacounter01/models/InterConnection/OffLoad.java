@@ -29,6 +29,7 @@ public class OffLoad {
     public Integer HighLowState;
     public Integer TEDAD_KHALI;
     public Integer OffloadedCount;
+    public Integer CounterStatePosition;
 
     public OffLoad() {
     }
@@ -56,5 +57,6 @@ public class OffLoad {
         this.PossibleTedadMaskooni=onOffLoadModel.getPossibleTedadMaskooni();
         this.PossibleTedadTejari=onOffLoadModel.getPossibleTedadTejari();
         this.TEDAD_KHALI=onOffLoadModel.getTedadKhali();
+        this.CounterStatePosition=onOffLoadModel.counterStatePosition;
     }
 }

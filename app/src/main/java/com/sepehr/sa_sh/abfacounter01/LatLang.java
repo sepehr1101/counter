@@ -6,8 +6,8 @@ import java.math.BigDecimal;
  * Created by saeid on 10/13/2016.
  */
 public class LatLang {
-    BigDecimal Latitude;
-    BigDecimal longtitude;
+    public BigDecimal Latitude;
+    public BigDecimal longtitude;
 
     public LatLang() {
     }

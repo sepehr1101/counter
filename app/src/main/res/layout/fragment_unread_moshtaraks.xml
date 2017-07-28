@@ -13,8 +13,7 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/controlsContainer"
-            android:background="#CC08ADA8"
+            android:background="?attr/colorPrimary"
             android:layout_alignParentBottom="true"
             android:layout_centerVertical="true"
             android:layout_centerInParent="true"
@@ -33,23 +32,20 @@
                 android:orientation="horizontal"
                 android:layout_marginBottom="4dp">
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/tedadKolText"
                     android:text="تعداد کل:"
-                    android:textSize="40dp"
-                    android:textStyle="bold"
-                    android:textColor="#EEE"
-                    android:id="@+id/tedadKolText"/>
+                    style="@style/statisticsElementBaseText.large" />
                 <TextView
+                    android:id="@+id/tedadKolVal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="250"
                     android:textSize="40dp"
                     android:textStyle="bold"
-                    android:textColor="#EEE"
+                    android:textColor="@color/textColor"
                     android:layout_gravity="left"
                     android:gravity="left"
-                    android:id="@+id/tedadKolVal"/>
+                  />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -57,20 +53,16 @@
                 android:orientation="horizontal"
                 android:layout_marginBottom="4dp">
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:text="تعداد قرائت نشده:"
-                    android:textSize="40dp"
-                    android:textStyle="bold"
-                    android:textColor="#EEE"
-                    android:id="@+id/tedadUnreadText"/>
+                    android:id="@+id/tedadUnreadText"
+                    style="@style/statisticsElementBaseText.large"  />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="245"
                     android:textSize="40dp"
                     android:textStyle="bold"
-                    android:textColor="#EEE"
+                    android:textColor="@color/textColor"
                     android:layout_gravity="left"
                     android:gravity="left"
                     android:id="@+id/tedadUnreadVal"/>
@@ -85,9 +77,9 @@
                     android:text="ادامه قرائت"
                     android:textSize="40dp"
                     android:textStyle="bold"
-                    android:textColor="@color/colorPrimaryDark"
+                    android:textColor="?attr/colorPrimaryDark"
                     android:gravity="center"
-                    android:background="#EEE"/>
+                    android:background="@color/textColor"/>
             </LinearLayout>
         </LinearLayout>
 

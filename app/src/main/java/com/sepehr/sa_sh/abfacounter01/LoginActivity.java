@@ -1,4 +1,5 @@
 package com.sepehr.sa_sh.abfacounter01;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -15,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.sepehr.sa_sh.abfacounter01.Activities.StartupActivity;
 import com.sepehr.sa_sh.abfacounter01.infrastructure.ISharedPreferenceManager;
 import com.sepehr.sa_sh.abfacounter01.infrastructure.IToastAndAlertBuilder;
 import com.sepehr.sa_sh.abfacounter01.infrastructure.SharedPreferenceManager;
@@ -142,7 +144,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<TokenResponseModel> call, Throwable t) {
                 String errorMessage ;
+                if(!isFinishing()){
                 toastAndAlertBuilder.makeSimpleAlert(SimpleErrorHandler.getErrorMessage(t));
+                }
                 Log.e("retrofit token error", t.toString());
                 ++failureCount;
                 if (canILoginOffline()) {
@@ -150,7 +154,9 @@ public class LoginActivity extends AppCompatActivity {
                         doLogin();
                     } else {
                         errorMessage = "نام کاربری و کامه عبور منطبق نیستند یا چنین کاربری وجود ندارد";
-                        toastAndAlertBuilder.makeSimpleAlert(errorMessage);
+                        if(!isFinishing()) {
+                            toastAndAlertBuilder.makeSimpleAlert(errorMessage);
+                        }
                         Log.e("invalid login attempt", " xxx");
                         switchVisibility();
                     }

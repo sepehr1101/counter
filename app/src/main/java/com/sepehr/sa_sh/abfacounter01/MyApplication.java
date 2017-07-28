@@ -43,4 +43,7 @@ public class MyApplication extends com.orm.SugarApp {
         // The following line triggers the initialization of ACRA
         ACRA.init(this);
     }
+    public static Context getAppContext() {
+        return MyApplication.getAppContext();
+    }
 }

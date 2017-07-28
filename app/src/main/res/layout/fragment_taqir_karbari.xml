@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:text="گروه کاربری:"
             android:textSize="30sp"
-            android:textColor="#000"
+            android:textColor="@color/black"
             android:gravity="right"
             android:layout_marginBottom="3dp"/>
         <com.rey.material.widget.Spinner
@@ -29,14 +29,14 @@
             android:prompt="@string/spinner_prompt"
             android:id="@+id/spinnerKarbariGroup"
             android:spinnerMode="dropdown"
-            android:textColor="#EEE"
-            android:popupBackground="@color/colorPrimary" />
+            android:textColor="@color/textColor"
+            android:popupBackground="?attr/colorPrimary" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="30sp"
-            android:textColor="#000"
+            android:textColor="@color/black"
             android:gravity="right"
             android:text="کاربری:"
             android:layout_marginTop="20dp"
@@ -53,8 +53,8 @@
             android:textSize="30sp"
             android:id="@+id/spinnerKarbari"
             android:spinnerMode="dropdown"
-            android:textColor="#EEE"
-            android:popupBackground="@color/colorPrimary"
+            android:textColor="@color/textColor"
+            android:popupBackground="?attr/colorPrimary"
             android:visibility="invisible"/>
     </LinearLayout>
 
@@ -72,7 +72,7 @@
             android:layout_weight="1"
             android:background="#D6D7D7"
             android:text="بستن فرم"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="?attr/colorPrimaryDark"
             android:layout_marginRight="5dp"
             android:textSize="20sp"
             android:id="@+id/dismissTaqirkarbari"/>
@@ -80,7 +80,7 @@
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="1"
-            android:background="@color/colorPrimaryDark"
+            android:background="?attr/colorPrimaryDark"
             android:text="تایید"
             android:textColor="#D6D7D7"
             android:textSize="20sp"

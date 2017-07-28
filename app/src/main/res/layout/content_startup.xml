@@ -9,7 +9,7 @@
     android:paddingRight="0dp"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.sepehr.sa_sh.abfacounter01.StartupActivity"
+    tools:context="com.sepehr.sa_sh.abfacounter01.Activities.StartupActivity"
     tools:showIn="@layout/app_bar_startup">
 
     <LinearLayout
@@ -54,7 +54,6 @@
                         android:text="جهت بارگیری اطلاعات جدید روی دستگاه از این گزینه استفاده فرمایید"/>
                 </LinearLayout>
                 <LinearLayout
-                    android:id="@+id/onLoad"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -91,7 +90,6 @@
                     android:orientation="vertical"
                     android:background="@drawable/startup_items_shape"
                     android:layout_margin="3dp"
-                    android:id="@+id/myWorks"
                     android:clickable="true">
                     <ImageView
                         android:layout_width="match_parent"
@@ -108,7 +106,6 @@
                         android:text="جهت نمایش اطلاعات بارگیری شده و ثبت شماره کنتور و وضعیت متناظر آن"/>
                 </LinearLayout>
                 <LinearLayout
-                    android:id="@+id/location"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -139,7 +136,6 @@
                 android:layout_margin="10dp"
                 android:visibility="invisible">
                 <LinearLayout
-                    android:id="@+id/flash"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -148,7 +144,6 @@
                     android:layout_margin="3dp"
                     android:clickable="true">
                     <com.andexert.library.RippleView
-                        android:id="@+id/more"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_toLeftOf="@+id/more2"
@@ -176,8 +171,7 @@
                     android:layout_weight="1"
                     android:orientation="vertical"
                     android:background="@drawable/startup_items_shape"
-                    android:layout_margin="3dp"
-                    android:id="@+id/my_works_report">
+                    android:layout_margin="3dp">
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -200,7 +194,7 @@
             android:layout_height="0dp"
             android:layout_weight="2"
             android:orientation="vertical"
-            android:background="@color/colorPrimary"
+            android:background="?attr/colorPrimary"
             android:padding="8dp">
             <android.support.design.widget.TabLayout
                 android:id="@+id/startTabs"
@@ -208,12 +202,12 @@
                 android:layout_height="wrap_content"
                 app:tabMode="fixed"
                 app:tabGravity="center"
-                android:background="@color/colorPrimary"
+                android:background="?attr/colorPrimary"
                 android:layout_marginBottom="6dp"/>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/milky" />
+                android:background="@color/textColor" />
             <android.support.v4.view.ViewPager
                 android:id="@+id/startViewpager"
                 android:layout_width="match_parent"

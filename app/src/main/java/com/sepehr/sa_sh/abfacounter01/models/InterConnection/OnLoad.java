@@ -35,6 +35,7 @@ public class OnLoad {
     public Integer Zarfiat;
     public Integer AhadMasraf;
     public String TavizDate;
+    public Integer CounterStatePosition;
 
     public OnLoad() {
     }
@@ -66,5 +67,6 @@ public class OnLoad {
         this.VaziatCode=onOffLoadModel.getVaziatCode();
         this.Zarfiat=onOffLoadModel.getZarfiat();
         this.ZoneId=onOffLoadModel.getZoneId();
+        this.CounterStatePosition=onOffLoadModel.getCounterStatePosition();
     }
 }

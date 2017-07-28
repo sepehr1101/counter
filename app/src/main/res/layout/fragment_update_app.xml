@@ -33,7 +33,7 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:textSize="25sp"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="?attr/colorPrimaryDark"
                 android:text="96.Q1.01"/>
         </LinearLayout>
         <ProgressBar

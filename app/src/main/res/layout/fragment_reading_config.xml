@@ -13,7 +13,7 @@
         android:layout_height="0dp"
         android:textDirection="rtl"
         android:textAlignment="center"
-        android:divider="@color/colorPrimaryDark"
+        android:divider="?attr/colorPrimaryDark"
         android:dividerHeight="2px"
         android:layout_weight="1"/>
 

@@ -130,6 +130,7 @@ public class OnOffLoadModel extends SugarRecord{
         this.setVaziatCode(onOffLoadViewModel.OnLoad.VaziatCode);
         this.setZarfiat(onOffLoadViewModel.OnLoad.Zarfiat);
         this.setZoneId(onOffLoadViewModel.OnLoad.ZoneId);
+        this.setCounterStatePosition(onOffLoadViewModel.OffLoad.CounterStatePosition);
     }
 
     //endregion

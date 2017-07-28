@@ -34,15 +34,14 @@
             android:layout_gravity="right"
             android:gravity="right"
             android:layout_marginRight="3dp"
-            android:textColor="@color/colorPrimary"/>
+            android:textColor="?attr/colorPrimary"/>
         <DigitalClock
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_gravity="center"
-            android:id="@+id/systemTime"
-            android:textColor="@color/colorPrimary"
+            android:textColor="?attr/colorPrimary"
             android:visibility="invisible"/>
         <TextView
             android:layout_width="0dp"
@@ -52,7 +51,7 @@
             android:id="@+id/countFraction"
             android:layout_gravity="left"
             android:gravity="left"
-            android:textColor="@color/colorPrimary"/>
+            android:textColor="?attr/colorPrimary"/>
     </LinearLayout>
 
     <android.support.v4.view.ViewPager

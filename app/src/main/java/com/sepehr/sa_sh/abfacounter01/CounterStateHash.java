@@ -8,9 +8,9 @@ import java.util.HashMap;
  */
 public final class CounterStateHash {
     //first -> counterStateCode (spinner) , second -> counterStateRealCode(biiling system)
-    private static HashMap<BigDecimal, Integer> counterHashMap = new HashMap<BigDecimal, Integer>();
+    private static HashMap<BigDecimal, Integer> counterHashMap = new HashMap<>();
     private static  HashMap<Integer,BigDecimal> counterInverseHashMap=new
-            HashMap<Integer,BigDecimal>();
+            HashMap<>();
 
     private static void generateInverse() {
         counterInverseHashMap.put(0, new BigDecimal(0));

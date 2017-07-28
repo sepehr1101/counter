@@ -1,5 +1,6 @@
 package com.sepehr.sa_sh.abfacounter01.infrastructure;
 
+import com.google.gson.JsonSyntaxException;
 import com.sepehr.sa_sh.abfacounter01.NetworkCommunication.ServiceGenerator;
 
 import java.io.IOException;
@@ -60,19 +61,20 @@ public class SimpleErrorHandler {
     }
 
     public static APIError parseError(Response<?> response) {
-        Converter<ResponseBody, APIError> converter =
-                ServiceGenerator.getInstance(false)
-                        .responseBodyConverter(APIError.class,new Annotation[0]);
-
-        APIError error;
-
         try {
+            Converter<ResponseBody, APIError> converter =
+                    ServiceGenerator.getInstance(false)
+                            .responseBodyConverter(APIError.class, new Annotation[0]);
+            APIError error;
             error = converter.convert(response.errorBody());
+            return error;
         } catch (IOException e) {
             return new APIError();
+        }catch (JsonSyntaxException e){
+            return new APIError();
+        }catch (Exception e){
+            return new APIError();
         }
-
-        return error;
     }
 
     public static class APIError {

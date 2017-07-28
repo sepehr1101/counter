@@ -75,7 +75,7 @@ public class ReloadLogic implements IOnLoadLogic{
                        ReadingConfigService readingConfig,
                        IToastAndAlertBuilder toastAndAlertBuilder) {
         this.mContext = mContext;
-        this.mStartButton =(Button) mStartButton;
+        this.mStartButton = mStartButton;
         this.mProgressBar = mProgressBar;
         this.mStateTextView = mStateTextView;
         this.userCode = userCode;
@@ -83,11 +83,12 @@ public class ReloadLogic implements IOnLoadLogic{
         this.deviceId = deviceId;
         this.readingConfig = readingConfig;
         this.toastAndAlertBuilder = toastAndAlertBuilder;
+        resetUiElements();
     }
     //
     public void start(boolean isLocal) {
         mProgressBar.setVisibility(View.VISIBLE);
-        mStateTextView.setText("در حال بارگیری اطلاعات");
+        mStateTextView.setText("اتصال به سرور...");
         mStateTextView.setVisibility(View.VISIBLE);
         mStartButton.setEnabled(false);
         mStartButton.setVisibility(View.GONE);

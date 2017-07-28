@@ -19,9 +19,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.VideoView;
 
+import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.ProgressCallback;
+import com.koushikdutta.ion.Response;
+import com.koushikdutta.ion.future.ResponseFuture;
 import com.orm.SugarTransactionHelper;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.OnOffLoadStatic;
 import com.sepehr.sa_sh.abfacounter01.constants.ActivityRequestCode;
@@ -29,6 +32,7 @@ import com.sepehr.sa_sh.abfacounter01.constants.ImageScale;
 import com.sepehr.sa_sh.abfacounter01.infrastructure.IImageOrVideoManager;
 import com.sepehr.sa_sh.abfacounter01.infrastructure.ImageOrVideoManager;
 import com.sepehr.sa_sh.abfacounter01.infrastructure.IToastAndAlertBuilder;
+import com.sepehr.sa_sh.abfacounter01.infrastructure.SimpleErrorHandler;
 import com.sepehr.sa_sh.abfacounter01.infrastructure.ToastAndAlertBuilder;
 import com.sepehr.sa_sh.abfacounter01.models.sqlLiteTables.CapturedImageModel;
 import com.sepehr.sa_sh.abfacounter01.models.sqlLiteTables.OnOffLoadModel;
@@ -162,7 +166,12 @@ public class CameraFragment extends DialogFragment {
                 try {
                     sendImage();
                 } catch (Exception e) {
-                    Log.e("fail ", e.getMessage());
+                    if(e.getMessage()!=null &&
+                       !e.getMessage().equals(null) &&
+                       e.getMessage().length()>0)
+                    {
+                        Log.e("fail ", e.getMessage());
+                    }
                     toastAndAlertBuilder.makeSimpleToast("خطا حین ارسال");
                 }
 
@@ -303,20 +312,32 @@ public class CameraFragment extends DialogFragment {
                 .setMultipartParameter("deviceId",Build.SERIAL)
                 .setMultipartParameter("billId",bill_id.trim())
                 .setMultipartParameter("trackNumber",trackNumber.toString())
-
-                //.asJsonObject()
                 .asString()
+                .withResponse()
                         // run a callback on completion                .
-                .setCallback(new FutureCallback<String>() {
+                .setCallback(new FutureCallback<Response<String>>() {
                     @Override
-                    public void onCompleted(Exception e, String result) {
+                    public void onCompleted(Exception e, Response<String> result) {
                         progressUpload.setVisibility(View.GONE);
                         if (e != null) {
                             textViewUpload.setText("ارسال با خطا مواجه شد");
-                            Log.e("MyLog", e.getMessage());
+                            if(e.getMessage()!=null &&
+                                    !e.getMessage().equals(null) &&
+                                    e.getMessage().length()>0)
+                            {
+                                Log.e("MyLog ", e.getMessage());
+                            }
                             return;
                         }
-                        Log.e("MyLog", "ion success" + result);
+                        int responseCode=result.getHeaders().code();
+                        if(responseCode!=200){
+                            String message= SimpleErrorHandler.getErrorMessage(responseCode);
+                            toastAndAlertBuilder.makeSimpleAlert("عکس با موفقیت در دستگاه شما ذخیره شد اما به دلیل خطا ارسال نشد"+
+                                    "\n"+"متن خطا:"+message);
+                            return;
+                        }
+                        //result=result==null?"":result;
+                        //Log.e("MyLog", "ion success" + result);
                         String remainedCount = "به دلیل محدودیت ترافیک اینترنت قادر به گرفتن فقط" + " "
                                 + getRemindedPicture()
                                 + " عکس دیگر هستید";

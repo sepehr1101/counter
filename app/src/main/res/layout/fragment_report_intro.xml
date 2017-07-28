@@ -10,8 +10,7 @@
         android:textSize="25dp"
         android:textStyle="bold"
         android:layout_centerInParent="true"
-        android:textColor="#EEE"
-        android:id="@+id/loadStateTextView2"
+        android:textColor="@color/milky"
         android:gravity="center"
         android:layout_gravity="center"
         android:layout_marginTop="16dp"/>
@@ -20,7 +19,7 @@
         android:layout_marginTop="16dp"
         android:layout_width="120dp"
         android:layout_height="40dp"
-        android:background="#EEE"
+        android:background="@color/milky"
         android:text="ورود"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="20sp"

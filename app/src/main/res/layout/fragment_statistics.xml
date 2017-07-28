@@ -14,15 +14,14 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/controlsContainer"
-            android:background="#CC08ADA8"
+            android:background="?attr/colorPrimary"
             android:layout_alignParentBottom="true"
             android:layout_centerVertical="true"
             android:layout_centerInParent="true"
             android:layout_centerHorizontal="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="30dp"
+            android:layout_margin="7dp"
             android:padding="@dimen/activity_horizontal_margin"
             android:orientation="vertical">
             <LinearLayout
@@ -31,21 +30,12 @@
                 android:orientation="horizontal"
                 android:layout_marginBottom="5dp">
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/sKolText"
                     android:text="تعداد کل:"
-                    android:textSize="25sp"
-                    android:textColor="#EEE"
-                    android:id="@+id/sKolText"/>
+                    style="@style/statisticsElementBaseText.medium"/>
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="250"
-                    android:textSize="25sp"
-                    android:textColor="#EEE"
-                    android:layout_gravity="left"
-                    android:gravity="left"
-                    android:id="@+id/sKolVal"/>
+                    android:id="@+id/sKolVal"
+                    style="@style/statisticsElementBaseText.medium"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -53,27 +43,15 @@
                 android:orientation="horizontal"
                 android:layout_marginBottom="5dp">
                 <View
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
                     android:background="@drawable/solid_square2"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="3dp"/>
+                    style="@style/statisticsElementSquare"/>
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:text="تعداد قرائت شده"
-                    android:textSize="25sp"
-                    android:textColor="#EEE"
-                    android:id="@+id/sReadText"/>
+                    android:id="@+id/sReadText"
+                    style="@style/statisticsElementBaseText.medium"/>
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="5"
-                    android:textSize="25sp"
-                    android:textColor="#EEE"
-                    android:layout_gravity="left"
-                    android:gravity="left"
-                    android:id="@+id/sReadVal"/>
+                    android:id="@+id/sReadVal"
+                   style="@style/statisticsElementValue"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -81,27 +59,15 @@
                 android:orientation="horizontal"
                 android:layout_marginBottom="5dp">
                 <View
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
                     android:background="@drawable/solid_squre"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="3dp"/>
+                    style="@style/statisticsElementSquare"/>
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/sUnreadText"
                     android:text="تعداد قرائت نشده"
-                    android:textSize="25sp"
-                    android:textColor="#EEE"
-                    android:id="@+id/sUnreadText"/>
+                    style="@style/statisticsElementBaseText.medium"/>
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="5"
-                    android:textSize="25sp"
-                    android:textColor="#EEE"
-                    android:layout_gravity="left"
-                    android:gravity="left"
-                    android:id="@+id/sUnreadVal"/>
+                    android:id="@+id/sUnreadVal"
+                    style="@style/statisticsElementValue"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -109,27 +75,15 @@
                 android:orientation="horizontal"
                 android:layout_marginBottom="5dp">
                 <View
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
                     android:background="@drawable/solid_square3"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="3dp"/>
+                    style="@style/statisticsElementSquare"/>
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/sAlalHesabText"
                     android:text="تعداد علی الحساب"
-                    android:textSize="25sp"
-                    android:textColor="#EEE"
-                    android:id="@+id/sAlalHesabText"/>
+                    style="@style/statisticsElementBaseText.medium"/>
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="5"
-                    android:textSize="25sp"
-                    android:textColor="#EEE"
-                    android:layout_gravity="left"
-                    android:gravity="left"
-                    android:id="@+id/sAlalHesabVal"/>
+                    android:id="@+id/sAlalHesabVal"
+                    style="@style/statisticsElementValue"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -137,21 +91,12 @@
                 android:orientation="horizontal"
                 android:layout_marginBottom="5dp">
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/sMasrafSefrText"
                     android:text="مصرف صفر"
-                    android:textSize="25sp"
-                    android:textColor="#EEE"
-                    android:id="@+id/sMasrafSefrText"/>
+                    style="@style/statisticsElementBaseText.medium"/>
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="5"
-                    android:textSize="25sp"
-                    android:textColor="#EEE"
-                    android:layout_gravity="left"
-                    android:gravity="left"
-                    android:id="@+id/sMasrafSefrVal"/>
+                    android:id="@+id/sMasrafSefrVal"
+                    style="@style/statisticsElementValue"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"

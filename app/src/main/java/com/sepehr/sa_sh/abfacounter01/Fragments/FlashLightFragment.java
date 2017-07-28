@@ -2,10 +2,7 @@ package com.sepehr.sa_sh.abfacounter01.Fragments;
 
 import android.app.AlertDialog;
 import android.content.pm.PackageManager;
-import android.graphics.Typeface;
 import android.hardware.Camera;
-import android.hardware.camera2.CameraCharacteristics;
-import android.hardware.camera2.CameraManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -15,9 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
-import com.sepehr.sa_sh.abfacounter01.FlashLight;
 import com.sepehr.sa_sh.abfacounter01.R;
 
 /**

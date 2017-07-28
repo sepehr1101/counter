@@ -144,8 +144,13 @@ public class OnOffloadService implements IOnOffloadService {
      * @return List<OnOffLoadModel></>
      */
     public List<OnOffLoadModel> get(int offloadState){
+        String query="SELECT C.* FROM ON_OFF_LOAD_MODEL C "+
+                "JOIN READING_CONFIG_MODEL R ON C.TRACK_NUMBER=R.TRACK_NUMBER "+
+                "WHERE C.OFF_LOAD_STATE="+offloadState+" "+"AND R.IS_ACTIVE=1";
+     /*   final List<OnOffLoadModel> onOffLoadModelList=OnOffLoadModel
+                .find(OnOffLoadModel.class, "OFF_LOAD_STATE= ? ", offloadState+"");*/
         final List<OnOffLoadModel> onOffLoadModelList=OnOffLoadModel
-                .find(OnOffLoadModel.class, "OFF_LOAD_STATE= ? ", offloadState+"");
+                .findWithQuery(OnOffLoadModel.class,query);
         return onOffLoadModelList;
     }
 

@@ -132,15 +132,19 @@ public class CounterReportService implements ICounterReportService{
     }
 
     public List<CounterReadingReport> get(int offloadState){
+        String query="SELECT C.* FROM COUNTER_READING_REPORT C "+
+                "JOIN READING_CONFIG_MODEL R ON C.TRACK_NUMBER=R.TRACK_NUMBER "+
+                "WHERE C.OFF_LOAD_STATE="+offloadState+" "+"AND R.IS_ACTIVE=1";
+      /*  final  List<CounterReadingReport> reportList=CounterReadingReport
+                .find(CounterReadingReport.class,"OFF_LOAD_STATE= ? ",offloadState+"");*/
         final  List<CounterReadingReport> reportList=CounterReadingReport
-                .find(CounterReadingReport.class,"OFF_LOAD_STATE= ? ",offloadState+"");
+                .findWithQuery(CounterReadingReport.class,query);
         return reportList;
     }
 
     public void changeOffloadState(Collection<CounterReadingReport> reports, int offloadState){
         for (CounterReadingReport report : reports) {
             report.setOffLoadState(offloadState);
-            //report.save();
         }
         SugarRecord.saveInTx(reports);
     }

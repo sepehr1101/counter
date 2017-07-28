@@ -1,11 +1,7 @@
 package com.sepehr.sa_sh.abfacounter01.BaseClasses;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Build;
-import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -40,23 +36,16 @@ public class LoadBase {
     boolean isLocal;
 
     public LoadBase(Context context, View rootView, String startButtonText,
-                    int imageResorce, boolean isLocal, boolean isReload) {
+                    int imageResource, boolean isLocal, boolean isReload) {
         mContext=context;
         this.isLocal=isLocal;
-        initialize(rootView,startButtonText,imageResorce,isReload);
+        initialize(rootView,startButtonText,imageResource,isReload);
     }
 
     public void initialize(View rootView,String startButtonText,int imageResource,boolean isReload){
-
         deviceId= Build.SERIAL;
-        SharedPreferences prefs = PreferenceManager
-                .getDefaultSharedPreferences(mContext);
-        userCode=prefs.getInt("userCode",0);
-        startLoadButton=(Button)rootView.findViewById(R.id.startLoadButton);
+        findAndSetViews(rootView);
         startLoadButton.setText(startButtonText);
-        progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
-        loadStateTextView=(TextView)rootView.findViewById(R.id.loadStateTextView);
-        loadImageView=(ImageView)rootView.findViewById(R.id.loadImage);
         loadImageView.setImageResource(imageResource);
         progressBar.setScaleY(7f);
         userCode=((LoadActivity)mContext).getUserCode();
@@ -72,6 +61,13 @@ public class LoadBase {
                     deviceId,readingConfig,toastAndAlertBuilder);
         }
         startLoadingButtonClickListener();
+    }
+
+    public void findAndSetViews(View rootView){
+        startLoadButton=(Button)rootView.findViewById(R.id.startLoadButton);
+        progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
+        loadStateTextView=(TextView)rootView.findViewById(R.id.loadStateTextView);
+        loadImageView=(ImageView)rootView.findViewById(R.id.loadImage);
     }
 
     private void startLoadingButtonClickListener(){

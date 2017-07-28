@@ -73,7 +73,7 @@ public class OnLoadLogic implements IOnLoadLogic{
                        ReadingConfigService readingConfig,
                        IToastAndAlertBuilder toastAndAlertBuilder) {
         this.mContext = mContext;
-        this.mStartButton =(Button) mStartButton;
+        this.mStartButton = mStartButton;
         this.mProgressBar = mProgressBar;
         this.mStateTextView = mStateTextView;
         this.userCode = userCode;
@@ -81,11 +81,12 @@ public class OnLoadLogic implements IOnLoadLogic{
         this.deviceId = deviceId;
         this.readingConfig = readingConfig;
         this.toastAndAlertBuilder = toastAndAlertBuilder;
+        resetUiElements();
     }
     //
     public void start(boolean isLocal) {
         mProgressBar.setVisibility(View.VISIBLE);
-        mStateTextView.setText("در حال بارگیری اطلاعات");
+        mStateTextView.setText("اتصال به سرور...");
         mStateTextView.setVisibility(View.VISIBLE);
         mStartButton.setEnabled(false);
         mStartButton.setVisibility(View.GONE);
@@ -95,6 +96,7 @@ public class OnLoadLogic implements IOnLoadLogic{
     private void resetUiElements(){
         mProgressBar.setVisibility(View.GONE);
         mStateTextView.setVisibility(View.GONE);
+        mStateTextView.setText("");
         mStartButton.setEnabled(true);
         mStartButton.setVisibility(View.VISIBLE);
     }
@@ -114,7 +116,7 @@ public class OnLoadLogic implements IOnLoadLogic{
             @Override
             public void onResponse(Call<MobileInputModel> call,
                                    retrofit2.Response<MobileInputModel> response) {
-                //
+                mStateTextView.setText("بارگیری داده ها...");
                 //region_______________________ response implicit error___________________
                 if(!response.isSuccessful()){
                     SimpleErrorHandler.APIError error=SimpleErrorHandler.parseError(response);
@@ -130,7 +132,7 @@ public class OnLoadLogic implements IOnLoadLogic{
                 //endregion
                 //
                 MobileInputModel loadedData = response.body();
-                mStateTextView.setText("در حال اعتبار سنجی داده های دریافتی");
+                mStateTextView.setText("اعتبار سنجی داده های دریافتی");
                 validateMyWorks(loadedData);
             }
 

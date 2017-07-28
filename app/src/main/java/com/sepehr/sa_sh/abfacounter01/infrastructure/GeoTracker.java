@@ -109,6 +109,9 @@ public class GeoTracker implements
     public void resume() {
         checkPlayServices();
         mRequestingLocationUpdates=true;
+        if (!mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.connect();
+        }
         // Resuming the periodic location updates
         if (mGoogleApiClient.isConnected()) {
             startLocationUpdates();
@@ -138,7 +141,7 @@ public class GeoTracker implements
         displayLocation();
         if (mRequestingLocationUpdates) {
             startLocationUpdates();
-        } //******now*******
+        }
     }
     //
     @Override
@@ -205,8 +208,10 @@ public class GeoTracker implements
      * Stopping location updates
      */
     public void stopLocationUpdates() {
-        LocationServices.FusedLocationApi.removeLocationUpdates(
-                mGoogleApiClient, this);
+        if(mGoogleApiClient.isConnected()) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(
+                    mGoogleApiClient, this);
+        }
     }
     //
     public Location getLastLocation(){

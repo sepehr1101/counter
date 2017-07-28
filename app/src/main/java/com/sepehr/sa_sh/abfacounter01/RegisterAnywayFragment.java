@@ -31,6 +31,9 @@ public class RegisterAnywayFragment extends DialogFragment {
         else if(averageState==AverageState.HIGH){
             alertTitle.setText("مصرف بالا ، آیا صحت شماره کنتور را تایید مینمایید؟");
         }
+        else if(averageState==AverageState.LOW){
+            alertTitle.setText("مصرف پایین ، آیا صحت شماره کنتور را تایید مینمایید؟");
+        }
         //
         onNoButtonClick(rootView);
         onYesButtonClick(rootView);

@@ -19,7 +19,7 @@ import com.manolovn.trianglify.TrianglifyView;*/
  * Created by sa-sh on 8/12/2016.
  */
 public class AlalHesabFragment extends Fragment {
-    TextView tedadKolText,tedadKolVal,alalHesabText,alalHesabVal;
+   private TextView tedadKolText,tedadKolVal,alalHesabText,alalHesabVal;
     String[] spinnerItems;
     Spinner maneSpinner;
     public AlalHesabFragment() {

@@ -27,7 +27,7 @@
                 android:layout_weight="1"
                 android:text="آقای شمسایی"
                 android:textSize="20dp"
-                android:textColor="#000000"
+                android:textColor="@color/black"
                 android:layout_margin="4dp"
                 android:layout_gravity="right"/>
             <TextView
@@ -36,7 +36,7 @@
                 android:layout_weight="1"
                 android:text="09357366741"
                 android:textSize="20dp"
-                android:textColor="#000000"
+                android:textColor="@color/black"
                 android:layout_margin="4dp"
                 android:layout_gravity="left"/>
         </LinearLayout>
@@ -52,9 +52,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/colorPrimaryDark"
+                android:background="?attr/colorPrimaryDark"
                 android:text="بستن فرم"
-                android:textColor="#D6D7D7"
+                android:textColor="?attr/colorAccent"
                 android:textSize="20sp"
                 android:layout_margin="4dp"/>
             <Button
@@ -62,9 +62,9 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:background="@color/colorAccent"
+                android:background="?attr/colorAccent"
                 android:text="تماس"
-                android:textColor="#D6D7D7"
+                android:textColor="?attr/colorPrimaryDark"
                 android:textSize="20sp"
                 android:layout_margin="4dp"/>
         </LinearLayout>

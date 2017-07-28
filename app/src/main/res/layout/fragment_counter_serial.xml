@@ -26,7 +26,7 @@
                 android:digits="0123456789"
                 android:theme="@style/MyEditTextTheme"
                 android:textSize="20sp"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="?attr/colorPrimaryDark"
                 android:maxLength="10"/>
         </android.support.design.widget.TextInputLayout>
 
@@ -46,7 +46,7 @@
             android:layout_weight="1"
             android:background="#D6D7D7"
             android:text="بستن فرم"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="?attr/colorPrimaryDark"
             android:layout_marginRight="5dp"
             android:textSize="20sp"
             android:id="@+id/dismiss"/>
@@ -54,7 +54,7 @@
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="1"
-            android:background="@color/colorPrimaryDark"
+            android:background="?attr/colorPrimaryDark"
             android:text="تایید"
             android:textColor="#D6D7D7"
             android:textSize="20sp"

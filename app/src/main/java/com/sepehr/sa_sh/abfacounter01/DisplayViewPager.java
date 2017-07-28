@@ -2,6 +2,8 @@ package com.sepehr.sa_sh.abfacounter01;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,11 +27,14 @@ import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.IKarbariService;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.IOnOffloadService;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.KarbariService;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.OnOffloadService;
+import com.sepehr.sa_sh.abfacounter01.Fragments.ContactUsFragment;
 import com.sepehr.sa_sh.abfacounter01.Fragments.FlashLightFragment;
+import com.sepehr.sa_sh.abfacounter01.Fragments.QeireMojazFragment;
 import com.sepehr.sa_sh.abfacounter01.Fragments.SearchFragment;
 import com.sepehr.sa_sh.abfacounter01.Logic.CounterNumberHelper;
 import com.sepehr.sa_sh.abfacounter01.Logic.ICounterNumberHelper;
 import com.sepehr.sa_sh.abfacounter01.constants.MenuItemId;
+import com.sepehr.sa_sh.abfacounter01.infrastructure.FlashLightManager;
 import com.sepehr.sa_sh.abfacounter01.infrastructure.GeoTracker;
 import com.sepehr.sa_sh.abfacounter01.infrastructure.IGeoTracker;
 import com.sepehr.sa_sh.abfacounter01.infrastructure.IMediaPlayerManager;
@@ -61,6 +66,8 @@ import retrofit2.Callback;
 
 public class DisplayViewPager extends BaseActivity {
     Context appContext;
+    Menu globalMenu;
+    MenuItem flashMenuItem;
     IToastAndAlertBuilder toastAndAlertBuilder;
     IKarbariService karbariService;
     ICounterNumberHelper counterNumberHelper;
@@ -243,24 +250,23 @@ public class DisplayViewPager extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        globalMenu=menu;
         getMenuInflater().inflate(R.menu.display_view_pager, menu);
 
         menu.add(Menu.NONE, MenuItemId.MENU_ITEM_QEIRE_MOJAZ.getValue(), Menu.NONE, R.string.menu_item_qeire_mojaz)
                 .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM)
                 .setIcon(R.drawable.ic_block_white_48dp);
 
-        menu.add(Menu.NONE, MenuItemId.MENUE_ITEM_FLASH_LIGHT.getValue(), Menu.NONE, R.string.menu_item_flash_light)
-                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
         menu.add(Menu.NONE,MenuItemId.MENU_ITEM_MORE_INFO.getValue(), Menu.NONE, R.string.menu_item_more_info)
-        .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
+        .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM)
         .setIcon(R.drawable.ic_featured_play_list_white_36dp);
 
        /* menu.add(Menu.NONE,MenuItemId.MENU_ITEM_LOCATION.getValue(), Menu.NONE, R.string.menu_item_location)
                 .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM)
                 .setIcon(R.drawable.ic_place_white_36dp);*/
 
-        menu.add(Menu.NONE,MenuItemId.MENU_ITEM_REPORT.getValue(), Menu.NONE, R.string.menu_item_report)
+        menu.add(Menu.NONE,MenuItemId.MENU_ITEM_REPORT.getValue(), Menu.NONE, R.string.menu_item_more_info)
                 .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
                 .setIcon(R.drawable.ic_warning_white_36dp);
 
@@ -271,6 +277,10 @@ public class DisplayViewPager extends BaseActivity {
         menu.add(Menu.NONE,MenuItemId.MENU_ITEM_SEARCH.getValue(),Menu.NONE,R.string.menu_item_search)
                 .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
                 .setIcon(R.drawable.ic_search_white_36dp);
+
+        flashMenuItem= menu.add(Menu.NONE, MenuItemId.MENUE_ITEM_FLASH_LIGHT.getValue(), Menu.NONE, R.string.menu_item_flash_light);
+        flashMenuItem.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
+                .setIcon(R.drawable.ic_flash_on_white_36dp);
 
         menu.add(Menu.NONE, MenuItemId.MENUE_ITEM_DISPLAY_LAST_UNREAD.getValue(), Menu.NONE, R.string.menue_item_display_last_unread)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
@@ -295,11 +305,11 @@ public class DisplayViewPager extends BaseActivity {
         int id = item.getItemId();
         FragmentManager fm = getSupportFragmentManager();
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+      /*  if (id == R.id.action_settings) {
             MoshtarakMoreInfoFragment dialogFragment = new MoshtarakMoreInfoFragment ();
             dialogFragment.show(fm, "اطلاعات مشترک");
             return true;
-        }
+        }*/
         if(id==MenuItemId.MENU_ITEM_LOCATION.getValue()){
 
         }
@@ -327,8 +337,18 @@ public class DisplayViewPager extends BaseActivity {
             dialogFragment.show(fm, "غیر مجاز");
         }
         if(id==MenuItemId.MENUE_ITEM_FLASH_LIGHT.getValue()){
-            FlashLightFragment flashLightFragment=new FlashLightFragment();
-            flashLightFragment.show(fm,"نور فلاش");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                 FlashLightManager.getInstance(getApplicationContext());
+                 boolean isFlashOn= FlashLightManager.toggleFlash();
+                if(isFlashOn)
+                    flashMenuItem.setIcon(R.drawable.ic_flash_off_white_36dp);
+                else
+                    flashMenuItem.setIcon(R.drawable.ic_flash_on_white_36dp);
+            }
+            else{
+                FlashLightFragment flashLightFragment=new FlashLightFragment();
+                flashLightFragment.show(fm,"نور فلاش");
+            }
         }
         if(id==MenuItemId.MENUE_ITEM_CONTACT_US.getValue()){
             ContactUsFragment dialogFragment=new ContactUsFragment();
@@ -400,6 +420,13 @@ public class DisplayViewPager extends BaseActivity {
             onOffLoadModel = OnOffLoadModel
                     .find(OnOffLoadModel.class, "BILL_ID = ? ", bill_id)
                     .get(0);
+            if(!isRegisterLimitValid(onOffLoadModel.offloadedCount)){
+                toastAndAlertBuilder.makeSimpleAlert(" همکار گرامی به حداکثر ویرایش این اشتراک رسیده اید");
+                return;
+            }
+            onOffLoadModel.offloadedCount=increaseRegisterLimit(onOffLoadModel.offloadedCount);
+            onOffLoadModel.save();
+            ///
             onOffLoadModel.offLoadState = 1;//1= sabt shode vali ersal nashode
 
             //region ______________________________ 1 _____________________________
@@ -491,6 +518,25 @@ public class DisplayViewPager extends BaseActivity {
         catch (Exception e){
           toastAndAlertBuilder.makeSimpleToast("ثبت با خطا روبرو شد، لطفا از عددی بودن شماره کنتور اطمینان حاصل کنید");
         }
+    }
+    //
+    private boolean isRegisterLimitValid(Integer registerCount){
+        final int REGISTER_LIMIT_=4;
+        if(registerCount==null){
+            return true;
+        }
+        if(registerCount<=REGISTER_LIMIT_){
+            return true;
+        }
+        return false;
+    }
+
+    private Integer increaseRegisterLimit(Integer registerCount){
+        if(registerCount==null){
+            return 0;
+        }
+        Integer modifiedValue=++registerCount;
+        return modifiedValue;
     }
     //
     public void spinnerCounterStateClick(View view){

@@ -7,6 +7,7 @@ import com.sepehr.sa_sh.abfacounter01.Adopters.ViewPagerAdapterTab;
 import com.sepehr.sa_sh.abfacounter01.BaseClasses.BaseActivity;
 import com.sepehr.sa_sh.abfacounter01.Fragments.ChangePasswordFragment;
 import com.sepehr.sa_sh.abfacounter01.Fragments.RouteConfigFragment;
+import com.sepehr.sa_sh.abfacounter01.Fragments.ThemeFragment;
 import com.sepehr.sa_sh.abfacounter01.models.UiElementInActivity;
 
 public class AppSettingActivity extends BaseActivity {
@@ -32,6 +33,7 @@ public class AppSettingActivity extends BaseActivity {
         ViewPagerAdapterTab adapter = new ViewPagerAdapterTab(getSupportFragmentManager());
         adapter.addFragment(new ChangePasswordFragment(),"تغییر پسوورد");
         adapter.addFragment(new UpdateAppFragment(),"به روز رسانی");
+        adapter.addFragment(new ThemeFragment(),"تغییر تم");
         viewPager.setAdapter(adapter);
     }
 }

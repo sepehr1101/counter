@@ -23,8 +23,7 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/controlsContainer"
-            android:background="#CC08ADA8"
+            android:background="?attr/colorPrimary"
             android:layout_centerVertical="true"
             android:layout_centerInParent="true"
             android:layout_centerHorizontal="true"
@@ -42,20 +41,16 @@
                     android:orientation="horizontal"
                      android:layout_marginBottom="4dp">
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:id="@+id/tedadKolText"
                         android:text="تعداد کل:"
-                        android:textSize="40dp"
-                        android:textStyle="bold"
-                        android:textColor="#EEE"
-                        android:id="@+id/tedadKolText"/>
+                        style="@style/statisticsElementBaseText.large"/>
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="250"
                         android:textSize="40dp"
                         android:textStyle="bold"
-                        android:textColor="#EEE"
+                        android:textColor="@color/textColor"
                         android:layout_gravity="left"
                         android:gravity="left"
                         android:id="@+id/tedadKolVal"/>
@@ -66,20 +61,16 @@
                     android:orientation="horizontal"
                     android:layout_marginBottom="4dp">
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:id="@+id/tedadAlalHesabText"
                         android:text="تعداد علی الحساب:"
-                        android:textSize="40dp"
-                        android:textStyle="bold"
-                        android:textColor="#EEE"
-                        android:id="@+id/tedadAlalHesabText"/>
+                        style="@style/statisticsElementBaseText.large"/>
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="5"
                         android:textSize="40dp"
                         android:textStyle="bold"
-                        android:textColor="#EEE"
+                        android:textColor="@color/textColor"
                         android:layout_gravity="left"
                         android:gravity="left"
                         android:id="@+id/tedadAlalHesabVal"/>
@@ -96,8 +87,8 @@
                     android:textSize="40dp"
                     android:prompt="@string/spinner_prompt"
                     android:spinnerMode="dropdown"
-                    android:textColor="#EEE"
-                    android:popupBackground="@color/colorPrimary">
+                    android:textColor="@color/textColor"
+                    android:popupBackground="?attr/colorPrimary">
 
                 </com.rey.material.widget.Spinner>
             </LinearLayout>
@@ -111,9 +102,9 @@
                      android:text="ادامه قرائت"
                      android:textSize="40dp"
                      android:textStyle="bold"
-                     android:textColor="@color/colorPrimaryDark"
+                     android:textColor="?attr/colorPrimaryDark"
                      android:gravity="center"
-                     android:background="#EEE"
+                     android:background="@color/textColor"
                      android:id="@+id/showAlalHesabHa"/>
              </LinearLayout>
         </LinearLayout>

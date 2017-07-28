@@ -26,13 +26,13 @@ public class FlashIntorFragment extends Fragment {
                              Bundle savedInstanceState){
         View rootView= inflater.inflate(R.layout.fragment_flash_intro, container, false);
         Button flash_intro_btn=(Button)rootView.findViewById(R.id.flash_intro_btn);
-        flash_intro_btn.setOnClickListener(new View.OnClickListener() {
+     /*   flash_intro_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intentFlash = new Intent(getContext(), FlashLight.class);
                 startActivity(intentFlash);
             }
-        });
+        });*/
         return rootView;
     }
 }
