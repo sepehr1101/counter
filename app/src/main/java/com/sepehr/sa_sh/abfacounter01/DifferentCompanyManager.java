@@ -84,7 +84,7 @@ public class DifferentCompanyManager {
             case TSW:
                 return "http://81.90.148.25/";
             case TE:
-                return "http://185.12.60.135/";
+                return "http://185.120.137.254";//http://185.12.60.135/,185.120.137.243
             case TSE:
                 return "http://5.160.85.228:9098/";
             case TOWNS_WEST:
@@ -203,6 +203,6 @@ public class DifferentCompanyManager {
     }
     //
     public static CompanyNames getActiveCompanyName(){
-        return CompanyNames.TSW;
+        return CompanyNames.TOWNS_WEST;
     }
 }

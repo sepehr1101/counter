@@ -27,21 +27,21 @@ import retrofit2.Call;
  */
 public interface IAbfaService {
 
-    @GET("Api1/api/CRMobileLoad")
+    @GET("Api/api/CRMobileLoad")
     Call<MobileInputModel> loadData(
             @Header("Authorization") String token,
             @Query("userCode") int userCode,
             @Query("deviceId") String deviceId,
             @Query("currentVersion") int currentVersionCode);
 
-    @POST("Api1/api/CRMobileLoad")
+    @POST("Api/api/CRMobileLoad")
     Call<MobileInputModel> reload(
             @Header("Authorization") String token,
             @Query("userCode") int userCode,
             @Query("deviceId") String deviceId,
             @Body Collection<BigDecimal> trackNumbers);
 
-    @POST("Api1/api/CRMobileOffLoad")
+    @POST("Api/api/CRMobileOffLoad")
     Call<Integer> sendCounterReadingInfo(@Header("Authorization") String token,
                                          @Body Output output,
                                          @Query("deviceId") String deviceId,
@@ -53,17 +53,17 @@ public interface IAbfaService {
     Call<String> changePassword(@Header("Authorization") String token,
                                  @Body ChangePasswordModel changePasswordModel);
 
-    @POST("Api1/api/CRMobileLoad")
+    @POST("Api/api/CRMobileLoad")
     Call<String> validateMyWorks(@Header("Authorization") String token,
             @Query("userCode") int userCode,
             @Query("deviceId") String deviceId,
             @Query("receivedRecordsCount") int myWorksCount);
 
-    @GET("Api1/api/CRSpecialLoad")
+    @GET("Api/api/CRSpecialLoad")
     Call<List<SpecialLoadModel>> getMySpecialWorks(@Header("Authorization") String token,
                                              @Query("dbf") String deviceId);
 
-    @POST("Api1/api/QeireMojaz")
+    @POST("Api/api/QeireMojaz")
     Call<String> sendQeireMojaz(@Header("Authorization") String token,
                                 @Body QeireMojazModel qeireMojazModel,
                                          @Query("deviceId") String deviceId,
