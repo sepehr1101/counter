@@ -23,6 +23,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.sepehr.sa_sh.abfacounter01.Activities.GISActivity;
 import com.sepehr.sa_sh.abfacounter01.Activities.LoadActivity;
 import com.sepehr.sa_sh.abfacounter01.Activities.OffLoadActivity;
 import com.sepehr.sa_sh.abfacounter01.DisplayViewPager;
@@ -136,7 +137,8 @@ public abstract class BaseActivity extends AppCompatActivity
             startActivity(intentUrgent);
         }
         else if (id == R.id.nav_location) {
-
+            Intent intentGis = new Intent(this,GISActivity.class);
+            startActivity(intentGis);
         }
         else if (id == R.id.preferred_setting) {
             Intent intentSetting=new Intent(this,AppSettingActivity.class);

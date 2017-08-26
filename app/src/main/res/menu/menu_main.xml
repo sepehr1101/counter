@@ -1,0 +1,60 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
+
+    <group android:checkableBehavior="all">
+        <item
+            android:id="@+id/manhole_menu"
+            app:showAsAction="never"
+            android:title="@string/manhole_persian" />
+        <item
+            android:id="@+id/sewer_pipe_menu"
+            app:showAsAction="never"
+            android:title="@string/sewer_pipe_persian" />
+        <item
+            android:id="@+id/network_pipe_menu"
+            app:showAsAction="never"
+            android:title="@string/network_pipe_persian" />
+        <item
+            android:id="@+id/network_valve_menu"
+            app:showAsAction="never"
+            android:title="@string/network_valve_persian" />
+        <item
+            android:id="@+id/transmission_pipeline_menu"
+            app:showAsAction="never"
+            android:title="@string/transmission_pipeline_persian" />
+        <item
+            android:id="@+id/water_well_menu"
+            app:showAsAction="never"
+            android:title="@string/water_well_persian" />
+        <item
+            android:id="@+id/water_branch_menu"
+            app:showAsAction="never"
+            android:title="@string/water_branch_persian" />
+        <item
+            android:id="@+id/common_block_menu"
+            app:showAsAction="never"
+            android:title="@string/common_block_persian" />
+        <item
+            android:id="@+id/network_line_menu"
+            app:showAsAction="never"
+            android:title="@string/network_line_persian" />
+        <item
+            android:id="@+id/street_menu"
+            app:showAsAction="never"
+            android:title="@string/street_persian" />
+        <item
+            android:id="@+id/town_menu"
+            app:showAsAction="never"
+            android:title="@string/town_persian" />
+        <item
+            android:id="@+id/parcel_menu"
+            app:showAsAction="never"
+            android:title="@string/parcel_persian" />
+        <item
+            android:id="@+id/counter_menu"
+            app:showAsAction="never"
+            android:title="@string/counter_persian" />
+    </group>
+
+</menu>

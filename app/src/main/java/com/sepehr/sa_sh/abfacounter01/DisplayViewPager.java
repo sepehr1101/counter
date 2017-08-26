@@ -521,11 +521,14 @@ public class DisplayViewPager extends BaseActivity {
     }
     //
     private boolean isRegisterLimitValid(Integer registerCount){
-        final int REGISTER_LIMIT_=4;
+        final int REGISTER_LIMIT_=5;
         if(registerCount==null){
             return true;
         }
         if(registerCount<=REGISTER_LIMIT_){
+            if(registerCount==registerCount-1){
+                toastAndAlertBuilder.makeSimpleToast("همکار گرامی فقط یک بار دیگر مجاز به تغییر وضعیت این اشتراک میباشید");
+            }
             return true;
         }
         return false;

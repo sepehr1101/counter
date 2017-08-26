@@ -1,6 +1,9 @@
 package com.sepehr.sa_sh.abfacounter01;
 
 import android.content.Context;
+import android.support.multidex.MultiDex;
+
+import com.orm.util.MultiDexHelper;
 
 import org.acra.ACRA;
 import org.acra.ReportingInteractionMode;
@@ -42,6 +45,7 @@ public class MyApplication extends com.orm.SugarApp {
 
         // The following line triggers the initialization of ACRA
         ACRA.init(this);
+        MultiDex.install(this);
     }
     public static Context getAppContext() {
         return MyApplication.getAppContext();

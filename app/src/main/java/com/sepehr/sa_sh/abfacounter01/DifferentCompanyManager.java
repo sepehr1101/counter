@@ -203,6 +203,6 @@ public class DifferentCompanyManager {
     }
     //
     public static CompanyNames getActiveCompanyName(){
-        return CompanyNames.TOWNS_WEST;
+        return CompanyNames.TSW;
     }
 }

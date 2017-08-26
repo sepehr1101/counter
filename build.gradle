@@ -17,6 +17,8 @@ allprojects {
     repositories {
         jcenter()
         mavenCentral()
+        maven { url 'https://maven.google.com' }
+        maven{ url 'https://esri.bintray.com/arcgis' }
         flatDir {
             dirs 'libs'
         }
