@@ -2,6 +2,9 @@ package com.sepehr.sa_sh.abfacounter01.Activities;
 
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.view.Menu;
+import android.view.MenuItem;
+
 import com.sepehr.sa_sh.abfacounter01.Adopters.ViewPagerAdapterTab;
 import com.sepehr.sa_sh.abfacounter01.BaseClasses.BaseActivity;
 import com.sepehr.sa_sh.abfacounter01.Fragments.OffloadFragment;
@@ -35,4 +38,5 @@ public class OffLoadActivity extends BaseActivity {
         adapter.addFragment(new UrgentOffloadFragment(),"تخلیه offline");
         viewPager.setAdapter(adapter);
     }
+
 }
