@@ -222,15 +222,15 @@ public class GisLocalLayersFragment extends Fragment {
     }
 
     private void setMenusChecked(){
-        manholeMenu.setChecked(true);
-        sewerPipeMenu.setChecked(true);
-        networkPipeMenu.setChecked(true);
-        networkValveMenu.setChecked(true);
-        transmissionPipelineMenu.setChecked(true);
-        waterWellMenu.setChecked(true);
-        waterBranchMenu.setChecked(true);
+        manholeMenu.setChecked(false);
+        sewerPipeMenu.setChecked(false);
+        networkPipeMenu.setChecked(false);
+        networkValveMenu.setChecked(false);
+        transmissionPipelineMenu.setChecked(false);
+        waterWellMenu.setChecked(false);
+        waterBranchMenu.setChecked(false);
         commonBlockMenu.setChecked(true);
-        networkLineMenu.setChecked(true);
+        networkLineMenu.setChecked(false);
         streetMenu.setChecked(true);
         townMenu.setChecked(true);
         parcelMenu.setChecked(true);

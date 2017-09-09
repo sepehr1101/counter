@@ -118,12 +118,12 @@ public class DisplayViewPager extends BaseActivity {
         try {
             appContext = this;
             initializeSomeUiElements();
-            highLowModel=HighLowModel.first(HighLowModel.class);
-            counterNumberHelper=new CounterNumberHelper();
+            highLowModel = HighLowModel.first(HighLowModel.class);
+            counterNumberHelper = new CounterNumberHelper();
             items = CounterStateService.getCounterStateTitles();
-            isAppbarLocked= initializeViewpager();
+            isAppbarLocked = initializeViewpager();
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-            karbariService =new KarbariService();
+            karbariService = new KarbariService();
             mediaPlayerManager = new MediaPlayerManager(appContext);
             toastAndAlertBuilder = new ToastAndAlertBuilder(appContext);
             geoTracker = new GeoTracker("viewPager", appContext);
@@ -132,8 +132,6 @@ public class DisplayViewPager extends BaseActivity {
                 geoTracker.buildGoogleApiClient();
                 geoTracker.createLocationRequest();
             }
-
-
         } catch (Exception e) {
             Log.e("error", e.getCause().toString());
             Log.e("error", e.getStackTrace().toString());

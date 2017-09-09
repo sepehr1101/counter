@@ -70,6 +70,7 @@ public class OnOffLoadModel extends SugarRecord{
     public String registerDate;
     public String registerDateJalali;
     public Integer counterStatePosition;
+    public String description;
     //
     //endregion
 
@@ -567,7 +568,13 @@ public class OnOffLoadModel extends SugarRecord{
         this.counterStatePosition = counterStatePosition;
     }
 
+    public String getDescription() {
+        return description;
+    }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     //endregion
 }
