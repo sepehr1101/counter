@@ -6,9 +6,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import com.sepehr.sa_sh.abfacounter01.Adopters.ViewPagerAdapterTab;
 import com.sepehr.sa_sh.abfacounter01.BaseClasses.BaseActivity;
+import com.sepehr.sa_sh.abfacounter01.DifferentCompanyManager;
 import com.sepehr.sa_sh.abfacounter01.Fragments.DisplayDeviceLocationFragment;
 import com.sepehr.sa_sh.abfacounter01.Fragments.GisLocalLayersFragment;
 import com.sepehr.sa_sh.abfacounter01.R;
+import com.sepehr.sa_sh.abfacounter01.constants.CompanyNames;
 import com.sepehr.sa_sh.abfacounter01.models.UiElementInActivity;
 
 public class GISActivity extends BaseActivity {
@@ -43,7 +45,9 @@ public class GISActivity extends BaseActivity {
 
     private void setupViewPager(){
         ViewPagerAdapterTab adapter = new ViewPagerAdapterTab(getSupportFragmentManager());
-        adapter.addFragment(new GisLocalLayersFragment(), "لایه ها");
+        if(DifferentCompanyManager.getActiveCompanyName()== CompanyNames.TSE){
+           adapter.addFragment(new GisLocalLayersFragment(), "لایه ها");
+        }
         adapter.addFragment(new DisplayDeviceLocationFragment(),"مکان فعلی");
         viewPager.setAdapter(adapter);
     }

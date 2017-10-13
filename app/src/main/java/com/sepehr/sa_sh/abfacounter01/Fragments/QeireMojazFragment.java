@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.sepehr.sa_sh.abfacounter01.DisplayViewPager;
 import com.sepehr.sa_sh.abfacounter01.IAbfaService;
 import com.sepehr.sa_sh.abfacounter01.LatLang;
+import com.sepehr.sa_sh.abfacounter01.NetworkHelper;
 import com.sepehr.sa_sh.abfacounter01.R;
 import com.sepehr.sa_sh.abfacounter01.constants.SharedPrefStrings;
 import com.sepehr.sa_sh.abfacounter01.infrastructure.ISharedPreferenceManager;
@@ -168,7 +169,7 @@ public class QeireMojazFragment extends DialogFragment {
         progressBar.setVisibility(View.VISIBLE);
         textViewSend.setVisibility(View.VISIBLE);
         ok.setEnabled(false);
-        IAbfaService abfaService = IAbfaService.retrofit.create(IAbfaService.class);
+        IAbfaService abfaService = NetworkHelper.getInstance(false).create(IAbfaService.class);
         Call<String> call=abfaService.sendQeireMojaz(token, model, deviceId, userCode);
         call.enqueue(new Callback<String>() {
             @Override

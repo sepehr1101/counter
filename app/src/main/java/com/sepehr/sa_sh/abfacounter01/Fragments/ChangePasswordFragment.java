@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.sepehr.sa_sh.abfacounter01.DifferentCompanyManager;
 import com.sepehr.sa_sh.abfacounter01.IAbfaService;
+import com.sepehr.sa_sh.abfacounter01.NetworkHelper;
 import com.sepehr.sa_sh.abfacounter01.R;
 import com.sepehr.sa_sh.abfacounter01.models.ChangePasswordModel;
 
@@ -118,7 +119,7 @@ public class ChangePasswordFragment extends Fragment {
     }
 
     private void doChangePassword(String email,String oldPass,String newPass,String confirmPass){
-        IAbfaService abfaService = IAbfaService.retrofit.create(IAbfaService.class);
+        IAbfaService abfaService = NetworkHelper.getInstance(false).create(IAbfaService.class);
         ChangePasswordModel changePasswordModel=new ChangePasswordModel(email,oldPass,newPass,confirmPass);
         Call<String> call=abfaService.changePassword(token, changePasswordModel);
         call.enqueue(new Callback<String>() {

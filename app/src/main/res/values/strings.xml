@@ -13,6 +13,7 @@
     <string name="menu_item_flash_light">نور فلاش</string>
     <string name="menue_item_contact_us">ارتباط با ما</string>
     <string name="menue_item_display_last_unread">نمایش آخرین قرائت</string>
+    <string name="menue_item_bill_description">ثبت توضیحات این اشتراک</string>
     <string name="title_activity_startup">فرم ورودی</string>
     <string name="title_activity_login">صفحه ورود</string>
     <string name="title_activity_my_works_report">گزارش قرائت من</string>

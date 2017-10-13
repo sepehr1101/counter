@@ -15,7 +15,10 @@ public class CounterNumberHelper implements ICounterNumberHelper{
     //
     private double calculateAverage(OnOffLoadModel onOffload, KarbariModel karbari, int todayNumber){
         double average=0;
-        int masraf=todayNumber-onOffload.getPreNumber();
+        int masraf=0;
+        if(todayNumber>onOffload.getPreNumber()){
+            masraf=todayNumber-onOffload.getPreNumber();
+        }
         int dateDifference=DateAndTime.dateDifference(onOffload.getPreDate());
         dateDifference=dateDifference==0?1:dateDifference;
         double preAverage=((double)masraf/dateDifference)*30;
@@ -42,7 +45,7 @@ public class CounterNumberHelper implements ICounterNumberHelper{
             if(todayRate>maxAllowdRate){
                 return AverageState.HIGH;
             }
-            if(todayNumber<minAllowdRate){
+            if(todayRate<minAllowdRate){
                 return AverageState.LOW;
             }
         }
@@ -52,7 +55,7 @@ public class CounterNumberHelper implements ICounterNumberHelper{
             if(todayRate>maxAllowdRate){
                 return AverageState.HIGH;
             }
-            if(todayNumber<minAllowdRate){
+            if(todayRate<minAllowdRate){
                 return AverageState.LOW;
             }
         }

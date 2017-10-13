@@ -72,7 +72,7 @@ public class UpdateAppFragment extends Fragment {
     }
     //
     private void doUpdateApp(String token,int currentVersion){
-        IAbfaService abfaService = IAbfaService.retrofit.create(IAbfaService.class);
+        IAbfaService abfaService = NetworkHelper.getInstance(false).create(IAbfaService.class);
         Call<ResponseBody> call=abfaService.updateApp(token, currentVersion);
         call.enqueue(new Callback<ResponseBody>() {
             @Override

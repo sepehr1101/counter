@@ -37,7 +37,7 @@ android {
         targetSdkVersion 25
         multiDexEnabled true
         versionCode 23
-        versionName "96.Q2.03"
+        versionName "96.Q3.01"
     }
     buildTypes {
         release {

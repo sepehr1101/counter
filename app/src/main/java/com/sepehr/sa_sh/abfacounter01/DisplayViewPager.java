@@ -27,6 +27,7 @@ import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.IKarbariService;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.IOnOffloadService;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.KarbariService;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.OnOffloadService;
+import com.sepehr.sa_sh.abfacounter01.Fragments.BillDescriptionFragment;
 import com.sepehr.sa_sh.abfacounter01.Fragments.ContactUsFragment;
 import com.sepehr.sa_sh.abfacounter01.Fragments.FlashLightFragment;
 import com.sepehr.sa_sh.abfacounter01.Fragments.QeireMojazFragment;
@@ -288,6 +289,9 @@ public class DisplayViewPager extends BaseActivity {
 
         menu.add(Menu.NONE,MenuItemId.MENUE_ITEM_CONTACT_US.getValue(),Menu.NONE,R.string.menue_item_contact_us)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+
+        menu.add(Menu.NONE,MenuItemId.MENUE_ITEM_BILL_D_DESCRIPTION.getValue(),Menu.NONE,R.string.menue_item_bill_description)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
         return true;
     }
 
@@ -354,6 +358,10 @@ public class DisplayViewPager extends BaseActivity {
         }
         if(id==MenuItemId.MENUE_ITEM_DISPLAY_LAST_UNREAD.getValue()){
             displayLastUnread();
+        }
+        if(id==MenuItemId.MENUE_ITEM_BILL_D_DESCRIPTION.getValue()){
+            BillDescriptionFragment billDescriptionFragment=new BillDescriptionFragment();
+            billDescriptionFragment.show(fm,"ثبت توضیحات اشتراک");
         }
         return super.onOptionsItemSelected(item);
     }
@@ -519,7 +527,7 @@ public class DisplayViewPager extends BaseActivity {
     }
     //
     private boolean isRegisterLimitValid(Integer registerCount){
-        final int REGISTER_LIMIT_=5;
+        final int REGISTER_LIMIT_=10;
         if(registerCount==null){
             return true;
         }
@@ -609,7 +617,7 @@ public class DisplayViewPager extends BaseActivity {
         final List<OnOffLoadModel> unSendeds=onOffloadService.get(OffloadState.ABOUT_TO_SEND);
         final  List<CounterReadingReport> unsendedReports=reportService.get(OffloadState.ABOUT_TO_SEND);
         Output output=new Output(unsendedReports,unSendeds);
-        IAbfaService abfaService = IAbfaService.retrofit.create(IAbfaService.class);
+        IAbfaService abfaService = NetworkHelper.getInstance(false).create(IAbfaService.class);
         Call<Integer> call=abfaService.sendCounterReadingInfo(getToken(),output,deviceId,getUserCode(),false,new BigDecimal(-1));
         call.enqueue(new Callback<Integer>() {
             @Override

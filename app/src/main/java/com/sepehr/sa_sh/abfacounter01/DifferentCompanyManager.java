@@ -170,7 +170,7 @@ public class DifferentCompanyManager {
             case ZONE6:
                 return "http://85.133.190.220:4121/Api/api/CRMobileOffLoad/UploadImage";
             case TSW:
-                return "http://81.90.148.25/Api/api/CRMobileOffLoad/UploadImage";
+                return "http://81.90.148.25/Api1/api/CRMobileOffLoad/UploadImage";//Ap1 todo
             case TE:
                 return "http://185.12.60.135/Api/api/CRMobileOffLoad/UploadImage";
             case TSE:

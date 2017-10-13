@@ -569,7 +569,7 @@ public class OnOffLoadModel extends SugarRecord{
     }
 
     public String getDescription() {
-        return description;
+        return description==null?"":description;
     }
 
     public void setDescription(String description) {

@@ -27,21 +27,21 @@ import retrofit2.Call;
  */
 public interface IAbfaService {
 
-    @GET("Api/api/CRMobileLoad")
+    @GET("Api1/api/CRMobileLoad")
     Call<MobileInputModel> loadData(
             @Header("Authorization") String token,
             @Query("userCode") int userCode,
             @Query("deviceId") String deviceId,
             @Query("currentVersion") int currentVersionCode);
 
-    @POST("Api/api/CRMobileLoad")
+    @POST("Api1/api/CRMobileLoad")
     Call<MobileInputModel> reload(
             @Header("Authorization") String token,
             @Query("userCode") int userCode,
             @Query("deviceId") String deviceId,
             @Body Collection<BigDecimal> trackNumbers);
 
-    @POST("Api/api/CRMobileOffLoad")
+    @POST("Api1/api/CRMobileOffLoad")
     Call<Integer> sendCounterReadingInfo(@Header("Authorization") String token,
                                          @Body Output output,
                                          @Query("deviceId") String deviceId,
@@ -53,17 +53,17 @@ public interface IAbfaService {
     Call<String> changePassword(@Header("Authorization") String token,
                                  @Body ChangePasswordModel changePasswordModel);
 
-    @POST("Api/api/CRMobileLoad")
+    @POST("Api1/api/CRMobileLoad")
     Call<String> validateMyWorks(@Header("Authorization") String token,
             @Query("userCode") int userCode,
             @Query("deviceId") String deviceId,
             @Query("receivedRecordsCount") int myWorksCount);
 
-    @GET("Api/api/CRSpecialLoad")
+    @GET("Api1/api/CRSpecialLoad")
     Call<List<SpecialLoadModel>> getMySpecialWorks(@Header("Authorization") String token,
                                              @Query("dbf") String deviceId);
 
-    @POST("Api/api/QeireMojaz")
+    @POST("Api1/api/QeireMojaz")
     Call<String> sendQeireMojaz(@Header("Authorization") String token,
                                 @Body QeireMojazModel qeireMojazModel,
                                          @Query("deviceId") String deviceId,
@@ -74,18 +74,12 @@ public interface IAbfaService {
    @FormUrlEncoded
    @POST("AuthApp/oauth/token")
    Call<TokenResponseModel> getToken(@Field("username") String username,
-                         @Field("password") String password,
-                         @Field("grant_type") String grant_type);
+                                     @Field("password") String password,
+                                     @Field("grant_type") String grant_type);
 
-    @GET("Api/api/Apk")
+    @GET("Api1/api/Apk")
     Call<ResponseBody> updateApp(@Header("Authorization") String token,
                                  @Query("currentVersion") int currentVersion);
-
-     Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl(DifferentCompanyManager.getBaseUrl(DifferentCompanyManager.getActiveCompanyName()))
-            .client(NetworkHelper.getHttpClient())//added recently
-           .addConverterFactory(GsonConverterFactory.create())
-           .build();
 }
 //
 
