@@ -20,7 +20,7 @@ public class CounterNumberHelper implements ICounterNumberHelper{
             masraf=todayNumber-onOffload.getPreNumber();
         }
         int dateDifference=DateAndTime.dateDifference(onOffload.getPreDate());
-        dateDifference=dateDifference==0?1:dateDifference;
+        dateDifference=dateDifference<=0?1:dateDifference;
         double preAverage=((double)masraf/dateDifference)*30;
         boolean isKarbariMaskooni=karbari.IS_MASKOONI();
         if(isKarbariMaskooni && onOffload.getTedadMaskooni()>0){
