@@ -52,9 +52,10 @@ public class CameraFragment extends DialogFragment {
     private Button btnCapturePicture, btnRecordVideo;
     private final int RESULT_OK=getActivity().RESULT_OK;
     private final int RESULT_CANCELED=getActivity().RESULT_CANCELED;
+    private CapturedImageModel imageModel;
     //
     int userCode;
-    String bill_id,token;
+    String bill_id,token,onOffloadId;
     BigDecimal trackNumber;
     boolean allowTakePicture=true;
     Context appContext;
@@ -74,6 +75,7 @@ public class CameraFragment extends DialogFragment {
         setRetainInstance(true);
         bill_id=((DisplayViewPager)getActivity()).getBill_id();
         trackNumber=((DisplayViewPager)getActivity()).getCurrentTrackNumber();
+        onOffloadId=((DisplayViewPager)getActivity()).getId();
         List<CapturedImageModel> capturedImages=CapturedImageModel
                 .find(CapturedImageModel.class, "BILL_ID= ? ", bill_id);
         List<OnOffLoadModel> currentOffLoadStates=OnOffLoadModel
@@ -231,7 +233,7 @@ public class CameraFragment extends DialogFragment {
     private void previewCapturedImage() {
         try {
             String filePath= imageOrVideoManager.getFilePath();
-            final CapturedImageModel imageModel=new CapturedImageModel(bill_id,userCode,filePath,trackNumber);
+            imageModel=new CapturedImageModel(bill_id,userCode,filePath,trackNumber,0);
             final OnOffLoadModel currentCounterReadingModel01= OnOffLoadStatic.GetOnOfLoad(bill_id);
             SugarTransactionHelper.doInTransaction(new SugarTransactionHelper.Callback() {
                 @Override
@@ -248,6 +250,7 @@ public class CameraFragment extends DialogFragment {
             imgPreview.setImageBitmap(bitmap);
         } catch (NullPointerException e) {
             e.printStackTrace();
+            toastAndAlertBuilder.makeSimpleAlert(e.getMessage());
         }
     }
     //
@@ -259,6 +262,7 @@ public class CameraFragment extends DialogFragment {
             imgPreview.setImageBitmap(bitmap);
         } catch (NullPointerException e) {
             e.printStackTrace();
+            toastAndAlertBuilder.makeSimpleAlert(e.getMessage());
         }
     }
     /*
@@ -309,9 +313,10 @@ public class CameraFragment extends DialogFragment {
                 .setTimeout(1000*60)
                 .setMultipartFile("file","image/png",fileToUpload)
                 .setMultipartParameter("userCode",userCode+"")
-                .setMultipartParameter("deviceId",Build.SERIAL)
+                .setMultipartParameter("deviceId",DeviceSerialManager.getSerial(appContext))
                 .setMultipartParameter("billId",bill_id.trim())
                 .setMultipartParameter("trackNumber",trackNumber.toString())
+                .setMultipartParameter("id",onOffloadId.trim())
                 .asString()
                 .withResponse()
                         // run a callback on completion                .
@@ -342,6 +347,8 @@ public class CameraFragment extends DialogFragment {
                                 + getRemindedPicture()
                                 + " عکس دیگر هستید";
                         textViewUpload.setText("ارسال عکس با موفقیت انجام شد" + "\n" + remainedCount);
+                        imageModel.setStatus(1);
+                        imageModel.save();
                         toggleEnable(false, false);
                     }
                 });

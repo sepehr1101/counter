@@ -16,8 +16,8 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:background="@drawable/startup_items_shape"
-            android:layout_marginTop="55dp"
-            android:layout_marginBottom="115dp"
+            android:layout_marginTop="35dp"
+            android:layout_marginBottom="90dp"
             android:padding="16dp">
 
             <ImageView
@@ -68,6 +68,17 @@
                     android:textColor="#EEE"
                     android:popupBackground="@color/colorPrimary"
                     android:visibility="visible"/>
+                <CheckBox
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    style="@style/Widget.AppCompat.CompoundButton.CheckBox"
+                    android:layout_gravity="center"
+                    android:foregroundGravity="center_horizontal"
+                    android:id="@+id/forceImageOffload"
+                    android:textSize="25sp"
+                    android:visibility="visible"
+                    android:text="تخلیه عکس ها"/>
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="0dp"

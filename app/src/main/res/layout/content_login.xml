@@ -99,6 +99,17 @@
                 android:layout_marginTop="20dp"
                 android:indeterminate="true"
                 android:visibility="gone"/>
+            <Button
+                android:id="@+id/showOneTimeCode"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="کد یکبار مصرف"
+                android:textSize="20sp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/button_shape"
+                android:textColor="@color/white"/>
         </LinearLayout>
 
     </RelativeLayout>

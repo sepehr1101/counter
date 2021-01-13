@@ -32,9 +32,13 @@ public class DifferentCompanyManager {
                 return CompanyNames.TOWNS_WEST;
             case 11:
                 return CompanyNames.ESF;
+            case 12:
+                return CompanyNames.AHWAZ;
+            case 13:
+                return CompanyNames.KERMANSHAH;
+
             default:
                 throw new UnsupportedOperationException();
-
         }
     }
     //
@@ -62,6 +66,10 @@ public class DifferentCompanyManager {
                 return "آبفا شهرک های غرب";
             case  ESF:
                 return "آبفا استان اصفهان";
+            case AHWAZ:
+                return "آبفا اهواز";
+            case KERMANSHAH:
+                return "آبفا کرمانشاه";
             default:
                 throw new UnsupportedOperationException();
         }
@@ -72,25 +80,29 @@ public class DifferentCompanyManager {
             case ZONE1:
                 return "http://217.146.220.33:50011/";
             case ZONE2:
-                return "http://212.16.75.194:8080/";
+                return "http://178.252.170.140:8080/";
             case ZONE3:
-                return "http://212.16.69.36:90/";
+                return "http://46.209.219.36:90/";
             case ZONE4:
-                return "http://91.98.248.36:8081/";
+                return "http://81.12.106.167:8081/";
             case ZONE5:
-                return "http://80.69.252.151/";
+                return "http://188.75.65.83/";
             case ZONE6:
                 return "http://85.133.190.220:4121/";
             case TSW:
                 return "http://81.90.148.25/";
             case TE:
-                return "http://185.120.137.254";//http://185.12.60.135/,185.120.137.243
+                return "http://185.120.137.254/";
             case TSE:
                 return "http://5.160.85.228:9098/";
             case TOWNS_WEST:
                 return "http://217.66.195.75/";
             case ESF:
-                return "http://172.18.12.122/";
+                return "https://37.191.92.157/";
+            case AHWAZ:
+                return "http://81.90.148.25/";
+            case KERMANSHAH:
+                return "http://46.225.241.211:25123/";
             default:
                 throw new UnsupportedOperationException();
         }
@@ -120,7 +132,11 @@ public class DifferentCompanyManager {
             case TOWNS_WEST:
                 return "http://172.28.5.40/";
             case ESF:
-                return "http://172.18.12.122/";
+                return "https://37.191.92.157/";
+            case AHWAZ:
+                return "http://81.90.148.25/";
+            case KERMANSHAH:
+                return "http://172.19.0.46/";
             default:
                 throw new UnsupportedOperationException();
         }
@@ -150,6 +166,10 @@ public class DifferentCompanyManager {
                 return "@ttw.ir";
             case ESF:
                 return "@esf.ir";
+            case AHWAZ:
+                return "@swt.ir";
+            case KERMANSHAH:
+                return "@kmsh.ir";
             default:
                 throw new UnsupportedOperationException();
         }
@@ -160,25 +180,29 @@ public class DifferentCompanyManager {
             case ZONE1:
                 return "http://217.146.220.33:50011/Api/api/CRMobileOffLoad/UploadImage";
             case ZONE2:
-                return "http://212.16.75.194:8080/Api/api/CRMobileOffLoad/UploadImage";
+                return "http://178.252.170.140:8080/Api/api/CRMobileOffLoad/UploadImage";
             case ZONE3:
-                return "http://212.16.69.36:90/Api/api/CRMobileOffLoad/UploadImage";
+                return "http://46.209.219.36:90/Api/api/CRMobileOffLoad/UploadImage";
             case ZONE4:
-                return "http://91.98.248.36:8081/Api/api/CRMobileOffLoad/UploadImage";
+                return "http://81.12.106.167:8081/Api/api/CRMobileOffLoad/UploadImage";
             case ZONE5:
-                return "http://80.69.252.151/Api/api/CRMobileOffLoad/UploadImage";
+                return "http://188.75.65.83/Api/api/CRMobileOffLoad/UploadImage";
             case ZONE6:
                 return "http://85.133.190.220:4121/Api/api/CRMobileOffLoad/UploadImage";
             case TSW:
-                return "http://81.90.148.25/Api1/api/CRMobileOffLoad/UploadImage";//Ap1 todo
+                return "http://81.90.148.25/Api/api/CRMobileOffLoad/UploadImage";
             case TE:
-                return "http://185.12.60.135/Api/api/CRMobileOffLoad/UploadImage";
+                return "http://185.120.137.254/Api/api/CRMobileOffLoad/UploadImage";
             case TSE:
                 return "http://5.160.85.228:9098/Api/api/CRMobileOffLoad/UploadImage";
             case TOWNS_WEST:
                 return "http://217.66.195.75/Api/api/CRMobileOffLoad/UploadImage";
             case ESF:
-                return "http://172.18.12.122/Api/api/CRMobileOffLoad/UploadImage";
+                return "https://37.191.92.157/Api/api/CRMobileOffLoad/UploadImage";
+            case AHWAZ:
+                return "http://81.90.148.25/ApiAhw/api/CRMobileOffLoad/UploadImage";
+            case KERMANSHAH:
+               return "http://46.225.241.211:25123/Api/api/CRMobileOffLoad/UploadImage";
             default:
                 throw new UnsupportedOperationException();
         }
@@ -187,9 +211,12 @@ public class DifferentCompanyManager {
     public static int getSplashRecourceId(CompanyNames companyNames){
         switch (companyNames){
             case ESF:
-                return R.drawable.logo_teh;
+                return R.drawable.logo_esf;
+            case KERMANSHAH:
+                return R.drawable.logo_esf;
             default:
                 return R.drawable.logo_teh;
+                //return R.drawable.logo_esf;
         }
     }
     //
@@ -197,12 +224,14 @@ public class DifferentCompanyManager {
         switch (companyName){
             case ESF:
                 return R.drawable.startup_esf;
+            case KERMANSHAH:
+                return R.drawable.kemanshah;
             default:
                 return R.drawable._teh1;
         }
     }
     //
     public static CompanyNames getActiveCompanyName(){
-        return CompanyNames.TSW;
+        return CompanyNames.TOWNS_WEST;
     }
 }

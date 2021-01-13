@@ -40,6 +40,16 @@ public class OnOffLoadModel extends SugarRecord{
     public Integer zarfiat;
     public Integer ahadMasraf;
     public String tavizDate;
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String mobile;
     //endregion
 
     //region Offload members
@@ -71,6 +81,16 @@ public class OnOffLoadModel extends SugarRecord{
     public String registerDateJalali;
     public Integer counterStatePosition;
     public String description;
+
+    public Integer d1;
+    public Integer d2;
+    public Integer r1;
+    public Integer r2;
+    public Integer l1;
+    public Integer l2;
+
+    public Integer Hazf;
+
     //
     //endregion
 
@@ -132,9 +152,25 @@ public class OnOffLoadModel extends SugarRecord{
         this.setZarfiat(onOffLoadViewModel.OnLoad.Zarfiat);
         this.setZoneId(onOffLoadViewModel.OnLoad.ZoneId);
         this.setCounterStatePosition(onOffLoadViewModel.OffLoad.CounterStatePosition);
+        setD1(0);
+        setD2(0);
+        setR1(0);
+        setR2(0);
+        setL1(0);
+        setL2(0);
+        setMobile(onOffLoadViewModel.OnLoad.Mobile);
+        setHazf(onOffLoadViewModel.OnLoad.Hazf);
     }
 
     //endregion
+
+    public Integer getHazf() {
+        return this.Hazf;
+    }
+
+    public void setHazf(Integer hazf) {
+        this.Hazf = hazf;
+    }
 
     //region setter and getter
     public String getS_id() {
@@ -576,5 +612,52 @@ public class OnOffLoadModel extends SugarRecord{
         this.description = description;
     }
 
+    public Integer getD1() {
+        return d1;
+    }
+
+    public void setD1(Integer d1) {
+        this.d1 = d1;
+    }
+
+    public Integer getD2() {
+        return d2;
+    }
+
+    public void setD2(Integer d2) {
+        this.d2 = d2;
+    }
+
+    public Integer getR1() {
+        return r1;
+    }
+
+    public void setR1(Integer r1) {
+        this.r1 = r1;
+    }
+
+    public Integer getR2() {
+        return r2;
+    }
+
+    public void setR2(Integer r2) {
+        this.r2 = r2;
+    }
+
+    public Integer getL1() {
+        return l1;
+    }
+
+    public void setL1(Integer l1) {
+        this.l1 = l1;
+    }
+
+    public Integer getL2() {
+        return l2;
+    }
+
+    public void setL2(Integer l2) {
+        this.l2 = l2;
+    }
     //endregion
 }

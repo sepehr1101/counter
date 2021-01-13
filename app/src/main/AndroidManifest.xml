@@ -27,9 +27,10 @@
     <uses-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.READ_LOGS"/>
+    <!--<uses-permission android:name="android.permission.READ_LOGS"/>-->
 
     <protected-broadcast android:name="android.intent.action.MEDIA_MOUNTED" />
 
@@ -47,13 +48,23 @@
             android:value="CounterReadingDB2.db" />
         <meta-data
             android:name="VERSION"
-            android:value="33" />
+            android:value="45" />
         <meta-data
             android:name="QUERY_LOG"
             android:value="true" />
         <meta-data
             android:name="com.sepehr.sa_sh.abfacounter01"
             android:value="com.sepehr.sa_sh.abfaCounter01.model" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
 
         <activity
             android:name=".SplashScreenActivity"

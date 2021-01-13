@@ -1,31 +1,45 @@
 package com.sepehr.sa_sh.abfacounter01.Logic;
 
 import android.content.Context;
+import android.os.Debug;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
+import com.koushikdutta.ion.ProgressCallback;
+import com.koushikdutta.ion.Response;
 import com.orm.SugarTransactionHelper;
 import com.rey.material.widget.Spinner;
 import com.sepehr.sa_sh.abfacounter01.CounterReadingReport;
+import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.CapturedImagesService;
+import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.ICapturedImagesService;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.ICounterReportService;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.IOnOffloadService;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.IReadingConfigService;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.IStatisticsRepo;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.ReadingConfigService;
+import com.sepehr.sa_sh.abfacounter01.DeviceSerialManager;
+import com.sepehr.sa_sh.abfacounter01.DifferentCompanyManager;
 import com.sepehr.sa_sh.abfacounter01.IAbfaService;
 import com.sepehr.sa_sh.abfacounter01.NetworkHelper;
 import com.sepehr.sa_sh.abfacounter01.Output;
 import com.sepehr.sa_sh.abfacounter01.R;
+import com.sepehr.sa_sh.abfacounter01.infrastructure.IImageOrVideoManager;
 import com.sepehr.sa_sh.abfacounter01.infrastructure.IToastAndAlertBuilder;
+import com.sepehr.sa_sh.abfacounter01.infrastructure.ImageOrVideoManager;
 import com.sepehr.sa_sh.abfacounter01.infrastructure.SimpleErrorHandler;
 import com.sepehr.sa_sh.abfacounter01.models.sqlLiteTables.CapturedImageModel;
 import com.sepehr.sa_sh.abfacounter01.models.sqlLiteTables.OnOffLoadModel;
 import com.sepehr.sa_sh.abfacounter01.models.sqlLiteTables.ReadingConfigModel;
 
+import java.io.File;
+import java.math.BigDecimal;
 import java.util.List;
 
 import retrofit2.Call;
@@ -41,6 +55,7 @@ public class OffloadLogic implements IOffloadLogic{
     ProgressBar mProgressBar;
     TextView mStateTextView;
     Spinner mSpinner;
+    CheckBox mForceImageOffLoad;
 
     int userCode;
     String token;
@@ -54,6 +69,8 @@ public class OffloadLogic implements IOffloadLogic{
 
     ArrayAdapter<String> adapter;
     List<String> listNumbers;
+    IImageOrVideoManager imageOrVideoManager;
+    ICapturedImagesService capturedImagesService;
 
     public OffloadLogic(Context mContext,
                         Button mStartButton,
@@ -66,12 +83,14 @@ public class OffloadLogic implements IOffloadLogic{
                         IToastAndAlertBuilder toastAndAlertBuilder,
                         IStatisticsRepo statisticsRepo,
                         IOnOffloadService onOffloadService,
-                        ICounterReportService counterReportService) {
+                        ICounterReportService counterReportService,
+                        CheckBox forceImageOffLoad) {
         this.mContext = mContext;
         this.mStartButton =(Button) mStartButton;
         this.mProgressBar = mProgressBar;
         this.mStateTextView = mStateTextView;
         this.mSpinner=listNumberSpinner;
+        this.mForceImageOffLoad=forceImageOffLoad;
 
         this.userCode = userCode;
         this.token = token;
@@ -82,6 +101,8 @@ public class OffloadLogic implements IOffloadLogic{
         this.onOffloadService=onOffloadService;
         this.counterReportService=counterReportService;
         this.toastAndAlertBuilder = toastAndAlertBuilder;
+        this.imageOrVideoManager= new ImageOrVideoManager(mContext,"savedMedia");
+        this.capturedImagesService= new CapturedImagesService();
         //
         listNumbers= readingConfigService.getListNumbers();
         adapter= new ArrayAdapter<String>(mContext,R.layout.spinner_custom_item, listNumbers);
@@ -103,29 +124,49 @@ public class OffloadLogic implements IOffloadLogic{
             mStartButton.setVisibility(View.VISIBLE);
         }
     }
+    private void startProgress(){
+        mProgressBar.setVisibility(View.VISIBLE);
+        mStateTextView.setVisibility(View.VISIBLE);
+        mStartButton.setEnabled(false);
+        mStartButton.setVisibility(View.GONE);
+    }
+    private void stopProgress(){
+        mProgressBar.setVisibility(View.GONE);
+        mStateTextView.setVisibility(View.GONE);
+        mStartButton.setEnabled(true);
+        mStartButton.setVisibility(View.VISIBLE);
+    }
 
     public void start(boolean isLocal) {
         try {
             if (!hasSpinnerValidItem()) {
                 return;
             }
-            switchVisibility();
-            boolean isAlalHesabSizeValid = isAlalHesabSizeValid();
-            if (!isAlalHesabSizeValid) {
-                String errorMessage = "درصد علی الحساب و خوانده نشده بالاتر ازحد مجاز";
-                toastAndAlertBuilder.makeSimpleAlert(errorMessage);
-                switchVisibility();
-                return;
+            final ReadingConfigModel readingConfig = getValidReadingConfig();
+            startProgress();
+            //switchVisibility();
+            if(mForceImageOffLoad.isChecked()){
+                offloadUnsendedImages(readingConfig,isLocal);
             }
-            doOffLoadCounterReadingTable(isLocal);
+            else {
+                boolean isAlalHesabSizeValid = isAlalHesabSizeValid();
+                if (!isAlalHesabSizeValid) {
+                    String errorMessage =  "درصد علی الحساب و خوانده نشده بالاتر ازحد مجاز";
+                    toastAndAlertBuilder.makeSimpleAlert(errorMessage);
+                    stopProgress();
+                    //switchVisibility();
+                    return;
+                }
+                doOffLoadCounterReadingTable(isLocal,readingConfig);
+            }
         } catch (Exception e) {
             Log.e("offload error", e.getMessage());
             toastAndAlertBuilder.makeSimpleAlert("خطا حین تخلیه اطلاعات");
+            stopProgress();
         }
     }
 
-    private void doOffLoadCounterReadingTable(boolean isLocal) {
-        final ReadingConfigModel readingConfig = getValidReadingConfig();
+    private void doOffLoadCounterReadingTable(boolean isLocal, final ReadingConfigModel readingConfig) {
         final List<OnOffLoadModel> onOffloads=
                 onOffloadService.getNeedToBeOffloadedOverall(readingConfig.get_index());
 
@@ -143,7 +184,8 @@ public class OffloadLogic implements IOffloadLogic{
                 int responseCode = response.code();
                 if (responseCode != 200) {
                     handleRetrofitResponseCode(responseCode);
-                    switchVisibility();
+                    stopProgress();
+                    //switchVisibility();
                     return;
                 }
 
@@ -155,14 +197,16 @@ public class OffloadLogic implements IOffloadLogic{
                     mStateTextView.setText("تخلیه به اتمام رسید" + " " + "تعداد" + " " +
                             count.toString() + " " + "رکورد تخلیه شد");
                 }
-                switchVisibility();
+                stopProgress();
+                //switchVisibility();
             }
 
             @Override
             public void onFailure(Call<Integer> call, Throwable t) {
                 toastAndAlertBuilder.makeSimpleAlert(SimpleErrorHandler.getErrorMessage(t));
                 Log.e("retrofit error", t.toString());
-                switchVisibility();
+                stopProgress();
+                //switchVisibility();
             }
         });
     }
@@ -245,5 +289,93 @@ public class OffloadLogic implements IOffloadLogic{
             }
         });
 
+    }
+
+    private void offloadUnsendedImages(final ReadingConfigModel readingConfig,boolean isLocal){
+        List<CapturedImageModel> capturedImageModelList=
+                capturedImagesService.getCapturedImages(0,readingConfig.getTrackNumber().toString());
+        if(capturedImageModelList.size()>0){
+            sendImage(capturedImageModelList,0,isLocal,readingConfig);
+        }else {
+            boolean isAlalHesabSizeValid = isAlalHesabSizeValid();
+            if (!isAlalHesabSizeValid) {
+                String errorMessage = "درصد علی الحساب و خوانده نشده بالاتر ازحد مجاز";
+                toastAndAlertBuilder.makeSimpleAlert(errorMessage);
+                stopProgress();
+                return;
+            }
+            doOffLoadCounterReadingTable(isLocal,readingConfig);
+        }
+    }
+    private void sendImage(final List<CapturedImageModel> capturedImageModelList, final int index,
+                           final boolean isLocal,final ReadingConfigModel readingConfig ){
+        int size=capturedImageModelList.size();
+        if(index>size-1){
+            boolean isAlalHesabSizeValid = isAlalHesabSizeValid();
+            if (!isAlalHesabSizeValid) {
+                String errorMessage = "درصد علی الحساب و خوانده نشده بالاتر ازحد مجاز";
+                if(capturedImageModelList.size()>0) {
+                    errorMessage = "درصد علی الحساب و خوانده نشده بالاتر ازحد مجاز. عکس ها با موفقیت تخلیه شد";
+                }
+                toastAndAlertBuilder.makeSimpleAlert(errorMessage);
+                stopProgress();
+                return;
+            }
+            doOffLoadCounterReadingTable(isLocal,readingConfig);
+            return;
+        }
+        final CapturedImageModel imageModel=capturedImageModelList.get(index);
+        File originalImage=new File(imageModel.getPath());
+        final File fileToUpload = imageOrVideoManager.downsizeImage(originalImage,75);
+        Ion.with(mContext)
+                .load(DifferentCompanyManager.getCameraUploadUrl
+                        (DifferentCompanyManager.getActiveCompanyName()))
+                .setHeader("Authorization", token)
+                .setLogging("offload log", Log.DEBUG)
+                .uploadProgressHandler(new ProgressCallback() {
+                    @Override
+                    public void onProgress(long uploaded, long total) {
+                        Log.e("Image offload","on progress");
+
+                       //switchVisibility();
+                    }
+                })
+                .setTimeout(1000*60)
+                .setMultipartFile("file","image/png",fileToUpload)
+                .setMultipartParameter("userCode",userCode+"")
+                .setMultipartParameter("deviceId", DeviceSerialManager.getSerial(mContext))
+                .setMultipartParameter("billId",imageModel.getBillId().trim())
+                .setMultipartParameter("trackNumber",imageModel.getTrackNumber().toString())
+                .asString()
+                .withResponse()
+                // run a callback on completion                .
+                .setCallback(new FutureCallback<Response<String>>() {
+                    @Override
+                    public void onCompleted(Exception e, Response<String> result) {
+                        //switchVisibility();
+                        if (e != null) {
+                            stopProgress();
+                            toastAndAlertBuilder.makeSimpleAlert("خطا حین ارسال تصاویر"+"\n"+"متن خطا:"+ e.getMessage());
+                            if(e.getMessage()!=null &&
+                                    !e.getMessage().equals(null) &&
+                                    e.getMessage().length()>0)
+                            {
+                                Log.e("MyLog ", e.getMessage());
+                            }
+                            return;
+                        }
+                        int responseCode=result.getHeaders().code();
+                        if(responseCode!=200){
+                            String message= SimpleErrorHandler.getErrorMessage(responseCode);
+                            toastAndAlertBuilder.makeSimpleAlert("خطا حین ارسال تصاویر"+"\n"+"متن خطا:"+ message);
+                            stopProgress();
+                            return;
+                        }
+                        imageModel.setStatus(1);
+                        imageModel.save();
+                        //switchVisibility();
+                        sendImage(capturedImageModelList,index+1,isLocal,readingConfig);
+                    }
+                });
     }
 }

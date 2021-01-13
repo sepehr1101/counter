@@ -14,7 +14,9 @@ public enum CompanyNames {
     TE(8),
     TSE(9),
     TOWNS_WEST(10),
-    ESF(11);
+    ESF(11),
+    AHWAZ(12),
+    KERMANSHAH(13);
 
     private final int value;
     CompanyNames(final int newValue) {

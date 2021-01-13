@@ -45,11 +45,14 @@ public class GISActivity extends BaseActivity {
 
     private void setupViewPager(){
         ViewPagerAdapterTab adapter = new ViewPagerAdapterTab(getSupportFragmentManager());
-        if(DifferentCompanyManager.getActiveCompanyName()== CompanyNames.TSE){
+        if(DifferentCompanyManager.getActiveCompanyName()== CompanyNames.TSW){
            adapter.addFragment(new GisLocalLayersFragment(), "لایه ها");
         }
-        adapter.addFragment(new DisplayDeviceLocationFragment(),"مکان فعلی");
+        if(DifferentCompanyManager.getActiveCompanyName()!= CompanyNames.TSW) {
+            adapter.addFragment(new DisplayDeviceLocationFragment(), "مکان فعلی");
+        }
         viewPager.setAdapter(adapter);
+
     }
 
 }

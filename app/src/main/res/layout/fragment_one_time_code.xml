@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FaFaFa">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@drawable/border_dialog_accent">
+
+        <LinearLayout
+            android:id="@+id/oneTimeCodeEntrance"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:textDirection="rtl"
+            android:textAlignment="center"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="20dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="30dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textColor="@color/black"
+                    android:text="کد 8 رقمی مامور قرائت"
+                    android:layout_marginRight="20dp"
+                    android:layout_gravity="right"
+                    android:gravity="right"/>
+                <EditText
+                    android:id="@+id/mamoorOneTimeCode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="35sp"
+                    android:textColor="@color/black"
+                    android:hint="کد 8 رقمی مامور قرائت"
+                    android:layout_marginRight="20dp"
+                    android:inputType="number"
+                    android:layout_margin="5dp"
+                    android:layout_gravity="right"
+                    android:gravity="right"
+                    android:maxLength="8"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/registerOneTimeCode"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/colorPrimaryDark"
+                    android:text="ثبت"
+                    android:textColor="#D6D7D7"
+                    android:textSize="35sp"
+                    android:layout_margin="5dp"/>
+                <Button
+                    android:visibility="visible"
+                    android:id="@+id/cancelOneTimeCode"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="کنسل"
+                    android:textSize="35sp"
+                    android:layout_margin="5dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/oneTimeCodeDisplay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:textDirection="rtl"
+            android:textAlignment="center"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:visibility="gone">
+            <TextView
+                android:id="@+id/oneTimeCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="50sp"
+                android:textColor="@color/black"
+                android:text=""
+                android:layout_marginRight="20dp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

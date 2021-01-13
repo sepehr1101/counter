@@ -6,6 +6,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -35,7 +36,7 @@ import java.util.List;
  */
 public class SearchFragment extends DialogFragment {
 
-    String[] items = new String[]{"اشتراک","شماره پرونده","شماره بدنه","شناسه ","شماره صفحه","نام"};
+    String[] items = new String[]{"اشتراک","شماره پرونده","شماره بدنه","شناسه ","شماره صفحه","نام","نام خانوادگی"};
     Spinner spinnerSearch;
     EditText searchEditText;
     AutoCompleteTextView searchAutoComplete;
@@ -54,7 +55,6 @@ public class SearchFragment extends DialogFragment {
     }
     //
     private void dismissDialog(){
-
         exitSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,14 +111,17 @@ public class SearchFragment extends DialogFragment {
         spinnerSearch.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             @Override
             public void onItemSelected(Spinner spinner, View view, int i, long l) {
-                if(i==5){
+                searchEditText.setText("");
+                if(i==5 || i==6 ){
+                    searchEditText.setInputType(InputType.TYPE_CLASS_TEXT);
                    /* searchEditText.setVisibility(View.GONE);
                     searchAutoComplete.setVisibility(View.VISIBLE);*/
-                    Snackbar.make(getView(), "همکار گرامی بدلیل تغییرات زیرساختی نرم افزار ، جستجو با نام در نسخه بعد در دسترس خواهد بود",
+                   /* Snackbar.make(getView(), "همکار گرامی بدلیل تغییرات زیرساختی نرم افزار ، جستجو با نام در نسخه بعد در دسترس خواهد بود",
                             Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                            .setAction("Action", null).show();*/
                 }
                 else{
+                    searchEditText.setInputType(InputType.TYPE_CLASS_NUMBER);
                     searchEditText.setVisibility(View.VISIBLE);
                     searchAutoComplete.setVisibility(View.GONE);
                 }
@@ -147,28 +150,28 @@ public class SearchFragment extends DialogFragment {
                     String autoText=searchAutoComplete.getText().toString().trim();
                     int spinnerSearchSelectedItemPosition=spinnerSearch.getSelectedItemPosition();
 
-                    if(TextUtils.isEmpty(searchText)&&spinnerSearchSelectedItemPosition!=5){
+                    if(TextUtils.isEmpty(searchText)){
                         //ToDo force user to change value
                         Snackbar.make(getView(), "لطفا در بخش ورود اطلاعات مقداری وارد کنید", Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
                         return;
                     }
-                    if(TextUtils.isEmpty(autoText)&& spinnerSearchSelectedItemPosition==5){
+                    /*if(TextUtils.isEmpty(autoText)TextUtils.isEmpty(searchText) && spinnerSearchSelectedItemPosition==5){
                         //ToDo force user to change value
                         Snackbar.make(getView(), "لطفا در بخش ورود اطلاعات مقداری وارد کنید", Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
                         return;
-                    }
-                    if(!TextUtils.isDigitsOnly(searchText) && spinnerSearchSelectedItemPosition!=5){
+                    }*/
+                    if(!TextUtils.isDigitsOnly(searchText) && spinnerSearchSelectedItemPosition!=5 && spinnerSearchSelectedItemPosition!=6){
                         Snackbar.make(getView(), "لطفا فقط کاراکتر های عددی وارد کنید", Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
                         return;
                     }
                     BackGroundSearch task=new BackGroundSearch();
                     task.initialize(_list, progressBar, spinnerSearchSelectedItemPosition);
-                    if(spinnerSearchSelectedItemPosition==5){
+                    /*if(spinnerSearchSelectedItemPosition==5){
                         searchText=autoText;
-                    }
+                    }*/
                     task.execute(searchText);
                 }
             });
@@ -204,9 +207,9 @@ public class SearchFragment extends DialogFragment {
     //
     private int searchByRadif(Collection<OnOffLoadModel> list,String radif){
         int i=0;
-        BigInteger radifInt=new BigInteger(radif);
+        //BigInteger radifInt=new BigInteger(radif);
         for (OnOffLoadModel listItem:list ) {
-            if( listItem.getRadif().toBigInteger().equals(radifInt)){
+            if( listItem.getRadif().toString().contains(radif)){
                 return i;
             }
             i++;
@@ -225,6 +228,29 @@ public class SearchFragment extends DialogFragment {
         }
         Log.e("search by counterSerial", " not found");
         return -1;
+    }
+    private int searchByName(Collection<OnOffLoadModel> list,String nameParam){
+        int i=0;
+        for (OnOffLoadModel listItem:list ) {
+            if( listItem.name.trim().replace('ي','ی').replace('ک','ک').contains(nameParam.trim())){
+                return i;
+            }
+            i++;
+        }
+        Log.e("search by name", " not found");
+        int searchIndex= searchByFamily(list,nameParam);
+        return searchIndex;
+    }
+    private int searchByFamily(Collection<OnOffLoadModel> list,String familyParam){
+        int i=0;
+        for (OnOffLoadModel listItem:list ) {
+            if( listItem.family.trim().replace('ي','ی').replace('ک','ک').contains(familyParam.trim())){
+               return i;
+            }
+            i++;
+        }
+        Log.e("search by name", " not found");
+        return  -1;
     }
     //
     private List<String> searchInDB(String nameAndFamily){
@@ -268,10 +294,22 @@ public class SearchFragment extends DialogFragment {
                        }
                        break;
                    case 1:
-
+                       String radif = params[0];
+                       myWorks = OnOffLoadModel
+                               .find(OnOffLoadModel.class, "radif like '%?%' ", radif);
+                       if (myWorks != null && myWorks.size() > 0) {
+                           position = myWorks.get(0)._index.intValue();
+                           Log.e("search position:", position + "");
+                       }
                        break;
                    case 2:
-
+                       String shomareBadane = params[0];
+                       myWorks = OnOffLoadModel
+                               .find(OnOffLoadModel.class, "COUNTER_SERIAL LIKE\'%"+shomareBadane+"%\'", null);
+                       if (myWorks != null && myWorks.size() > 0) {
+                           position = myWorks.get(0)._index.intValue();
+                           Log.e("search position:", position + "");
+                       }
                        break;
                    case 3:
                        String bill_id = params[0];
@@ -292,9 +330,17 @@ public class SearchFragment extends DialogFragment {
                        }
                        break;
                    case 5:
-                   String nameAndFamily=params[0];
+                   String name=params[0];
                        myWorks = OnOffLoadModel
-                               .find(OnOffLoadModel.class, "(NAME||\' \'||FAMILY) LIKE\'%"+nameAndFamily+"%\'", null);
+                               .find(OnOffLoadModel.class, "NAME LIKE\'%"+name+"%\'", null);
+                       if (myWorks != null && myWorks.size() > 0) {
+                           position = myWorks.get(0)._index.intValue() + 1;
+                           Log.e("search position:", position + "");
+                       }
+                   case 6:
+                       String family=params[0];
+                       myWorks = OnOffLoadModel
+                               .find(OnOffLoadModel.class, "FAMILY LIKE\'%"+family+"%\'", null);
                        if (myWorks != null && myWorks.size() > 0) {
                            position = myWorks.get(0)._index.intValue() + 1;
                            Log.e("search position:", position + "");
@@ -329,6 +375,14 @@ public class SearchFragment extends DialogFragment {
                         catch(Exception e){
                             position=-1;
                         }
+                       break;
+                   case 5:
+                       String name=params[0];
+                       position=searchByName(this._list,name);
+                       break;
+                   case 6:
+                       String family=params[0];
+                       position=searchByFamily(this._list,family);
                        break;
                }
             }

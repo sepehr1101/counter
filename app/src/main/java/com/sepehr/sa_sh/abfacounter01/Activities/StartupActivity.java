@@ -19,6 +19,7 @@ import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 import com.sepehr.sa_sh.abfacounter01.Adopters.ViewPagerAdapterTab;
 import com.sepehr.sa_sh.abfacounter01.BaseClasses.BaseActivity;
+import com.sepehr.sa_sh.abfacounter01.DeviceSerialManager;
 import com.sepehr.sa_sh.abfacounter01.DifferentCompanyManager;
 import com.sepehr.sa_sh.abfacounter01.FlashIntorFragment;
 import com.sepehr.sa_sh.abfacounter01.Karbari;
@@ -28,8 +29,10 @@ import com.sepehr.sa_sh.abfacounter01.R;
 import com.sepehr.sa_sh.abfacounter01.ReportIntroFragment;
 import com.sepehr.sa_sh.abfacounter01.models.UiElementInActivity;
 import com.sepehr.sa_sh.abfacounter01.models.sqlLiteTables.KarbariGroup;
+import com.sepehr.sa_sh.abfacounter01.models.sqlLiteTables.OnOffLoadModel;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class StartupActivity extends BaseActivity {
@@ -57,7 +60,7 @@ public class StartupActivity extends BaseActivity {
         Context appContext=getApplicationContext();
         addKarbariesIfNotExists();
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);//right to left
-        Log.e("serial", Build.SERIAL);
+        Log.e("serial", DeviceSerialManager.getSerial(this));
 
         LinearLayout loadLinearLayout=(LinearLayout)findViewById(R.id.load);
         loadLinearLayout.setOnClickListener(new View.OnClickListener() {
@@ -104,6 +107,7 @@ public class StartupActivity extends BaseActivity {
                 .setGotoSettingButtonText("اعطای دسترسی")
                 .setPermissions(Manifest.permission.CAMERA,
                         Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
                         Manifest.permission.ACCESS_NETWORK_STATE,
                         Manifest.permission.RECORD_AUDIO,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -159,7 +163,8 @@ public class StartupActivity extends BaseActivity {
 
             List<Karbari> karbaris = new ArrayList<>();
             karbaris.add(new Karbari(1, "مسكوني", 1));
-            karbaris.add(new Karbari(3, "تجاري مسکوني(مختلط)", 1));
+            karbaris.add(new Karbari(11, "حمام", 1));
+            karbaris.add(new Karbari(3, "تجاري مسکوني(مختلط)", 2));
             karbaris.add(new Karbari(14, "در حال ساخت", 1));
             karbaris.add(new Karbari(30, "انشعابات وابسته به شرکت آبفا", 1));
             karbaris.add(new Karbari(41, "چند خانواري", 1));

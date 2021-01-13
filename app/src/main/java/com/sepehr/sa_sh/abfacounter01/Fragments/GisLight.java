@@ -4,16 +4,16 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Debug;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Spinner;
@@ -32,6 +32,7 @@ import com.esri.arcgisruntime.geometry.Envelope;
 import com.esri.arcgisruntime.geometry.Geometry;
 import com.esri.arcgisruntime.geometry.GeometryEngine;
 import com.esri.arcgisruntime.geometry.Point;
+import com.esri.arcgisruntime.geometry.SpatialReferences;
 import com.esri.arcgisruntime.layers.ArcGISTiledLayer;
 import com.esri.arcgisruntime.layers.FeatureLayer;
 import com.esri.arcgisruntime.layers.Layer;
@@ -47,20 +48,21 @@ import com.esri.arcgisruntime.mapping.view.IdentifyLayerResult;
 import com.esri.arcgisruntime.mapping.view.LocationDisplay;
 import com.esri.arcgisruntime.mapping.view.MapView;
 import com.sepehr.sa_sh.abfacounter01.Adopters.SpinnerGisAdapter;
+import com.sepehr.sa_sh.abfacounter01.DisplayViewPager;
 import com.sepehr.sa_sh.abfacounter01.R;
+import com.sepehr.sa_sh.abfacounter01.infrastructure.InputFilterMinMax;
 import com.sepehr.sa_sh.abfacounter01.models.SpinnerDataModel;
 
+import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-/**
- * Created by saeid on 8/26/2017.
- */
-
-public class GisLocalLayersFragment extends Fragment {
-    private Spinner mBasemapSpinner,mNavigationSpinner;
+public class GisLight extends DialogFragment {
+    private Spinner mBasemapSpinner;
     private MapView mMapView;
     private LocationDisplay mLocationDisplay;
     private ArcGISMap map;
@@ -68,25 +70,28 @@ public class GisLocalLayersFragment extends Fragment {
     private Basemap tswBoundaryBasemap;
     private LayerList mOperationalLayers;
     private ArcGISTiledLayer tswBoundaryTiledLayer;
-    private Layer manholeLayer,sewerPipeLayer,networkPipeLayer, commonBlockLayer
-            ,streetLayer,parcelLayer;
-    private FeatureLayer counterLayer;
-    private MenuItem manholeMenu, sewagePipeMenu,networkPipeMenu, eshterakBlockMenu,
-            streetMenu,parcelMenu, counterMenu;
+    private Layer streetLayer,parcelLayer;
+    private FeatureLayer counterLayer,parcelLayerGolestan;
     private ProgressBar progressBarMapLoading;
-    private ServiceFeatureTable counterFeatureTable;
-    private ArcGISFeature mIdentifiedFeature;
+    private ServiceFeatureTable counterFeatureTable , parcelFeatureTableGolestan;
+    private ArcGISFeature counterIdentifiedFeature , parcelIdentifiedFeatureGolestan;
     private SearchView searchView;
-    private boolean mFeatureSelected = false;
+    LinearLayout confirmWrapper,addOrCancel;
+    EditText d1,d2,l1,l2,r1,r2;
+    Button cancel,ok,addCounter,cancelSelect;
+    Point mapPoint=null;
+    private boolean isCounterFeatureSelected = false,isGolestanParcelSelected;
     private final double SCALE=700;
+    String eshterak;
 
-    public GisLocalLayersFragment() {
+    public GisLight() {
         ArcGISRuntimeEnvironment.setLicense("runtimelite,1000,rud8277465837,none,8SH93PJPXMH2NERL1236");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)  throws RuntimeException {
-        View rootView = inflater.inflate(R.layout.fragment_gis_local_layers, container, false);
+        getActivity().getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        View rootView = inflater.inflate(R.layout.fragment_gis_light, container, false);
         initializeMap(rootView);
         setHasOptionsMenu(true);
         initializeChangeBaseMapSpinner(rootView);
@@ -94,12 +99,15 @@ public class GisLocalLayersFragment extends Fragment {
         if (mLocationDisplay == null) {
             Log.e("loc display", " is null");
         }
-
-        initializeNavigationItems(rootView);
+        setAutopan();
         return rootView;
     }
 
-
+    @Override
+    public int getTheme() {
+        //return super.getTheme();
+        return R.style.FullScreenDialog;
+    }
 
     @Override
     public void onPause(){
@@ -120,27 +128,12 @@ public class GisLocalLayersFragment extends Fragment {
         super.onStop();
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_main, menu);
-        initializeMenuItems(menu);
-        setMenusChecked();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int itemId = item.getItemId();
-        handleMenuItemSelected(itemId);
-        return super.onOptionsItemSelected(item);
-    }
-
     protected void initializeMap(View rootView){
         initializeViewElements(rootView);
 
         tswBoundaryTiledLayer = new ArcGISTiledLayer(getString(R.string.tsw_boundary));
         tswBoundaryBasemap = new Basemap(tswBoundaryTiledLayer);
         map = new ArcGISMap(tswBoundaryBasemap);
-        //ArcGISMap map = new ArcGISMap(Basemap.Type.OPEN_STREET_MAP, 48.354406, -99.998267, 2);
 
         initializeServiceFeatureTable();
         initializeSubLayers();
@@ -155,104 +148,66 @@ public class GisLocalLayersFragment extends Fragment {
         // allow magnifier to pan near the edge of the map bounds
         mMapView.setCanMagnifierPanMap(true);
         mapOnTouchListener();
+        onOkClickListener();
+        onCancelClickListener();
+        //onCancelSelectListener();
     }
 
     private void initializeViewElements(View rootView){
         mMapView = (MapView) rootView.findViewById(R.id.mapViewLayout);
         progressBarMapLoading = (ProgressBar) rootView.findViewById(R.id.progressBarMapLoading);
         searchView = (SearchView) rootView.findViewById(R.id.mapSearchView);
+        confirmWrapper = (LinearLayout) rootView.findViewById(R.id.confirmWrapper);
+        d1=(EditText)rootView.findViewById(R.id.d1);
+        d2=(EditText)rootView.findViewById(R.id.d2);
+        l1=(EditText)rootView.findViewById(R.id.l1);
+        l2=(EditText)rootView.findViewById(R.id.l2);
+        r1=(EditText)rootView.findViewById(R.id.r1);
+        r2=(EditText)rootView.findViewById(R.id.r2);
+        cancel=(Button)rootView.findViewById(R.id.cancel);
+        ok=(Button)rootView.findViewById(R.id.ok);
+
+        addOrCancel=(LinearLayout)rootView.findViewById(R.id.addOrCancel);
+        addCounter=(Button)rootView.findViewById(R.id.addCounter);
+        cancelSelect=(Button)rootView.findViewById(R.id.cancelSelect);
+
+        d1.setFilters(new InputFilter[]{ new InputFilterMinMax("0", "30")});
+        d2.setFilters(new InputFilter[]{ new InputFilterMinMax("0", "90")});
+        l1.setFilters(new InputFilter[]{ new InputFilterMinMax("0", "30")});
+        l2.setFilters(new InputFilter[]{ new InputFilterMinMax("0", "90")});
+        r1.setFilters(new InputFilter[]{ new InputFilterMinMax("0", "90")});
+        r2.setFilters(new InputFilter[]{ new InputFilterMinMax("0", "90")});
+        eshterak=((DisplayViewPager)getActivity()).getEshterak();
+        initializeSearchView(eshterak);
     }
 
     private void initializeServiceFeatureTable(){
         counterFeatureTable = new ServiceFeatureTable(getString(R.string.counter_feature_service));
         counterFeatureTable.setFeatureRequestMode(ServiceFeatureTable.FeatureRequestMode.ON_INTERACTION_CACHE);
+
+        //parcelFeatureTableGolestan=new ServiceFeatureTable(getString(R.string.parcel_feature_service_golestan));
+        //parcelFeatureTableGolestan.setFeatureRequestMode(ServiceFeatureTable.FeatureRequestMode.ON_INTERACTION_CACHE);
     }
 
     private void initializeSubLayers() {
-        manholeLayer = new ArcGISTiledLayer(getString(R.string.sewage_manhole));
-        sewerPipeLayer = new ArcGISTiledLayer(getString(R.string.sewage_pipe));
-        networkPipeLayer = new ArcGISTiledLayer(getString(R.string.network_pipe));
-        commonBlockLayer = new ArcGISTiledLayer(getString(R.string.eshterak_block));
         streetLayer = new ArcGISTiledLayer(getString(R.string.street));
         parcelLayer = new ArcGISTiledLayer(getString(R.string.parcel));
 
         counterLayer=new FeatureLayer(counterFeatureTable);
         counterLayer.setSelectionColor(Color.CYAN);
         counterLayer.setSelectionWidth(6);
+
+       /* parcelLayerGolestan =new FeatureLayer(parcelFeatureTableGolestan);
+        parcelLayerGolestan.setSelectionColor(Color.BLUE);
+        parcelLayerGolestan.setSelectionWidth(6);*/
+
     }
 
     private void addSubLayers(){
-        //mOperationalLayers.add(manholeLayer);
-        //mOperationalLayers.add(sewerPipeLayer);
-        //mOperationalLayers.add(networkPipeLayer);
-        //mOperationalLayers.add(commonBlockLayer);
-        //mOperationalLayers.add(streetLayer);
+        mOperationalLayers.add(streetLayer);
         mOperationalLayers.add(parcelLayer);
-        mOperationalLayers.add(counterLayer);//todo added temp
-    }
-
-    private void initializeMenuItems(Menu menu) {
-        manholeMenu = menu.getItem(0);
-        sewagePipeMenu = menu.getItem(1);
-        networkPipeMenu = menu.getItem(2);
-        eshterakBlockMenu = menu.getItem(3);
-        streetMenu = menu.getItem(4);
-        parcelMenu = menu.getItem(5);
-        counterMenu = menu.getItem(6);
-    }
-
-    private void setMenusChecked(){
-        manholeMenu.setChecked(false);
-        sewagePipeMenu.setChecked(false);
-        networkPipeMenu.setChecked(false);
-        eshterakBlockMenu.setChecked(true);
-        streetMenu.setChecked(false);
-        parcelMenu.setChecked(true);
-        counterMenu.setChecked(true);//todo added temp
-    }
-
-    private void handleMenuItemSelected(int menuItemId){
-        switch (menuItemId) {
-            case R.id.manhole_menu:
-                selectOrDeselectMenuItem(manholeMenu, manholeLayer);
-                break;
-            case R.id.sewer_pipe_menu:
-                selectOrDeselectMenuItem(sewagePipeMenu,sewerPipeLayer);
-                break;
-            case R.id.network_pipe_menu:
-                selectOrDeselectMenuItem(networkPipeMenu,networkPipeLayer);
-                break;
-            case R.id.eshterak_block_menu:
-                selectOrDeselectMenuItem( eshterakBlockMenu,commonBlockLayer);
-                break;
-            case R.id.street_menu:
-                selectOrDeselectMenuItem(streetMenu,streetLayer);
-                break;
-            case R.id.parcel_menu:
-                selectOrDeselectMenuItem(parcelMenu,parcelLayer);
-                break;
-            case R.id.counter_menu:
-                selectOrDeselectMenuItem(counterMenu,counterLayer);
-                break;
-            default:
-                throw new RuntimeException("no menu find!");
-        }
-    }
-
-    private void selectMenuItem(MenuItem menuItem,Layer subLayer){
-        map.getOperationalLayers().add(subLayer);
-        menuItem.setChecked(true);
-    }
-    private void unSelectMenuItem(MenuItem menuItem,Layer subLayer){
-        map.getOperationalLayers().remove(subLayer);
-        menuItem.setChecked(false);
-    }
-    private void selectOrDeselectMenuItem(MenuItem menuItem,Layer subLayer){
-        if(menuItem.isChecked()){
-            unSelectMenuItem(menuItem,subLayer);
-        }else {
-            selectMenuItem(menuItem,subLayer);
-        }
+        mOperationalLayers.add(counterLayer);
+        //mOperationalLayers.add(parcelLayerGolestan);
     }
 
     private void mapDrawingStateChangeListener(){
@@ -273,20 +228,29 @@ public class GisLocalLayersFragment extends Fragment {
             mMapView.setOnTouchListener(new DefaultMapViewOnTouchListener(getContext(), mMapView) {
                 @Override
                 public boolean onSingleTapConfirmed(MotionEvent e) {
-                    //updateFeture(e);
-                    //addCounterFeauter(e);
+                  /*  if(!isGolestanParcelSelected) {
+                        selectGolestanParcel(e);
+                    }
+                    else {*/
+                        fillPreAddParams(e);
+//                    }
                     return super.onSingleTapConfirmed(e);
                 }
 
+                @Override
+                public void onLongPress(MotionEvent e) {
+                    updateFeture(e);
+                    super.onLongPress(e);
+                }
             });
         }catch (Exception e){
-            Toast.makeText(getContext(),"بنظر میرسد این فیچر از به روز رسانی پشتیبانی نمیکند",Toast.LENGTH_SHORT);
+            Toast.makeText(getContext(),"بنظر میرسد این فیچر از به روز رسانی پشتیبانی نمیکند",Toast.LENGTH_SHORT).show();
         }
 
     }
     private void applyEditsToServer() {
         final ListenableFuture<List<FeatureEditResult>> applyEditsFuture =
-                ((ServiceFeatureTable) ((FeatureLayer)counterLayer).getFeatureTable()).applyEditsAsync();
+                ((ServiceFeatureTable) (counterLayer).getFeatureTable()).applyEditsAsync();
         applyEditsFuture.addDoneListener(new Runnable() {
             @Override
             public void run() {
@@ -308,8 +272,8 @@ public class GisLocalLayersFragment extends Fragment {
     }
     private void addBasemapGisSpinner(){
         ArrayList<SpinnerDataModel> list = new ArrayList<>();
-        list.add(new SpinnerDataModel(getString(R.string.local_gis_basemap), R.drawable.locationdisplaydisabled));//// TODO: change image
-        list.add(new SpinnerDataModel(getString(R.string.osm) , R.drawable.locationdisplayon));//// TODO: change image 
+        list.add(new SpinnerDataModel(getString(R.string.local_gis_basemap), R.drawable.locationdisplaydisabled));
+        list.add(new SpinnerDataModel(getString(R.string.osm) , R.drawable.locationdisplayon));
 
         SpinnerGisAdapter adapter = new SpinnerGisAdapter(getActivity(), R.layout.gis_pan_mode_spinner_layout, R.id.txt, list);
         mBasemapSpinner.setAdapter(adapter);
@@ -330,93 +294,11 @@ public class GisLocalLayersFragment extends Fragment {
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
-
         });
     }
-    private void initializeNavigationItems(View rootView){
-        mNavigationSpinner=(Spinner) rootView.findViewById(R.id.mapNavigationSpinner);
-        addNavigationSpinner();
-        setNavigationSpinnerClickListener();
-        locationChangeStateListener();
-    }
-    private void addNavigationSpinner(){
-        ArrayList<SpinnerDataModel> list = new ArrayList<>();
-        list.add(new SpinnerDataModel("خاموش", R.drawable.locationdisplaydisabled));
-        list.add(new SpinnerDataModel("روشن", R.drawable.locationdisplayon));
-        list.add(new SpinnerDataModel("Re-Center", R.drawable.locationdisplayrecenter));
-        list.add(new SpinnerDataModel("ناوبری", R.drawable.locationdisplaynavigation));
-        list.add(new SpinnerDataModel("قطب نما", R.drawable.locationdisplayheading));
 
-        SpinnerGisAdapter adapter = new SpinnerGisAdapter(getActivity(), R.layout.gis_pan_mode_spinner_layout, R.id.txt, list);
-        mNavigationSpinner.setAdapter(adapter);
-    }
-    private void setNavigationSpinnerClickListener(){
-        mNavigationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                switch (position) {
-                    case 0:
-                        if (mLocationDisplay.isStarted())
-                            mLocationDisplay.stop();
-                        break;
-                    case 1:
-                        if (!mLocationDisplay.isStarted())
-                            mLocationDisplay.startAsync();
-                        break;
-                    case 2:
-                        mLocationDisplay.setAutoPanMode(LocationDisplay.AutoPanMode.RECENTER);
-                        if (!mLocationDisplay.isStarted())
-                            mLocationDisplay.startAsync();
-                        break;
-                    case 3:
-                        mLocationDisplay.setAutoPanMode(LocationDisplay.AutoPanMode.NAVIGATION);
-                        if (!mLocationDisplay.isStarted())
-                            mLocationDisplay.startAsync();
-                        break;
-                    case 4:
-                        mLocationDisplay.setAutoPanMode(LocationDisplay.AutoPanMode.COMPASS_NAVIGATION);
-                        if (!mLocationDisplay.isStarted())
-                            mLocationDisplay.startAsync();
-                        break;
-                }
-
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-    }
-    private void locationChangeStateListener(){
-        mLocationDisplay.addDataSourceStatusChangedListener(new LocationDisplay.DataSourceStatusChangedListener() {
-            @Override
-            public void onStatusChanged(LocationDisplay.DataSourceStatusChangedEvent dataSourceStatusChangedEvent) {
-
-                // If LocationDisplay started OK, then continue.
-                if (dataSourceStatusChangedEvent.isStarted()){
-                    return;
-                }
-
-                // No error is reported, then continue.
-                if (dataSourceStatusChangedEvent.getError() == null) {
-                    return;
-                }
-                // Report other unknown failure types to the user - for example, location services may not
-                // be enabled on the device.
-                String message = String.format("خطا در DataSourceStatusChangedListener: %s", dataSourceStatusChangedEvent
-                        .getSource().getLocationDataSource().getError().getMessage());
-                Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
-
-                // Update UI to reflect that the location display did not actually start
-                mNavigationSpinner.setSelection(0, true);
-            }
-        });
-
-    }
-
-    private  void updateFeturer(MotionEvent e){
-        if (!mFeatureSelected) {
+    private void updateFeture(MotionEvent e){
+        if (!isCounterFeatureSelected) {
             android.graphics.Point screenCoordinate = new android.graphics.Point(Math.round(e.getX()), Math.round(e.getY()));
             double tolerance = 20;
             //Identify Layers to find features
@@ -432,10 +314,10 @@ public class GisLocalLayersFragment extends Fragment {
                         //Debug.waitForDebugger();
                         if (resultGeoElements.size() > 0) {
                             if (resultGeoElements.get(0) instanceof ArcGISFeature) {
-                                mIdentifiedFeature = (ArcGISFeature) resultGeoElements.get(0);
+                                counterIdentifiedFeature = (ArcGISFeature) resultGeoElements.get(0);
                                 //Select the identified feature
-                                (counterLayer).selectFeature(mIdentifiedFeature);
-                                mFeatureSelected = true;
+                                (counterLayer).selectFeature(counterIdentifiedFeature);
+                                isCounterFeatureSelected = true;
                                 Toast.makeText(getContext(), "فیچر انتخاب شد  ،برای اعمال تغییرات اطلاعات مکانی روی نقشه تپ کنید", Toast.LENGTH_LONG).show();
                             } else {
                                 Toast.makeText(getContext(), "هیچ فیچری انتخاب نشده ، برای انتخاب تپ کنید", Toast.LENGTH_LONG).show();
@@ -449,19 +331,19 @@ public class GisLocalLayersFragment extends Fragment {
         } else {
             Point movedPoint = mMapView.screenToLocation(new android.graphics.Point(Math.round(e.getX()), Math.round(e.getY())));
             final Point normalizedPoint = (Point) GeometryEngine.normalizeCentralMeridian(movedPoint);
-            mIdentifiedFeature.addDoneLoadingListener(new Runnable() {
+            counterIdentifiedFeature.addDoneLoadingListener(new Runnable() {
                 @Override
                 public void run() {
                     //Debug.waitForDebugger();
-                    boolean canIEdit=mIdentifiedFeature.canEditAttachments();
-                    boolean canUpdateGeometr=mIdentifiedFeature.canUpdateGeometry();
+                    boolean canIEdit=counterIdentifiedFeature.canEditAttachments();
+                    boolean canUpdateGeometr=counterIdentifiedFeature.canUpdateGeometry();
                     if(!canUpdateGeometr){
                         Toast.makeText(getContext(),"این فیچر قابلیت به روز رسانی ندارد",Toast.LENGTH_SHORT);
                         return;
                     }
                     else {
-                        mIdentifiedFeature.setGeometry(normalizedPoint);
-                        final ListenableFuture<Void> updateFuture = counterLayer.getFeatureTable().updateFeatureAsync(mIdentifiedFeature);
+                        counterIdentifiedFeature.setGeometry(normalizedPoint);
+                        final ListenableFuture<Void> updateFuture = counterLayer.getFeatureTable().updateFeatureAsync(counterIdentifiedFeature);
                         updateFuture.addDoneListener(new Runnable() {
                             @Override
                             public void run() {
@@ -472,7 +354,7 @@ public class GisLocalLayersFragment extends Fragment {
                                     if (updateFuture.isDone()) {
                                         applyEditsToServer();
                                         counterLayer.clearSelection();
-                                        mFeatureSelected = false;
+                                        isCounterFeatureSelected = false;
                                     } else {
                                         Log.e(getResources().getString(R.string.app_name), "به روز رسانی ناموفق");
                                     }
@@ -484,12 +366,49 @@ public class GisLocalLayersFragment extends Fragment {
                     }
                 }
             });
-            mIdentifiedFeature.loadAsync();
+            counterIdentifiedFeature.loadAsync();
         }
     }
 
-    private void addCounterFeauter(MotionEvent e){
+    private void selectGolestanParcel(MotionEvent e){
+        if (!isGolestanParcelSelected) {
+            android.graphics.Point screenCoordinate = new android.graphics.Point(Math.round(e.getX()), Math.round(e.getY()));
+            double tolerance = 20;
+            //Identify Layers to find features
+            final ListenableFuture<IdentifyLayerResult> identifyFuture = mMapView.identifyLayerAsync(parcelLayerGolestan, screenCoordinate, tolerance, false, 1);
+            identifyFuture.addDoneListener(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        // call get on the future to get the result
+                        IdentifyLayerResult layerResult = identifyFuture.get();
+                        List<GeoElement> resultGeoElements = layerResult.getElements();
 
+                        //Debug.waitForDebugger();
+                        if (resultGeoElements.size() > 0) {
+                            if (resultGeoElements.get(0) instanceof ArcGISFeature) {
+                                parcelIdentifiedFeatureGolestan = (ArcGISFeature) resultGeoElements.get(0);
+                                //Select the identified feature
+                                (parcelLayerGolestan).selectFeature(parcelIdentifiedFeatureGolestan);
+                                isGolestanParcelSelected = true;
+                                addOrCancel.setVisibility(View.VISIBLE);
+                            } else {
+                                Toast.makeText(getContext(), "هیچ فیچری انتخاب نشده ، برای انتخاب تپ کنید", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    } catch (InterruptedException | ExecutionException e) {
+                        Log.e(getResources().getString(R.string.app_name), "انتخاب عارضه ناموفق: " + e.getMessage());
+                    }
+                }
+            });
+        }
+    }
+
+
+    private void addCounterFeauter(MotionEvent e){
+        if(isCounterFeatureSelected){
+            return;
+        }
         android.graphics.Point screenPoint = new android.graphics.Point((int)e.getX(), (int)e.getY());
         // convert this to a map point
         Point mapPoint = mMapView.screenToLocation(screenPoint);
@@ -539,7 +458,7 @@ public class GisLocalLayersFragment extends Fragment {
                                     // if required, can check the edits applied in this operation
                                     Log.e("arc success",String.format("Number of edits: %d", featureEditResults.size()));
                                 } catch (InterruptedException | ExecutionException e) {
-                                    Debug.waitForDebugger();
+                                    //Debug.waitForDebugger();
                                     Log.e("error",e.getMessage());
                                 }
                             }
@@ -554,7 +473,7 @@ public class GisLocalLayersFragment extends Fragment {
                         Log.e("error",String.format("Add Feature Error %d\n=%s", agsEx.getErrorCode(), agsEx.getMessage()));
                         Log.e("add feature additional",((ArcGISRuntimeException) e.getCause()).getAdditionalMessage());
                     } else {
-                        Debug.waitForDebugger();
+                        //Debug.waitForDebugger();
                         Log.e("error",e.getMessage());
                     }
                 }
@@ -562,31 +481,60 @@ public class GisLocalLayersFragment extends Fragment {
         });
 
     }
-    private void addCounterFeauter(MotionEvent e,CharSequence eshterak, int d1,int d2,int l1,int l2){
 
+    private void fillPreAddParams(MotionEvent e){
+        if(confirmWrapper.getVisibility()==View.VISIBLE || isCounterFeatureSelected /*|| !isGolestanParcelSelected*/){
+            return;
+        }
+        //addOrCancel.setVisibility(View.GONE);
+        confirmWrapper.setVisibility(View.VISIBLE);
         android.graphics.Point screenPoint = new android.graphics.Point((int)e.getX(), (int)e.getY());
         // convert this to a map point
-        Point mapPoint = mMapView.screenToLocation(screenPoint);
-
+        mapPoint = mMapView.screenToLocation(screenPoint);
+    }
+    private Feature makeAddFeature(){
+        Point wgs84Point=projectToWgs84(mapPoint);
+        int _d1,_d2,_l1,_l2,_r1,_r2;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        String currentDateandTime = sdf.format(new Date());
+        _d1=Integer.parseInt(d1.getText().toString());
+        _d2=Integer.parseInt(d2.getText().toString());
+        _l1=Integer.parseInt(l1.getText().toString());
+        _l2=Integer.parseInt(l2.getText().toString());
+        _r1=Integer.parseInt(r1.getText().toString());
+        _r2=Integer.parseInt(r2.getText().toString());
         // check features can be added, based on edit capabilities
         // create the attributes for the feature
         java.util.Map<String, Object> attributes = new HashMap<>();
-        attributes.put("Eshterak_Code", eshterak); // Coded Values: [1: Manatee] etc...
-        attributes.put("Address", ""); // Coded Values: [0: No] , [1: Yes]
-        attributes.put("Usage_", "");
-        attributes.put("Customer_Name", "");
-        //attributes.put("Status ", "");
-        //attributes.put("City_Name ", "چهاردانگه");
-        attributes.put("C1", d1);
-        attributes.put("C2", d2);
-        attributes.put("C3", l1);
-        attributes.put("C4", l2);
-        attributes.put("X", mapPoint.getX());
-        attributes.put("Y", mapPoint.getY());
+        attributes.put("Eshterak_Code",eshterak);
         attributes.put("ESHTERAK_CODE_NEW", eshterak);
+        attributes.put("City_Name ", "");
+        attributes.put("C1", _d1);
+        attributes.put("C2", _d2);
+        attributes.put("C3", _l1);
+        attributes.put("C4", _l2);
+        attributes.put("C5", _r1);
+        attributes.put("C6", _r2);
+        attributes.put("User_Code", ((DisplayViewPager)getActivity()).getUserCode());
+        attributes.put("Date_Time ",currentDateandTime );
+        attributes.put("X", wgs84Point.getX());
+        attributes.put("Y", wgs84Point.getY());
+        attributes.put("Description","");
 
         // Create a new feature from the attributes and an existing point geometry, and then add the feature
         Feature addedFeature = counterFeatureTable.createFeature(attributes, mapPoint);
+        return addedFeature;
+    }
+
+    private void addCounterFeauter(){
+        if(isCounterFeatureSelected){
+            return;
+        }
+        Feature addedFeature=makeAddFeature();
+        if(addedFeature==null){
+            return;
+        }
+        //Debug.waitForDebugger();
         final ListenableFuture<Void> addFeatureFuture = counterFeatureTable.addFeatureAsync(addedFeature);
         addFeatureFuture.addDoneListener(new Runnable() {
             @Override
@@ -602,7 +550,7 @@ public class GisLocalLayersFragment extends Fragment {
                     // if dealing with ServiceFeatureTable, apply edits after making updates; if editing locally, then edits can
                     // be synchronized at some point using the SyncGeodatabaseTask.
                     if (counterFeatureTable instanceof ServiceFeatureTable) {
-                        ServiceFeatureTable serviceFeatureTable = (ServiceFeatureTable)counterFeatureTable;
+                        ServiceFeatureTable serviceFeatureTable = counterFeatureTable;
                         // apply the edits
                         final ListenableFuture<List<FeatureEditResult>> applyEditsFuture = serviceFeatureTable.applyEditsAsync();
                         applyEditsFuture.addDoneListener(new Runnable() {
@@ -613,7 +561,7 @@ public class GisLocalLayersFragment extends Fragment {
                                     // if required, can check the edits applied in this operation
                                     Log.e("arc success",String.format("Number of edits: %d", featureEditResults.size()));
                                 } catch (InterruptedException | ExecutionException e) {
-                                    Debug.waitForDebugger();
+                                    //Debug.waitForDebugger();
                                     Log.e("error",e.getMessage());
                                 }
                             }
@@ -628,9 +576,12 @@ public class GisLocalLayersFragment extends Fragment {
                         Log.e("error",String.format("Add Feature Error %d\n=%s", agsEx.getErrorCode(), agsEx.getMessage()));
                         Log.e("add feature additional",((ArcGISRuntimeException) e.getCause()).getAdditionalMessage());
                     } else {
-                        Debug.waitForDebugger();
+                        //Debug.waitForDebugger();
                         Log.e("error",e.getMessage());
                     }
+                }finally {
+                    confirmWrapper.setVisibility(View.GONE);
+                    clearEditTexts();
                 }
             }
         });
@@ -672,7 +623,6 @@ public class GisLocalLayersFragment extends Fragment {
 
                     // check there are some results
                     if (result.iterator().hasNext()) {
-
                         // get the extend of the first feature in the result to zoom to with the default scale
                         Feature feature = result.iterator().next();
                         Envelope envelope = feature.getGeometry().getExtent();
@@ -682,14 +632,16 @@ public class GisLocalLayersFragment extends Fragment {
                         mMapView.setViewpointScaleAsync(SCALE);
                         //Select the feature
                         counterLayer.selectFeature(feature);
-                        mFeatureSelected=true;
-                        mIdentifiedFeature = (ArcGISFeature)feature;
+                        isCounterFeatureSelected =true;
+                        counterIdentifiedFeature = (ArcGISFeature)feature;
                     } else {
                         setAutopan();
+                        Toast.makeText(getContext(), "جستجوی اشتراک: " + eshterak + " میسر نشد",Toast.LENGTH_SHORT);
                         Log.e("gis","eshterak not found");
                     }
                 } catch (Exception e) {
-                    Log.e(getResources().getString(R.string.app_name), "Feature search failed for: " + eshterak + ". Error=" + e.getMessage());
+                    setAutopan();
+                    Log.e(getResources().getString(R.string.app_name), "جستجوی اشتراک: " + eshterak + " میسر نشد"+ e.getCause());
                 }
             }
         });
@@ -705,5 +657,53 @@ public class GisLocalLayersFragment extends Fragment {
             Log.e(getTag(),e.getMessage());
         }
     }
-}
+    //
+    private void onOkClickListener(){
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(d1.getText().toString().length()>0 && d2.getText().toString().length()>0 &&
+                        l1.getText().toString().length()>0 && l2.getText().toString().length()>0){
+                    addCounterFeauter();
+                }else {
+                    Toast.makeText(getContext(),"لطفا فاصله ها را با دقت بیشتری وارد فرمایید",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+    private void onCancelClickListener(){
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mapPoint=null;
+                isCounterFeatureSelected =false;
+                confirmWrapper.setVisibility(View.GONE);
+                clearEditTexts();
+            }
+        });
+    }
+    private void onCancelSelectListener(){
+        cancelSelect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                parcelLayerGolestan.clearSelection();
+                parcelIdentifiedFeatureGolestan=null;
+                isGolestanParcelSelected=false;
+                addOrCancel.setVisibility(View.GONE);
+            }
+        });
+    }
 
+    private void clearEditTexts(){
+        d1.setText("");
+        d2.setText("");
+        l1.setText("");
+        l2.setText("");
+        r1.setText("");
+        r2.setText("");
+    }
+    private Point projectToWgs84(Point point){
+        Point wgs84Point = (Point) GeometryEngine.project(point, SpatialReferences.getWgs84());
+        return wgs84Point;
+    }
+}

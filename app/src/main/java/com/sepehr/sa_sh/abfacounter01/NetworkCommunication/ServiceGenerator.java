@@ -19,6 +19,7 @@ public class ServiceGenerator {
     private static long READ_TIMEOUT=120;
     private static long WRITE_TIMEOUT=60;
     private static long CONNECT_TIMEOUT=10;
+    private static boolean RETRY_ENABLED=false;
 
     private ServiceGenerator() {
 
@@ -32,7 +33,7 @@ public class ServiceGenerator {
                 .readTimeout(READ_TIMEOUT, TIME_UNIT)
                 .writeTimeout(WRITE_TIMEOUT, TIME_UNIT)
                 .connectTimeout(CONNECT_TIMEOUT, TIME_UNIT)
-                .retryOnConnectionFailure(false)
+                .retryOnConnectionFailure(RETRY_ENABLED)
                 .addInterceptor(interceptor).build();
         return  client;
     }

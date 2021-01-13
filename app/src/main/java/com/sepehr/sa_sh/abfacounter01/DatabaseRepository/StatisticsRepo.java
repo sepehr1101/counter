@@ -26,7 +26,7 @@ public class StatisticsRepo implements IStatisticsRepo{
         String rawQuery ="SELECT COUNT(*) FROM ON_OFF_LOAD_MODEL C " +
                 "JOIN COUNTER_STATE_VALUE_KEY_MODEL S ON C.COUNTER_STATE_CODE=S.MAINCODE " +
                 "JOIN READING_CONFIG_MODEL R ON C.TRACK_NUMBER=R.TRACK_NUMBER " +
-                " WHERE S.ISMANE=1 AND R._INDEX="+configIndex;
+                " WHERE HAZF<=0 AND S.ISMANE=1 AND R._INDEX="+configIndex;
         SQLiteStatement query = database.compileStatement(rawQuery);
         try {
             count = query.simpleQueryForLong();

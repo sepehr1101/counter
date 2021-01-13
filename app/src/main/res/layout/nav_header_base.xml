@@ -15,6 +15,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:src="@drawable/splash_image"/>
+        android:src="@drawable/logo_general"/>
 
 </LinearLayout>

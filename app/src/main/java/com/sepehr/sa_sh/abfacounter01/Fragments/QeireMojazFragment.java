@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.sepehr.sa_sh.abfacounter01.DeviceSerialManager;
 import com.sepehr.sa_sh.abfacounter01.DisplayViewPager;
 import com.sepehr.sa_sh.abfacounter01.IAbfaService;
 import com.sepehr.sa_sh.abfacounter01.LatLang;
@@ -78,7 +79,7 @@ public class QeireMojazFragment extends DialogFragment {
         textViewSend.setText("در حال ارسال");
         userCode=sharedPreferenceManager.getInt(SharedPrefStrings.USER_CODE);
         token=sharedPreferenceManager.getString(SharedPrefStrings.TOKEN);
-        deviceId=Build.SERIAL;
+        deviceId= DeviceSerialManager.getSerial(appContext);
         trackNumber=((DisplayViewPager)getActivity()).getCurrentTrackNumber();
         toastAndAlertBuilder=new ToastAndAlertBuilder(appContext);
     }

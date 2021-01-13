@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Build;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -18,6 +19,7 @@ import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.IStatisticsRepo;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.OnOffloadService;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.ReadingConfigService;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.StatisticsRepo;
+import com.sepehr.sa_sh.abfacounter01.DeviceSerialManager;
 import com.sepehr.sa_sh.abfacounter01.Logic.IOffloadLogic;
 import com.sepehr.sa_sh.abfacounter01.Logic.OffloadLogic;
 import com.sepehr.sa_sh.abfacounter01.R;
@@ -36,6 +38,7 @@ public class OffloadBase {
     TextView mStateTextView;
     Spinner mSpinner;
     ImageView offloadImage;
+    CheckBox mForceImageOffload;
 
     int userCode;
     String token;
@@ -65,16 +68,17 @@ public class OffloadBase {
         mStartButton=(Button)rootView.findViewById(R.id.offLoadButton);
         mStartButton.setText(startButtonText);
         mStateTextView=(TextView)rootView.findViewById(R.id.offLoadStateTextView);
+        mForceImageOffload=(CheckBox)rootView.findViewById(R.id.forceImageOffload);
         userCode=((OffLoadActivity)mContext).getUserCode();
         token=((OffLoadActivity)mContext).getToken();
-        deviceId= Build.SERIAL;
+        deviceId= DeviceSerialManager.getSerial(mContext);
         toastAndAlertBuilder=new ToastAndAlertBuilder(mContext);
         readingConfigService=new ReadingConfigService();
         statisticsRepo=new StatisticsRepo(mContext);
         onOffloadService=new OnOffloadService(mContext);
         counterReportService=new CounterReportService();
         offloadLogic=new OffloadLogic(mContext,mStartButton,mProgressBar,mStateTextView,mSpinner,userCode,token,deviceId,
-                readingConfigService,toastAndAlertBuilder,statisticsRepo,onOffloadService,counterReportService);
+                readingConfigService,toastAndAlertBuilder,statisticsRepo,onOffloadService,counterReportService,mForceImageOffload);
         startOffload();
     }
 

@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.rey.material.widget.Spinner;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.CounterStateService;
@@ -119,6 +120,7 @@ public class ViewPagerAdaptor extends PagerAdapter {
 
     private void setTag(MainViewPagerHolder viewPagerHolder,int position){
         viewPagerHolder.billId.setTag("billId"+position);
+        viewPagerHolder.id.setTag("id"+position);
         viewPagerHolder.eshterak.setTag("eshterak" + position);
         viewPagerHolder.address.setTag("address" + position);
         viewPagerHolder.counterNumber.setTag("counterNumber" + position);

@@ -16,18 +16,28 @@ public class CapturedImageModel extends SugarRecord{
     String saveTimeStamp;
     String path;
     BigDecimal trackNumber;
+    Integer status;
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
 
     public CapturedImageModel() {
 
     }
     //
 
-    public CapturedImageModel(String billId, Integer savedByUserCode, String path,BigDecimal trackNumber) {
+    public CapturedImageModel(String billId, Integer savedByUserCode, String path,BigDecimal trackNumber,int status) {
         this.billId = billId;
         this.savedByUserCode = savedByUserCode;
         this.saveTimeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
         this.path = path;
         this.trackNumber=trackNumber;
+        this.status=status;
     }
 
     public String getBillId() {

@@ -2,8 +2,6 @@ package com.sepehr.sa_sh.abfacounter01;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.hardware.camera2.CameraAccessException;
-import android.hardware.camera2.CameraManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,11 +27,17 @@ import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.KarbariService;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.OnOffloadService;
 import com.sepehr.sa_sh.abfacounter01.Fragments.BillDescriptionFragment;
 import com.sepehr.sa_sh.abfacounter01.Fragments.ContactUsFragment;
+import com.sepehr.sa_sh.abfacounter01.Fragments.CounterDistanceFragment;
+import com.sepehr.sa_sh.abfacounter01.Fragments.EsfAdditionalReport;
 import com.sepehr.sa_sh.abfacounter01.Fragments.FlashLightFragment;
+import com.sepehr.sa_sh.abfacounter01.Fragments.GisLight;
+import com.sepehr.sa_sh.abfacounter01.Fragments.MobileReport;
+import com.sepehr.sa_sh.abfacounter01.Fragments.OneTimeCodeFragment;
 import com.sepehr.sa_sh.abfacounter01.Fragments.QeireMojazFragment;
 import com.sepehr.sa_sh.abfacounter01.Fragments.SearchFragment;
 import com.sepehr.sa_sh.abfacounter01.Logic.CounterNumberHelper;
 import com.sepehr.sa_sh.abfacounter01.Logic.ICounterNumberHelper;
+import com.sepehr.sa_sh.abfacounter01.constants.CompanyNames;
 import com.sepehr.sa_sh.abfacounter01.constants.MenuItemId;
 import com.sepehr.sa_sh.abfacounter01.infrastructure.FlashLightManager;
 import com.sepehr.sa_sh.abfacounter01.infrastructure.GeoTracker;
@@ -61,7 +65,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import  android.os.Vibrator;
+import android.os.Vibrator;
 import retrofit2.Call;
 import retrofit2.Callback;
 
@@ -74,14 +78,14 @@ public class DisplayViewPager extends BaseActivity {
     ICounterNumberHelper counterNumberHelper;
     String[] items;
     private int offlineAttempts=0;
-    private final int MAX_OFFLINE_ATTEMPTS=3;
+    private final int MAX_OFFLINE_ATTEMPTS=10;
 
-    public static  String bill_id;
+    public static String bill_id,id,eshterak;
     public static BigDecimal currentTrackNumber;
     public static int currentPosition=0;
     public static Integer globalCurrentCounterNumberForFragment;
-    public static  Integer globalCurrentCounterPositionForFragment;
-    public static  Integer globalCurrentCounterStateCode;
+    public static Integer globalCurrentCounterPositionForFragment;
+    public static Integer globalCurrentCounterStateCode;
     public static AverageState averageStateGlobal;
     ViewPager viewPager;
     TextView systemDate,countFraction;
@@ -115,7 +119,7 @@ public class DisplayViewPager extends BaseActivity {
     }
 
     @Override
-    protected void initialize() {
+    protected void initialize(){
         try {
             appContext = this;
             initializeSomeUiElements();
@@ -127,11 +131,15 @@ public class DisplayViewPager extends BaseActivity {
             karbariService = new KarbariService();
             mediaPlayerManager = new MediaPlayerManager(appContext);
             toastAndAlertBuilder = new ToastAndAlertBuilder(appContext);
-            geoTracker = new GeoTracker("viewPager", appContext);
-            if (geoTracker.checkPlayServices()) {
-                // Building the GoogleApi client
-                geoTracker.buildGoogleApiClient();
-                geoTracker.createLocationRequest();
+            try {
+                geoTracker = new GeoTracker("viewPager", appContext);
+                if (geoTracker.checkPlayServices()) {
+                    // Building the GoogleApi client
+                    geoTracker.buildGoogleApiClient();
+                    geoTracker.createLocationRequest();
+                }
+            } catch (Exception e) {
+                Log.e("geoTracker", e.getMessage());
             }
         } catch (Exception e) {
             Log.e("error", e.getCause().toString());
@@ -157,6 +165,8 @@ public class DisplayViewPager extends BaseActivity {
 
         //initialize before page scroll
         bill_id = _list.get(0).billId;
+        id = _list.get(0).s_id;
+        eshterak=_list.get(0).eshterak;
         currentTrackNumber=_list.get(0).trackNumber;
         reportService =new CounterReportService(bill_id);
         selectedReports= reportService.getCounterReadingSelectedReports(bill_id);
@@ -201,6 +211,14 @@ public class DisplayViewPager extends BaseActivity {
 
             @Override
             public void onPageSelected(int position) {
+//                if (_list != null && _list.size() > 0) {
+//                    if(DifferentCompanyManager.getActiveCompanyName()==CompanyNames.ESF){
+//                        //FragmentManager fmEsf = getSupportFragmentManager();
+//                        EsfAdditionalReport dialogFragment=new EsfAdditionalReport();
+//                        //MobileReport dialogFragment=new MobileReport();
+//                        //dialogFragment.show(fmEsf,"پیمایش افزوده اصفهان");
+//                    }
+//                }
             }
 
             @Override
@@ -211,9 +229,13 @@ public class DisplayViewPager extends BaseActivity {
                         bill_id = ((TextView) viewPager
                                 .findViewWithTag("billId" + currentPosition))
                                 .getText().toString();
+                        id = ((TextView) viewPager
+                                .findViewWithTag("id" + currentPosition))
+                                .getText().toString();
                         String trackNumString = ((TextView) viewPager
                                 .findViewWithTag("trackNumber" + currentPosition))
                                 .getText().toString();
+                        eshterak=_list.get(currentPosition).eshterak;
                         currentTrackNumber = new BigDecimal(trackNumString);
                         Log.e("billId", bill_id);
                     }
@@ -256,7 +278,6 @@ public class DisplayViewPager extends BaseActivity {
                 .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM)
                 .setIcon(R.drawable.ic_block_white_48dp);
 
-
         menu.add(Menu.NONE,MenuItemId.MENU_ITEM_MORE_INFO.getValue(), Menu.NONE, R.string.menu_item_more_info)
         .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM)
         .setIcon(R.drawable.ic_featured_play_list_white_36dp);
@@ -283,6 +304,8 @@ public class DisplayViewPager extends BaseActivity {
 
         menu.add(Menu.NONE, MenuItemId.MENUE_ITEM_DISPLAY_LAST_UNREAD.getValue(), Menu.NONE, R.string.menue_item_display_last_unread)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+        menu.add(Menu.NONE,MenuItemId.MENU_ITEM_SHOW_MAP.getValue(),Menu.NONE,R.string.menu_show_map)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 
         menu.add(Menu.NONE, MenuItemId.MENU_ITEM_LOCK_INPUT.getValue(), Menu.NONE, R.string.menu_item_lock_input)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
@@ -291,6 +314,15 @@ public class DisplayViewPager extends BaseActivity {
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 
         menu.add(Menu.NONE,MenuItemId.MENUE_ITEM_BILL_D_DESCRIPTION.getValue(),Menu.NONE,R.string.menue_item_bill_description)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+        if(DifferentCompanyManager.getActiveCompanyName()== CompanyNames.TSW) {
+            menu.add(Menu.NONE, MenuItemId.MENU_ITEM_GIS.getValue(), Menu.NONE, R.string.menu_item_gis)
+                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+        }
+        menu.add(Menu.NONE, MenuItemId.MENU_ITEM_COUNTER_DISTANCES.getValue(), Menu.NONE,R.string.menu_item_counter_distance)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+
+        menu.add(Menu.NONE, MenuItemId.MENU_ITEM_COUNTER_DISTANCES.getValue(), Menu.NONE,R.string.menu_item_one_time_code)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
         return true;
     }
@@ -320,8 +352,15 @@ public class DisplayViewPager extends BaseActivity {
             dialogFragment.show(fm,"اطلاعات احتمالی مشترک");
         }
         if(id==MenuItemId.MENU_ITEM_REPORT.getValue()) {
-            CounterReportFragment dialogFragment = new CounterReportFragment();
-            dialogFragment.show(fm, "گزارش کنتور");
+            if(DifferentCompanyManager.getActiveCompanyName()==CompanyNames.ESF){
+                //EsfAdditionalReport dialogFragment=new EsfAdditionalReport(); //پیمایش
+                MobileReport dialogFragment=new MobileReport();
+                dialogFragment.show(fm,"اخذ تلفن همراه");
+            }else {
+                CounterReportFragment dialogFragment = new CounterReportFragment();
+                //MobileReport dialogFragment=new MobileReport();
+                dialogFragment.show(fm, "گزارش کنتور");
+            }
         }
         if(id==MenuItemId.MENU_ITEM_CAMERA.getValue()){
             CameraFragment dialogFragment=new CameraFragment();
@@ -363,6 +402,21 @@ public class DisplayViewPager extends BaseActivity {
             BillDescriptionFragment billDescriptionFragment=new BillDescriptionFragment();
             billDescriptionFragment.show(fm,"ثبت توضیحات اشتراک");
         }
+        if(id==MenuItemId.MENU_ITEM_GIS.getValue()){
+            GisLight gisLight=new GisLight();
+            gisLight.show(fm,"ثبت اطلاعات مکانی");
+        }
+        if(id==MenuItemId.MENU_ITEM_SHOW_MAP.getValue()){
+
+        }
+        if(id==MenuItemId.MENU_ITEM_COUNTER_DISTANCES.getValue()){
+            CounterDistanceFragment counterDistanceFragment=new CounterDistanceFragment();
+            counterDistanceFragment.show(fm,"ثبت فواصل کنتور");
+        }
+        if(id==MenuItemId.MENU_ITEM_ONE_TIME_CODE.getValue()){
+            OneTimeCodeFragment oneTimeCodeFragment=new OneTimeCodeFragment();
+            oneTimeCodeFragment.show(fm,"کد یکبار مصرف");
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -374,7 +428,7 @@ public class DisplayViewPager extends BaseActivity {
     public void displayPreNumber(View view){
         try {
         onOffLoadModel = OnOffLoadModel
-                .find(OnOffLoadModel.class, "BILL_ID = ? ", bill_id)
+                .find(OnOffLoadModel.class, "SID = ? ", id)
                 .get(0);
         onOffLoadModel.setIsCounterNumberShown(true);
         onOffLoadModel.save();
@@ -424,7 +478,7 @@ public class DisplayViewPager extends BaseActivity {
                     CounterStateService(spinnerSelectedText,selectedReports);
             String counterNumberString = counterNumberEditText.getText().toString();
             onOffLoadModel = OnOffLoadModel
-                    .find(OnOffLoadModel.class, "BILL_ID = ? ", bill_id)
+                    .find(OnOffLoadModel.class, "SID = ? ", id)
                     .get(0);
             if(!isRegisterLimitValid(onOffLoadModel.offloadedCount)){
                 toastAndAlertBuilder.makeSimpleAlert(" همکار گرامی به حداکثر ویرایش این اشتراک رسیده اید");
@@ -486,7 +540,7 @@ public class DisplayViewPager extends BaseActivity {
                 }
                 //2.2 & error !
                 else {
-                  toastAndAlertBuilder.makeSimpleToast("لطفا شماره کنتور را بررسی کرده و دوباره امتحان فرمایید");
+                    toastAndAlertBuilder.makeSimpleToast("لطفا شماره کنتور را بررسی کرده و دوباره امتحان فرمایید");
                     return;
                 }
             }//todayNumber > preNumber
@@ -514,7 +568,7 @@ public class DisplayViewPager extends BaseActivity {
         //sabt e mamooli
             _list.get(currentPosition).counterStatePosition = spinnerSelectedItemPosition;//list
             onOffLoadModel.counterStatePosition = spinnerSelectedItemPosition;//db
-            onOffLoadModel.counterStateCode= CounterStateService.getRealState(spinnerSelectedText);
+            onOffLoadModel.counterStateCode = CounterStateService.getRealState(spinnerSelectedText);
             _list.get(currentPosition).counterNumber = new Integer(counterNumberString);//list
             onOffLoadModel.counterNumber = new Integer(counterNumberString);
             doSaveProccess();
@@ -527,7 +581,7 @@ public class DisplayViewPager extends BaseActivity {
     }
     //
     private boolean isRegisterLimitValid(Integer registerCount){
-        final int REGISTER_LIMIT_=10;
+        final int REGISTER_LIMIT_=15;
         if(registerCount==null){
             return true;
         }
@@ -559,16 +613,29 @@ public class DisplayViewPager extends BaseActivity {
     public String getBill_id(){
         return bill_id;
     }
+
+    public String getEshterak() {
+        return eshterak;
+    }
+
+    public String getId() {
+         return id;
+    }
+
     //
     public BigDecimal getCurrentTrackNumber(){
         return currentTrackNumber;
     }
     //
     public void registerAnyway(){
-        Location lastLocation =geoTracker.getLastLocation();
-        if (lastLocation != null) {
-            onOffLoadModel.latitude=new BigDecimal(lastLocation.getLatitude());
-            onOffLoadModel.longitude=new BigDecimal(lastLocation.getLongitude());
+        try {
+            Location lastLocation = geoTracker.getLastLocation();
+            if (lastLocation != null) {
+                onOffLoadModel.latitude=new BigDecimal(lastLocation.getLatitude());
+                onOffLoadModel.longitude=new BigDecimal(lastLocation.getLongitude());
+            }
+        } catch (Exception e) {
+            Log.e("geoTracker", e.getMessage());
         }
         _list.get(currentPosition).counterNumber=globalCurrentCounterNumberForFragment;//list
         _list.get(currentPosition).counterStateCode=globalCurrentCounterStateCode;//list
@@ -591,29 +658,54 @@ public class DisplayViewPager extends BaseActivity {
     }
     //
     private void saveDone(){
-        Location lastLocation =geoTracker.getLastLocation();
-        if (lastLocation != null) {
-            if(lastLocation.hasAccuracy()){
-                Integer accuracy2=Math.round(lastLocation.getAccuracy());
-                onOffLoadModel.gisAccuracy=accuracy2;
+        try {
+            Location lastLocation = geoTracker.getLastLocation();
+            if (lastLocation != null) {
+                if (lastLocation.hasAccuracy()) {
+                    Integer accuracy2 = Math.round(lastLocation.getAccuracy());
+                    onOffLoadModel.gisAccuracy = accuracy2;
+                }
+                onOffLoadModel.latitude = new BigDecimal(lastLocation.getLatitude());
+                onOffLoadModel.longitude = new BigDecimal(lastLocation.getLongitude());
             }
-            onOffLoadModel.latitude=new BigDecimal(lastLocation.getLatitude());
-            onOffLoadModel.longitude=new BigDecimal(lastLocation.getLongitude());
+        }catch (Exception e){
+            Log.e("geoTracker",e.getMessage());
         }
         onOffLoadModel.registerDateJalali=persianDate_db_format;
         onOffLoadModel.save();
-        geoTracker.displayLocation();
+        try {
+            geoTracker.displayLocation();
+        }catch (Exception e){
+            Log.e("geoTracker",e.getMessage());
+        }
+
+        if(DifferentCompanyManager.getActiveCompanyName()!=CompanyNames.ESF ) {
+            Spinner counterStateSpinner = (Spinner) viewPager.findViewWithTag("counterState" + currentPosition);
+            int spinnerSelectedItemPosition = counterStateSpinner.getSelectedItemPosition();
+            String spinnerSelectedText=counterStateSpinner.getSelectedItem().toString();
+            globalCurrentCounterPositionForFragment = new Integer(spinnerSelectedItemPosition);
+            globalCurrentCounterStateCode=CounterStateService.getRealState(spinnerSelectedText);
+            FragmentManager fmEsf = getSupportFragmentManager();
+            //EsfAdditionalReport dialogFragment = new EsfAdditionalReport();
+            MobileReport dialogFragment = new MobileReport();
+            dialogFragment.show(fmEsf, "گزارش کنتور");
+        }else {
+            goNextPage();
+        }
+
+        Snackbar.make(viewPager, "ذخیره شماره کنتور انجام شد", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
+    }
+    public void goNextPage(){
         if(currentPosition<viewPagerSize-1){
             int newPosition=++currentPosition;
             viewPager.setCurrentItem(newPosition);
             Log.e("currentPosition changed",(currentPosition++)+"");
         }
-        Snackbar.make(viewPager, "ذخیره شماره کنتور انجام شد", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
     }
     //
     private void sendTheUnsended(){
-        String deviceId= Build.SERIAL;
+        String deviceId= DeviceSerialManager.getSerial(this);
         final List<OnOffLoadModel> unSendeds=onOffloadService.get(OffloadState.ABOUT_TO_SEND);
         final  List<CounterReadingReport> unsendedReports=reportService.get(OffloadState.ABOUT_TO_SEND);
         Output output=new Output(unsendedReports,unSendeds);
@@ -694,31 +786,52 @@ public class DisplayViewPager extends BaseActivity {
     //region _____________________________ GPS __________________________________
     //
     public LatLang getLatLang(){
-      return geoTracker.getLatLang();
+        try {
+            return geoTracker.getLatLang();
+        }catch (Exception e){
+            Log.e("geoTracker",e.getMessage());
+        }
+        return null;
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-       geoTracker.start();
+        try {
+            geoTracker.start();
+        }catch (Exception e){
+            Log.e("geoTracker",e.getMessage());
+        }
     }
     //
     @Override
     protected void onResume() {
         super.onResume();
-        geoTracker.resume();
+        try{
+            geoTracker.resume();
+        }catch (Exception e) {
+            Log.e("geoTracker", e.getMessage());
+        }
     }
     //
     @Override
     protected void onStop() {
         super.onStop();
-       geoTracker.stop();
+        try {
+            geoTracker.stop();
+        } catch (Exception e){
+        Log.e("geoTracker",e.getMessage());
+    }
     }
     //
     @Override
     protected void onPause() {
         super.onPause();
-        geoTracker.pause();
+        try{
+            geoTracker.pause();
+        }catch (Exception e){
+            Log.e("geoTracker",e.getMessage());
+        }
     }
     //endregion
 }

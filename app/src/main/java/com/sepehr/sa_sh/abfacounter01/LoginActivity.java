@@ -8,6 +8,7 @@ import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +18,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.sepehr.sa_sh.abfacounter01.Activities.StartupActivity;
+import com.sepehr.sa_sh.abfacounter01.Fragments.MobileReport;
+import com.sepehr.sa_sh.abfacounter01.Fragments.OneTimeCodeFragment;
 import com.sepehr.sa_sh.abfacounter01.infrastructure.ISharedPreferenceManager;
 import com.sepehr.sa_sh.abfacounter01.infrastructure.IToastAndAlertBuilder;
 import com.sepehr.sa_sh.abfacounter01.infrastructure.SharedPreferenceManager;
@@ -37,7 +40,7 @@ import retrofit2.Callback;
 public class LoginActivity extends AppCompatActivity {
     IToastAndAlertBuilder toastAndAlertBuilder;
     ISharedPreferenceManager sharedPreferenceManager;
-    Button loginButton;
+    Button loginButton,showOneTimeCode;
     EditText usercodeEditCode,passwordEditCode;
     TextView applicationVersion,myVersionIs;
     String userCode,password,appVersion;
@@ -52,8 +55,10 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         initialize();
-        Log.e("serial: ", Build.SERIAL);
+        Log.e("serial: ", DeviceSerialManager.getSerial(this));
         loginClickListener();
+        loginLongClickListener();
+        oneTimeCodeClickListener();
     }
     //
     private void initialize(){
@@ -61,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
         sharedPreferenceManager=new SharedPreferenceManager(appContext);
         toastAndAlertBuilder=new ToastAndAlertBuilder(appContext);
         loginButton=(Button)findViewById(R.id.loginButton);
+        showOneTimeCode=(Button)findViewById(R.id.showOneTimeCode);
         usercodeEditCode = (EditText) findViewById(R.id.editTextUserCode);
         passwordEditCode = (EditText) findViewById(R.id.editTextPassword);
         applicationVersion=(TextView) findViewById(R.id.applicationVersion);
@@ -84,10 +90,12 @@ public class LoginActivity extends AppCompatActivity {
         if(loginProgressBar.getVisibility()==View.GONE){
             loginProgressBar.setVisibility(View.VISIBLE);
             loginButton.setVisibility(View.GONE);
+            showOneTimeCode.setVisibility(View.GONE);
         }
         else {
             loginProgressBar.setVisibility(View.GONE);
             loginButton.setVisibility(View.VISIBLE);
+            showOneTimeCode.setVisibility(View.VISIBLE);
         }
     }
     //
@@ -102,11 +110,33 @@ public class LoginActivity extends AppCompatActivity {
                 if(userCode.length()>1){
                     String userFirstChar= userCode.substring(0,2);
                     if(userFirstChar.equals("00")){
-                        userCode=userCode.substring(1,userCode.length());
+                        userCode=userCode.substring(2,userCode.length());
+                        // Log.e("userCode:",userCode+"");
                         isLocal=true;
                     }
                 }
                 getToken(userCode, password,isLocal);
+            }
+        });
+    }
+
+    private void loginLongClickListener(){
+        loginButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                toastAndAlertBuilder.makeSimpleAlert(DeviceSerialManager.getSerial(getApplicationContext()));
+                return true;
+            }
+        });
+    }
+
+    private void oneTimeCodeClickListener(){
+        showOneTimeCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fm = getSupportFragmentManager();
+                OneTimeCodeFragment dialogFragment=new OneTimeCodeFragment();
+                dialogFragment.show(fm,"نمایش کد یکبار مصرف");
             }
         });
     }
@@ -145,7 +175,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onFailure(Call<TokenResponseModel> call, Throwable t) {
                 String errorMessage ;
                 if(!isFinishing()){
-                toastAndAlertBuilder.makeSimpleAlert(SimpleErrorHandler.getErrorMessage(t));
+                    toastAndAlertBuilder.makeSimpleAlert(SimpleErrorHandler.getErrorMessage(t));
                 }
                 Log.e("retrofit token error", t.toString());
                 ++failureCount;

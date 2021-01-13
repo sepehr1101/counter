@@ -1,11 +1,4 @@
 package com.sepehr.sa_sh.abfacounter01;
-
-/*
-import com.ibm.icu.text.DateFormat;
-import com.ibm.icu.util.Calendar;
-import com.ibm.icu.util.ULocale;
-*/
-
 import java.util.Calendar;
 
 /**
@@ -49,6 +42,18 @@ public final class DateAndTime {
 
         String persianDate = year + "/" + month + "/" + day;
         return persianDate;
+    }
+    public static int getPersianCurrentMonth(){
+        JalaliCalendar jalaliCalendar = new JalaliCalendar();
+        int month;
+        month = jalaliCalendar.get(JalaliCalendar.MONTH) + 1;
+        return month;
+    }
+    public static int getPersianCurrentDay(){
+        JalaliCalendar jalaliCalendar = new JalaliCalendar();
+        int day;
+        day = jalaliCalendar.get(JalaliCalendar.DATE);
+        return day;
     }
     //
     public static String getPersianDbFormattedDate(){

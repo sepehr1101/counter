@@ -16,37 +16,13 @@
             app:showAsAction="never"
             android:title="@string/network_pipe_persian" />
         <item
-            android:id="@+id/network_valve_menu"
-            app:showAsAction="never"
-            android:title="@string/network_valve_persian" />
-        <item
-            android:id="@+id/transmission_pipeline_menu"
-            app:showAsAction="never"
-            android:title="@string/transmission_pipeline_persian" />
-        <item
-            android:id="@+id/water_well_menu"
-            app:showAsAction="never"
-            android:title="@string/water_well_persian" />
-        <item
-            android:id="@+id/water_branch_menu"
-            app:showAsAction="never"
-            android:title="@string/water_branch_persian" />
-        <item
-            android:id="@+id/common_block_menu"
+            android:id="@+id/eshterak_block_menu"
             app:showAsAction="never"
             android:title="@string/common_block_persian" />
-        <item
-            android:id="@+id/network_line_menu"
-            app:showAsAction="never"
-            android:title="@string/network_line_persian" />
         <item
             android:id="@+id/street_menu"
             app:showAsAction="never"
             android:title="@string/street_persian" />
-        <item
-            android:id="@+id/town_menu"
-            app:showAsAction="never"
-            android:title="@string/town_persian" />
         <item
             android:id="@+id/parcel_menu"
             app:showAsAction="never"

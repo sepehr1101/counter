@@ -6,10 +6,13 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 
+import com.sepehr.sa_sh.abfacounter01.BuildConfig;
 import com.sepehr.sa_sh.abfacounter01.constants.ImageScale;
 import com.sepehr.sa_sh.abfacounter01.constants.MediaType;
 
@@ -62,7 +65,12 @@ public class ImageOrVideoManager  implements IImageOrVideoManager{
     }
 
     public String getFilePath(){
-        return fileUri.getPath();
+        String fileExternalLiteral="external_files";
+        String filePath= fileUri.getPath();
+        if(filePath.contains(fileExternalLiteral)) {//android 7
+            filePath = filePath.replace(fileExternalLiteral, "storage/emulated/0");
+        }
+        return  filePath;
     }
 
     public File downsizeImage(File file,int newScaleInPercent) {
@@ -102,7 +110,14 @@ public class ImageOrVideoManager  implements IImageOrVideoManager{
      * Creating file uri to store image/video
      */
     public Uri getOutputMediaFileUri(MediaType mediaType) {
-        return Uri.fromFile(getOutputMediaFile(mediaType));
+        Uri uri;
+        File outputMediaFile=getOutputMediaFile(mediaType);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+             uri = FileProvider.getUriForFile(appContext, BuildConfig.APPLICATION_ID + ".provider",outputMediaFile);
+        }else {
+            uri = Uri.fromFile(outputMediaFile);
+        }
+        return uri;
     }
     //
     /**
@@ -111,8 +126,7 @@ public class ImageOrVideoManager  implements IImageOrVideoManager{
     public File getOutputMediaFile(MediaType mediaType) {
         // External sdcard location
         File mediaStorageDir = new File(
-                Environment
-                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
                 IMAGE_DIRECTORY_NAME);
 
         // Create the storage directory if it does not exist

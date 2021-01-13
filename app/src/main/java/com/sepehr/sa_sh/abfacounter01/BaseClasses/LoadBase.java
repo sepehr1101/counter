@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.sepehr.sa_sh.abfacounter01.Activities.LoadActivity;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.ReadingConfigService;
+import com.sepehr.sa_sh.abfacounter01.DeviceSerialManager;
 import com.sepehr.sa_sh.abfacounter01.Logic.IOnLoadLogic;
 import com.sepehr.sa_sh.abfacounter01.Logic.OnLoadLogic;
 import com.sepehr.sa_sh.abfacounter01.Logic.ReloadLogic;
@@ -43,7 +44,7 @@ public class LoadBase {
     }
 
     public void initialize(View rootView,String startButtonText,int imageResource,boolean isReload){
-        deviceId= Build.SERIAL;
+        deviceId= DeviceSerialManager.getSerial(mContext);
         findAndSetViews(rootView);
         startLoadButton.setText(startButtonText);
         loadImageView.setImageResource(imageResource);

@@ -14,7 +14,7 @@ public final class NetworkHelper {
     private static long WRITE_TIMEOUT=60;
     private static long CONNECT_TIMEOUT=10;
 
-    public NetworkHelper() {
+    private NetworkHelper() {
 
     }
 
