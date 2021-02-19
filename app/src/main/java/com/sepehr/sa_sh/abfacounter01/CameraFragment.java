@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +28,9 @@ import com.koushikdutta.ion.Response;
 import com.koushikdutta.ion.future.ResponseFuture;
 import com.orm.SugarTransactionHelper;
 import com.sepehr.sa_sh.abfacounter01.DatabaseRepository.OnOffLoadStatic;
+import com.sepehr.sa_sh.abfacounter01.Fragments.MobileReport;
 import com.sepehr.sa_sh.abfacounter01.constants.ActivityRequestCode;
+import com.sepehr.sa_sh.abfacounter01.constants.CompanyNames;
 import com.sepehr.sa_sh.abfacounter01.constants.ImageScale;
 import com.sepehr.sa_sh.abfacounter01.infrastructure.IImageOrVideoManager;
 import com.sepehr.sa_sh.abfacounter01.infrastructure.ImageOrVideoManager;
@@ -77,10 +80,13 @@ public class CameraFragment extends DialogFragment {
         trackNumber=((DisplayViewPager)getActivity()).getCurrentTrackNumber();
         onOffloadId=((DisplayViewPager)getActivity()).getId();
         List<CapturedImageModel> capturedImages=CapturedImageModel
-                .find(CapturedImageModel.class, "BILL_ID= ? ", bill_id);
-        List<OnOffLoadModel> currentOffLoadStates=OnOffLoadModel
-                .find(OnOffLoadModel.class, "BILL_ID= ? ", bill_id);
-        OnOffLoadModel tmp=currentOffLoadStates.get(0);
+                .find(CapturedImageModel.class, "O_ID= ? ", onOffloadId);
+       /* List<OnOffLoadModel> currentOffLoadStates=OnOffLoadModel
+                .find(OnOffLoadModel.class, "BILL_ID= ? ", bill_id);*/
+        OnOffLoadModel tmp = OnOffLoadModel
+                .find(OnOffLoadModel.class, "SID = ? ", onOffloadId)
+                .get(0);
+        //OnOffLoadModel tmp=currentOffLoadStates.get(0);
         Integer currentOffLoadState=tmp.offLoadState;
         if( currentOffLoadState==null){
             String pleaseSetStateFirst= "لطفا ابتدا وضعیت قرائت این مشترک را مشخص فرمایید";
@@ -120,6 +126,11 @@ public class CameraFragment extends DialogFragment {
         dismiss.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(DifferentCompanyManager.getActiveCompanyName() == CompanyNames.KERMANSHAH) {
+                    FragmentManager fmEsf = ((DisplayViewPager) getActivity()).getSupportFragmentManager();
+                    MobileReport dialogFragment = new MobileReport();
+                    dialogFragment.show(fmEsf, "گزارش کنتور");
+                }
                 dismiss();
             }
         });
@@ -233,7 +244,7 @@ public class CameraFragment extends DialogFragment {
     private void previewCapturedImage() {
         try {
             String filePath= imageOrVideoManager.getFilePath();
-            imageModel=new CapturedImageModel(bill_id,userCode,filePath,trackNumber,0);
+            imageModel=new CapturedImageModel(bill_id,userCode,filePath,trackNumber,0,onOffloadId);
             final OnOffLoadModel currentCounterReadingModel01= OnOffLoadStatic.GetOnOfLoad(bill_id);
             SugarTransactionHelper.doInTransaction(new SugarTransactionHelper.Callback() {
                 @Override
@@ -294,6 +305,10 @@ public class CameraFragment extends DialogFragment {
     private void sendImage() {
         buttonUpload.setVisibility(View.GONE);
         File originalImage=new File(imageOrVideoManager.getFilePath());
+        int scaleInPercent=75;
+        if(DifferentCompanyManager.getActiveCompanyName()==CompanyNames.KERMANSHAH){
+            scaleInPercent=65;
+        }
         final File fileToUpload = imageOrVideoManager.downsizeImage(originalImage,75);
         Ion.with(getContext())
                 .load(DifferentCompanyManager.getCameraUploadUrl

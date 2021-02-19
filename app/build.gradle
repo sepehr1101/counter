@@ -36,8 +36,8 @@ android {
         minSdkVersion 21
         targetSdkVersion 25
         multiDexEnabled true
-        versionCode 39//34 for esf , 38 for other
-        versionName "99.Q3.03"//esf 99.Q2.02 other 99.Q2.04
+        versionCode  42//39
+        versionName "99.Q4.03"//99.Q3.03
     }
     buildTypes {
         release {

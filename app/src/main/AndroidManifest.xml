@@ -48,7 +48,7 @@
             android:value="CounterReadingDB2.db" />
         <meta-data
             android:name="VERSION"
-            android:value="45" />
+            android:value="49" />
         <meta-data
             android:name="QUERY_LOG"
             android:value="true" />

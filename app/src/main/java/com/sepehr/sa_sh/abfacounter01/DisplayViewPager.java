@@ -679,7 +679,7 @@ public class DisplayViewPager extends BaseActivity {
             Log.e("geoTracker",e.getMessage());
         }
 
-        if(DifferentCompanyManager.getActiveCompanyName()!=CompanyNames.ESF ) {
+        if(DifferentCompanyManager.getActiveCompanyName()!=CompanyNames.ESF && DifferentCompanyManager.getActiveCompanyName()!=CompanyNames.KERMANSHAH) {
             Spinner counterStateSpinner = (Spinner) viewPager.findViewWithTag("counterState" + currentPosition);
             int spinnerSelectedItemPosition = counterStateSpinner.getSelectedItemPosition();
             String spinnerSelectedText=counterStateSpinner.getSelectedItem().toString();
@@ -689,7 +689,16 @@ public class DisplayViewPager extends BaseActivity {
             //EsfAdditionalReport dialogFragment = new EsfAdditionalReport();
             MobileReport dialogFragment = new MobileReport();
             dialogFragment.show(fmEsf, "گزارش کنتور");
-        }else {
+        } else if(DifferentCompanyManager.getActiveCompanyName() == CompanyNames.KERMANSHAH){
+            Spinner counterStateSpinner = (Spinner) viewPager.findViewWithTag("counterState" + currentPosition);
+            int spinnerSelectedItemPosition = counterStateSpinner.getSelectedItemPosition();
+            String spinnerSelectedText=counterStateSpinner.getSelectedItem().toString();
+            globalCurrentCounterPositionForFragment = new Integer(spinnerSelectedItemPosition);
+            globalCurrentCounterStateCode=CounterStateService.getRealState(spinnerSelectedText);
+            FragmentManager fmEsf = getSupportFragmentManager();
+            CameraFragment dialogFragment = new CameraFragment();
+            dialogFragment.show(fmEsf, "تصاویر");
+        } else {
             goNextPage();
         }
 
